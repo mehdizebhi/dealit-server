@@ -1,6 +1,7 @@
 package ir.dealit.restful.model.user;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -11,9 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@Document
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Document(collection = "users")
 public class User implements UserDetails {
 
     private @MongoId ObjectId id;
