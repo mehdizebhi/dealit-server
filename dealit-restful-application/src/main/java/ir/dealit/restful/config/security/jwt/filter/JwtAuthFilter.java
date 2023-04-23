@@ -1,12 +1,9 @@
 package ir.dealit.restful.config.security.jwt.filter;
 
-import ir.dealit.restful.config.security.jwt.util.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,13 +35,13 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
         username = extractSubject(jwt);
         if (isValidSubject(username) && !isAnyoneAuthenticated()) {
             UserDetails user = loadUserBySubject(username);
-            if (isValidToken(jwt) && isValidUser(user)) {
+            if (isValidToken(jwt) && isValidLoadedUser(user)) {
                 setAuthenticationSecurityContextHolder(createAthenticationToken(
                         user, null, user.getAuthorities(), request
                 ));
             }
         }
-
+        filterChain.doFilter(request, response);
     }
 
     protected boolean isAnyoneAuthenticated() {
@@ -78,7 +75,7 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
 
     protected abstract boolean isValidSubject(String subject);
 
-    protected abstract boolean isValidUser(UserDetails user);
+    protected abstract boolean isValidLoadedUser(UserDetails user);
 
     protected abstract UserDetails loadUserBySubject(String subject);
 

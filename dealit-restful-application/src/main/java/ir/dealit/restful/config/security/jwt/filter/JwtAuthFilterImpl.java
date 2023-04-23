@@ -1,6 +1,7 @@
 package ir.dealit.restful.config.security.jwt.filter;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtils;
+import ir.dealit.restful.service.user.UserDaoService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import java.io.IOException;
 public class JwtAuthFilterImpl extends JwtAuthFilter {
 
     private final JwtUtils jwtUtils;
+    private final UserDaoService userDaoService;
 
     @Override
     protected void doFilterInternal(
@@ -30,43 +32,47 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
 
     @Override
     protected String extractAuthHeader(HttpServletRequest request) {
-        return null;
+        return request.getHeader("Authorization");
     }
 
     @Override
     protected String extractToken(String authHeader) {
-        return null;
+        return authHeader.substring(7);
     }
 
     @Override
     protected String extractSubject(String token) {
+        //Todo: extract with JwtUtil
         return null;
     }
 
     @Override
     protected boolean isValidHeader(String authHeader) {
-        return false;
+        return authHeader != null && authHeader.startsWith("Bearer ");
     }
 
     @Override
     protected boolean isValidToken(String token) {
+        //Todo: validate with JwtUtil
         return false;
     }
 
     @Override
     protected boolean isValidSubject(String subject) {
-        return false;
+        return subject != null && !subject.isBlank();
     }
 
 
     @Override
     protected UserDetails loadUserBySubject(String subject) {
-        return null;
+        return userDaoService.loadUserByUsername(subject);
     }
 
     @Override
-    protected boolean isValidUser(UserDetails user) {
-        return false;
+    protected boolean isValidLoadedUser(UserDetails loadedUser) {
+        return loadedUser != null
+                && loadedUser.isAccountNonExpired()
+                && loadedUser.isEnabled();
     }
 
 }
