@@ -33,7 +33,7 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
         }
         jwt = extractToken(authHeader);
         username = extractSubject(jwt);
-        if (isValidSubject(username) && !isAnyoneAuthenticated()) {
+        if (isValidSubject(username) && !isAlreadyAuthenticated()) {
             UserDetails user = loadUserBySubject(username);
             if (isValidLoadedUser(user) && isTokenValid(jwt, user)) {
                 setAuthenticationSecurityContextHolder(createAthenticationToken(
@@ -44,7 +44,7 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    protected boolean isAnyoneAuthenticated() {
+    protected boolean isAlreadyAuthenticated() {
         return SecurityContextHolder.getContext().getAuthentication() != null;
     }
 
