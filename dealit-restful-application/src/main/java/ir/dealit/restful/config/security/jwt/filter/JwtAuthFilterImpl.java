@@ -7,11 +7,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
@@ -42,8 +40,7 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
 
     @Override
     protected String extractSubject(String token) {
-        //Todo: extract with JwtUtil
-        return null;
+        return jwtUtils.extractSubject(token);
     }
 
     @Override
@@ -52,9 +49,8 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
     }
 
     @Override
-    protected boolean isValidToken(String token) {
-        //Todo: validate with JwtUtil
-        return false;
+    protected boolean isTokenValid(String token, UserDetails user) {
+        return jwtUtils.isTokenValid(token, user);
     }
 
     @Override
