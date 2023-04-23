@@ -1,4 +1,4 @@
 package ir.dealit.restful.config.security.jwt.util;
 
-public abstract class JwtUtils {
+public class JwtUtilsImpl extends JwtUtils{
 }
