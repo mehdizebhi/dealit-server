@@ -15,7 +15,7 @@ public class SecurityFilterChainConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and().httpBasic();
         return http.build();
     }
