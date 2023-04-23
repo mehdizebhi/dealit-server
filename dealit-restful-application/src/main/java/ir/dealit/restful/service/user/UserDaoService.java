@@ -9,20 +9,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserDaoService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public UserDetails save(UserDetails user) {
+    public User save(User user) {
         //Todo: use DTO object
         //Todo: validate User object
         return userRepository.save(user);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
+    }
+
+    public List<User> loadAllUsers() {
+        return userRepository.findAll();
     }
 }
