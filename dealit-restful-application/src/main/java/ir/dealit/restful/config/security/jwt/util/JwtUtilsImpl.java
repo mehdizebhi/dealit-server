@@ -20,7 +20,9 @@ public class JwtUtilsImpl implements JwtUtils {
 
     @Value("${jwt.key}")
     private static String SECRET_KEY;
-    private static long EXPIRATION_PERIOD = 86_400_000;
+
+    @Value("${jwt.period}")
+    private static long EXPIRATION_PERIOD;
 
     @Override
     public String extractSubject(String token) {
