@@ -34,7 +34,12 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
         jwt = extractToken(authHeader);
-        username = extractSubject(jwt);
+        try {
+            username = extractSubject(jwt);
+        } catch (Exception e) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         if (isSubjectValid(username) && !isAlreadyAuthenticated()) {
             UserDetails user = loadUserBySubject(username, userDetailsService);
             if (isLoadedUserValid(user) && isTokenValid(jwt, user)) {
@@ -73,7 +78,7 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
 
     protected abstract String extractToken(String authHeader);
 
-    protected abstract String extractSubject(String token);
+    protected abstract String extractSubject(String token) throws Exception;
 
     protected abstract boolean isHeaderValid(String authHeader);
 

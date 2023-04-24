@@ -39,7 +39,7 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
     }
 
     @Override
-    protected String extractSubject(String token) {
+    protected String extractSubject(String token) throws Exception {
         return jwtUtils.extractSubject(token);
     }
 
