@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -58,7 +57,6 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
     protected boolean isSubjectValid(String subject) {
         return subject != null && !subject.isBlank();
     }
-
 
     @Override
     protected boolean isLoadedUserValid(UserDetails loadedUser) {
