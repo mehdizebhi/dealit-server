@@ -24,7 +24,7 @@ public class SecurityFilterChainConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("").permitAll()
+                .requestMatchers("/v1/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
