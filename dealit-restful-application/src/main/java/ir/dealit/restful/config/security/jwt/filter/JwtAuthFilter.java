@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,7 +22,8 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
     protected void defaultDoFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain
+            FilterChain filterChain,
+            UserDetailsService userDetailsService
     ) throws ServletException, IOException {
 
         final String authHeader = extractAuthHeader(request);
@@ -34,7 +36,7 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
         jwt = extractToken(authHeader);
         username = extractSubject(jwt);
         if (isSubjectValid(username) && !isAlreadyAuthenticated()) {
-            UserDetails user = loadUserBySubject(username);
+            UserDetails user = loadUserBySubject(username, userDetailsService);
             if (isLoadedUserValid(user) && isTokenValid(jwt, user)) {
                 setAuthenticationSecurityContextHolder(createAthenticationToken(
                         user, null, user.getAuthorities(), request
@@ -63,6 +65,10 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
+    protected UserDetails loadUserBySubject(String subject, UserDetailsService userDetailsService) {
+        return userDetailsService.loadUserByUsername(subject);
+    }
+
     protected abstract String extractAuthHeader(HttpServletRequest request);
 
     protected abstract String extractToken(String authHeader);
@@ -76,7 +82,5 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
     protected abstract boolean isSubjectValid(String subject);
 
     protected abstract boolean isLoadedUserValid(UserDetails user);
-
-    protected abstract UserDetails loadUserBySubject(String subject);
 
 }

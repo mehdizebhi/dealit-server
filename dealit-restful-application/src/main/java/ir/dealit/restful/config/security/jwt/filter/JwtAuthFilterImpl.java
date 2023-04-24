@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-        super.defaultDoFilterInternal(request, response, filterChain);
+        super.defaultDoFilterInternal(request, response, filterChain, userDaoService);
     }
 
     @Override
@@ -58,11 +59,6 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
         return subject != null && !subject.isBlank();
     }
 
-
-    @Override
-    protected UserDetails loadUserBySubject(String subject) {
-        return userDaoService.loadUserByUsername(subject);
-    }
 
     @Override
     protected boolean isLoadedUserValid(UserDetails loadedUser) {
