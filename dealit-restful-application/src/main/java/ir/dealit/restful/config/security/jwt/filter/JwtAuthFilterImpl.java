@@ -44,7 +44,7 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
     }
 
     @Override
-    protected boolean isValidHeader(String authHeader) {
+    protected boolean isHeaderValid(String authHeader) {
         return authHeader != null && authHeader.startsWith("Bearer ");
     }
 
@@ -54,7 +54,7 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
     }
 
     @Override
-    protected boolean isValidSubject(String subject) {
+    protected boolean isSubjectValid(String subject) {
         return subject != null && !subject.isBlank();
     }
 
@@ -65,7 +65,7 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
     }
 
     @Override
-    protected boolean isValidLoadedUser(UserDetails loadedUser) {
+    protected boolean isLoadedUserValid(UserDetails loadedUser) {
         return loadedUser != null
                 && loadedUser.isAccountNonExpired()
                 && loadedUser.isEnabled();

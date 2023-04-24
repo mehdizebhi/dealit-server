@@ -27,15 +27,15 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
         final String authHeader = extractAuthHeader(request);
         final String jwt;
         final String username;
-        if (!isValidHeader(authHeader)) {
+        if (!isHeaderValid(authHeader)) {
             filterChain.doFilter(request, response);
             return;
         }
         jwt = extractToken(authHeader);
         username = extractSubject(jwt);
-        if (isValidSubject(username) && !isAlreadyAuthenticated()) {
+        if (isSubjectValid(username) && !isAlreadyAuthenticated()) {
             UserDetails user = loadUserBySubject(username);
-            if (isValidLoadedUser(user) && isTokenValid(jwt, user)) {
+            if (isLoadedUserValid(user) && isTokenValid(jwt, user)) {
                 setAuthenticationSecurityContextHolder(createAthenticationToken(
                         user, null, user.getAuthorities(), request
                 ));
@@ -69,13 +69,13 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
 
     protected abstract String extractSubject(String token);
 
-    protected abstract boolean isValidHeader(String authHeader);
+    protected abstract boolean isHeaderValid(String authHeader);
 
     protected abstract boolean isTokenValid(String token, UserDetails user);
 
-    protected abstract boolean isValidSubject(String subject);
+    protected abstract boolean isSubjectValid(String subject);
 
-    protected abstract boolean isValidLoadedUser(UserDetails user);
+    protected abstract boolean isLoadedUserValid(UserDetails user);
 
     protected abstract UserDetails loadUserBySubject(String subject);
 
