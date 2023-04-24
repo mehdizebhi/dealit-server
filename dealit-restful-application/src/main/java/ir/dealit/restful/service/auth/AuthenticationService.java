@@ -50,11 +50,10 @@ public class AuthenticationService {
         } catch (Exception exp) {
             throw new BadCredentialsException("Something happen wrongly in authenticate");
         }
-        Optional<User> user = userRepository.findByUsernameOptionally(authReauest.getUsername());
-        return user.isPresent() ?
-                AuthenticationResponse.builder()
-                        .token(jwtUtils.generateToken(user.get()))
-                        .build()
+        User user = userRepository.findByUsername(authReauest.getUsername());
+        return user != null ? AuthenticationResponse.builder()
+                .token(jwtUtils.generateToken(user))
+                .build()
                 : AuthenticationResponse.builder().token(null).build();
     }
 }
