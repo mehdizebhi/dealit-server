@@ -1,2 +1,9 @@
-package ir.dealit.restful.service.auth;public class AuthenticationService {
+package ir.dealit.restful.service.auth;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class AuthenticationService {
 }
