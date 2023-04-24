@@ -19,10 +19,10 @@ import java.util.function.Function;
 public class JwtUtilsImpl implements JwtUtils {
 
     @Value("${jwt.key}")
-    private static String SECRET_KEY;
+    private String SECRET_KEY;
 
     @Value("${jwt.period}")
-    private static long EXPIRATION_PERIOD;
+    private long EXPIRATION_PERIOD;
 
     @Override
     public String extractSubject(String token) {
@@ -42,12 +42,18 @@ public class JwtUtilsImpl implements JwtUtils {
 
     @Override
     public Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = null;
+        try {
+            claims = Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            //Todo: log
+        }
+        return claims;
     }
 
     private Key getSigningKey() {
