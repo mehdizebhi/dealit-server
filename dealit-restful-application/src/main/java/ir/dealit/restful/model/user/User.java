@@ -23,6 +23,8 @@ public class User implements UserDetails {
     private @MongoId ObjectId id;
     private @Indexed(unique = true) String username;
     private String password;
+    private String displayName;
+    private String email;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
