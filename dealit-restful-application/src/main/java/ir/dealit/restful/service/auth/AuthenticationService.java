@@ -29,6 +29,8 @@ public class AuthenticationService {
         User user = User.builder()
                 .username(regRequest.getUsername())
                 .password(passwordEncoder.encode(regRequest.getPassword()))
+                .displayName(regRequest.getDisplayName())
+                .email(regRequest.getEmail())
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
                 .accountNonLocked(true)
