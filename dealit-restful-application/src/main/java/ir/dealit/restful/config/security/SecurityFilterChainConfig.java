@@ -24,7 +24,7 @@ public class SecurityFilterChainConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/v1/auth/**").permitAll()
+                .requestMatchers("/v1/auth/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
