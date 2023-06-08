@@ -5,7 +5,7 @@ import ir.dealit.restful.dto.auth.AuthenticationRequest;
 import ir.dealit.restful.dto.auth.AuthenticationResponse;
 import ir.dealit.restful.dto.auth.RegisterRequest;
 import ir.dealit.restful.dto.auth.RegisterResponse;
-import ir.dealit.restful.model.user.User;
+import ir.dealit.restful.entity.user.User;
 import ir.dealit.restful.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,8 +13,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package ir.dealit.restful.repository.user;
 
-import ir.dealit.restful.model.user.User;
+import ir.dealit.restful.entity.user.User;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

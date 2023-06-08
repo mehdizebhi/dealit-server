@@ -1,10 +1,8 @@
 package ir.dealit.restful.service.user;
 
-import ir.dealit.restful.model.user.User;
+import ir.dealit.restful.entity.user.User;
 import ir.dealit.restful.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

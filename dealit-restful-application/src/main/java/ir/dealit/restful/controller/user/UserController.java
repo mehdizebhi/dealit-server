@@ -1,6 +1,6 @@
 package ir.dealit.restful.controller.user;
 
-import ir.dealit.restful.model.user.User;
+import ir.dealit.restful.entity.user.User;
 import ir.dealit.restful.service.user.UserDaoService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;

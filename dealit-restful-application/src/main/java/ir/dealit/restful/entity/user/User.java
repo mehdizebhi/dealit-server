@@ -1,4 +1,4 @@
-package ir.dealit.restful.model.user;
+package ir.dealit.restful.entity.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
