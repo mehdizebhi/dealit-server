@@ -20,14 +20,14 @@ import java.util.function.Function;
 @Slf4j
 public class JwtUtilsImpl implements JwtUtils {
 
-    @Value("${jwt.key}")
+    @Value("${app.security.jwt.key}")
     private String SECRET_KEY;
 
     /*
     The value is considered based on milliseconds.
     For example, if we want to consider 1 hour, the value of this field should be 60 * 60 * 1000 = 3,600,000.
      */
-    @Value("${jwt.period}")
+    @Value("${app.security.jwt.period}")
     private long EXPIRATION_PERIOD;
 
     @Override
