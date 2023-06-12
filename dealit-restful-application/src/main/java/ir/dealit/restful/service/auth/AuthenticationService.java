@@ -1,10 +1,10 @@
 package ir.dealit.restful.service.auth;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
-import ir.dealit.restful.dto.auth.AuthenticationRequest;
-import ir.dealit.restful.dto.auth.AuthenticationResponse;
-import ir.dealit.restful.dto.auth.RegisterRequest;
-import ir.dealit.restful.dto.auth.RegisterResponse;
+import ir.dealit.restful.dto.auth.SignInReq;
+import ir.dealit.restful.dto.auth.AuthTokenRes;
+import ir.dealit.restful.dto.auth.UserSignUpReq;
+import ir.dealit.restful.dto.auth.UserSignUpRes;
 import ir.dealit.restful.entity.user.User;
 import ir.dealit.restful.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class AuthenticationService {
     private final JwtUtilsImpl jwtUtils;
     private final AuthenticationManager authenticationManager;
 
-    public RegisterResponse register(RegisterRequest regRequest) {
+    public UserSignUpRes register(UserSignUpReq regRequest) {
         User user = User.builder()
                 .username(regRequest.getUsername())
                 .password(passwordEncoder.encode(regRequest.getPassword()))
@@ -35,11 +35,11 @@ public class AuthenticationService {
                 .enabled(true)
                 .build();
         userRepository.save(user);
-        return user != null ? RegisterResponse.builder().successfulRegister(true).build()
-                : RegisterResponse.builder().successfulRegister(false).build();
+        return user != null ? UserSignUpRes.builder().successfulRegister(true).build()
+                : UserSignUpRes.builder().successfulRegister(false).build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest authReauest) {
+    public AuthTokenRes authenticate(SignInReq authReauest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -51,10 +51,10 @@ public class AuthenticationService {
             throw new BadCredentialsException("Something happen wrongly in authenticate");
         }
         User user = userRepository.findByUsername(authReauest.getUsername());
-        return user != null ? AuthenticationResponse.builder()
+        return user != null ? AuthTokenRes.builder()
                 .token(jwtUtils.generateToken(user))
                 .build()
-                : AuthenticationResponse.builder().token(null).build();
+                : AuthTokenRes.builder().token(null).build();
     }
 }
 

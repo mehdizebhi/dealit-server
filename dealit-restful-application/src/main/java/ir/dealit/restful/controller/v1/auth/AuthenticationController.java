@@ -1,9 +1,9 @@
 package ir.dealit.restful.controller.v1.auth;
 
-import ir.dealit.restful.dto.auth.AuthenticationRequest;
-import ir.dealit.restful.dto.auth.AuthenticationResponse;
-import ir.dealit.restful.dto.auth.RegisterRequest;
-import ir.dealit.restful.dto.auth.RegisterResponse;
+import ir.dealit.restful.dto.auth.SignInReq;
+import ir.dealit.restful.dto.auth.AuthTokenRes;
+import ir.dealit.restful.dto.auth.UserSignUpReq;
+import ir.dealit.restful.dto.auth.UserSignUpRes;
 import ir.dealit.restful.service.auth.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +20,15 @@ public class AuthenticationController {
     private final AuthenticationService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> registerUser(
-            @RequestBody RegisterRequest request
+    public ResponseEntity<UserSignUpRes> registerUser(
+            @RequestBody UserSignUpReq request
     ) {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticateUser(
-            @RequestBody AuthenticationRequest request
+    public ResponseEntity<AuthTokenRes> authenticateUser(
+            @RequestBody SignInReq request
     ) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
