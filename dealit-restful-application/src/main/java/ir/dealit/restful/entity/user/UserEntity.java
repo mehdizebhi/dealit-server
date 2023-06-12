@@ -21,7 +21,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Builder
 @Document(collection = "users")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
     private @MongoId ObjectId id;
     private @Indexed(unique = true) String username;

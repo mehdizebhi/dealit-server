@@ -1,6 +1,6 @@
 package ir.dealit.restful.repository.user;
 
-import ir.dealit.restful.entity.user.User;
+import ir.dealit.restful.entity.user.UserEntity;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, ObjectId> {
+public interface UserRepository extends MongoRepository<UserEntity, ObjectId> {
 
-    User findByUsername(String username);
+    UserEntity findByUsername(String username);
 
     @Query("{'name':  ?0}")
-    Optional<User> findByUsernameOptionally(String username);
+    Optional<UserEntity> findByUsernameOptionally(String username);
 }

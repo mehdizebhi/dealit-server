@@ -1,6 +1,6 @@
 package ir.dealit.restful.controller.v1.user;
 
-import ir.dealit.restful.entity.user.User;
+import ir.dealit.restful.entity.user.UserEntity;
 import ir.dealit.restful.service.user.UserDaoService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -25,15 +25,15 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<UserEntity>> getUsers() {
         return ResponseEntity.ok(userDaoService.loadAllUsers());
     }
 
     @PostMapping("")
     public ResponseEntity<ObjectId> createUser(
-            @RequestBody User user
+            @RequestBody UserEntity userEntity
     ) {
-        return ResponseEntity.ok(userDaoService.save(user).getId());
+        return ResponseEntity.ok(userDaoService.save(userEntity).getId());
     }
 
 }

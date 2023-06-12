@@ -1,6 +1,6 @@
 package ir.dealit.restful.service.user;
 
-import ir.dealit.restful.entity.user.User;
+import ir.dealit.restful.entity.user.UserEntity;
 import ir.dealit.restful.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,17 +15,17 @@ public class UserDaoService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public User save(User user) {
+    public UserEntity save(UserEntity userEntity) {
         //Todo: use DTO object
-        //Todo: validate User object
-        return userRepository.save(user);
+        //Todo: validate UserEntity object
+        return userRepository.save(userEntity);
     }
 
-    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
     }
 
-    public List<User> loadAllUsers() {
+    public List<UserEntity> loadAllUsers() {
         return userRepository.findAll();
     }
 }

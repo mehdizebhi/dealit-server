@@ -5,7 +5,7 @@ import ir.dealit.restful.dto.auth.SignInReq;
 import ir.dealit.restful.dto.auth.AuthTokenRes;
 import ir.dealit.restful.dto.auth.UserSignUpReq;
 import ir.dealit.restful.dto.auth.UserSignUpRes;
-import ir.dealit.restful.entity.user.User;
+import ir.dealit.restful.entity.user.UserEntity;
 import ir.dealit.restful.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +24,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public UserSignUpRes register(UserSignUpReq regRequest) {
-        User user = User.builder()
+        UserEntity userEntity = UserEntity.builder()
                 .username(regRequest.getUsername())
                 .password(passwordEncoder.encode(regRequest.getPassword()))
                 .displayName(regRequest.getDisplayName())
@@ -34,8 +34,8 @@ public class AuthenticationService {
                 .accountNonLocked(true)
                 .enabled(true)
                 .build();
-        userRepository.save(user);
-        return user != null ? UserSignUpRes.builder().successfulRegister(true).build()
+        userRepository.save(userEntity);
+        return userEntity != null ? UserSignUpRes.builder().successfulRegister(true).build()
                 : UserSignUpRes.builder().successfulRegister(false).build();
     }
 
@@ -50,9 +50,9 @@ public class AuthenticationService {
         } catch (Exception exp) {
             throw new BadCredentialsException("Something happen wrongly in authenticate");
         }
-        User user = userRepository.findByUsername(authReauest.getUsername());
-        return user != null ? AuthTokenRes.builder()
-                .token(jwtUtils.generateToken(user))
+        UserEntity userEntity = userRepository.findByUsername(authReauest.getUsername());
+        return userEntity != null ? AuthTokenRes.builder()
+                .token(jwtUtils.generateToken(userEntity))
                 .build()
                 : AuthTokenRes.builder().token(null).build();
     }
