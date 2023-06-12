@@ -1,4 +1,4 @@
-package ir.dealit.restful.controller.user;
+package ir.dealit.restful.controller.v1.user;
 
 import ir.dealit.restful.entity.user.User;
 import ir.dealit.restful.service.user.UserDaoService;

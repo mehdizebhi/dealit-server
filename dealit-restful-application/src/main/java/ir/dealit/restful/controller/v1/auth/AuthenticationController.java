@@ -1,4 +1,4 @@
-package ir.dealit.restful.controller.auth;
+package ir.dealit.restful.controller.v1.auth;
 
 import ir.dealit.restful.dto.auth.AuthenticationRequest;
 import ir.dealit.restful.dto.auth.AuthenticationResponse;
