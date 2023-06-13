@@ -1,13 +1,12 @@
 package ir.dealit.restful.controller.v1.auth;
 
 import ir.dealit.restful.api.v1.auth.AuthenticationApi;
-import ir.dealit.restful.dto.auth.SignInReq;
+import ir.dealit.restful.dto.auth.AuthTokenReq;
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.service.auth.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,7 +24,7 @@ public class AuthenticationController implements AuthenticationApi {
 
     @Override
     public ResponseEntity<AuthToken> authenticate(
-            @Valid SignInReq request
+            @Valid AuthTokenReq request
     ) {
         return ResponseEntity.ok(authService.authenticate(request));
     }

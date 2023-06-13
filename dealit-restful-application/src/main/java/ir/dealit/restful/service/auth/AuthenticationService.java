@@ -1,7 +1,7 @@
 package ir.dealit.restful.service.auth;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
-import ir.dealit.restful.dto.auth.SignInReq;
+import ir.dealit.restful.dto.auth.AuthTokenReq;
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.auth.UserSignUpReq;
 import ir.dealit.restful.dto.auth.UserSignUpRes;
@@ -39,7 +39,7 @@ public class AuthenticationService {
                 : UserSignUpRes.builder().successfulRegister(false).build();
     }
 
-    public AuthToken authenticate(SignInReq authReauest) {
+    public AuthToken authenticate(AuthTokenReq authReauest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
