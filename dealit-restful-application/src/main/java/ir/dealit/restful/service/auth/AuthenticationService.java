@@ -2,7 +2,7 @@ package ir.dealit.restful.service.auth;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
 import ir.dealit.restful.dto.auth.SignInReq;
-import ir.dealit.restful.dto.auth.AuthTokenRes;
+import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.auth.UserSignUpReq;
 import ir.dealit.restful.dto.auth.UserSignUpRes;
 import ir.dealit.restful.entity.user.UserEntity;
@@ -39,7 +39,7 @@ public class AuthenticationService {
                 : UserSignUpRes.builder().successfulRegister(false).build();
     }
 
-    public AuthTokenRes authenticate(SignInReq authReauest) {
+    public AuthToken authenticate(SignInReq authReauest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -51,10 +51,10 @@ public class AuthenticationService {
             throw new BadCredentialsException("Something happen wrongly in authenticate");
         }
         UserEntity userEntity = userRepository.findByUsername(authReauest.getUsername());
-        return userEntity != null ? AuthTokenRes.builder()
+        return userEntity != null ? AuthToken.builder()
                 .token(jwtUtils.generateToken(userEntity))
                 .build()
-                : AuthTokenRes.builder().token(null).build();
+                : AuthToken.builder().token(null).build();
     }
 }
 

@@ -1,6 +1,6 @@
 package ir.dealit.restful.api.v1.auth;
 
-import ir.dealit.restful.dto.auth.AuthTokenRes;
+import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.auth.SignInReq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface AuthenticationApi {
 
     @PostMapping("/token")
-    ResponseEntity<AuthTokenRes> authenticate(
+    ResponseEntity<AuthToken> authenticate(
             @RequestBody SignInReq request
     );
 
