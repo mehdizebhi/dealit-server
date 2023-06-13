@@ -1,5 +1,7 @@
 package ir.dealit.restful.controller.v1.user;
 
+import ir.dealit.restful.api.v1.user.UserApi;
+import ir.dealit.restful.dto.user.UserInfo;
 import ir.dealit.restful.entity.user.UserEntity;
 import ir.dealit.restful.service.user.UserDaoService;
 import lombok.RequiredArgsConstructor;
@@ -11,29 +13,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserApi {
 
     private final UserDaoService userDaoService;
 
-    @GetMapping("/{username}")
-    public ResponseEntity<UserDetails> getUserById(
-            @PathVariable("username") String username
-    ) {
-        return ResponseEntity.ok(userDaoService.loadUserByUsername(username));
-    }
+//    @GetMapping("/{username}")
+//    public ResponseEntity<UserDetails> getUserById(
+//            @PathVariable("username") String username
+//    ) {
+//        return ResponseEntity.ok(userDaoService.loadUserByUsername(username));
+//    }
+//
+//    @GetMapping("")
+//    public ResponseEntity<List<UserEntity>> getUsers() {
+//        return ResponseEntity.ok(userDaoService.loadAllUsers());
+//    }
+//
+//    @PostMapping("")
+//    public ResponseEntity<ObjectId> createUser(
+//            @RequestBody UserEntity userEntity
+//    ) {
+//        return ResponseEntity.ok(userDaoService.save(userEntity).getId());
+//    }
 
-    @GetMapping("")
-    public ResponseEntity<List<UserEntity>> getUsers() {
+    @Override
+    public ResponseEntity<List<UserInfo>> getAllUsers() {
         return ResponseEntity.ok(userDaoService.loadAllUsers());
     }
 
-    @PostMapping("")
-    public ResponseEntity<ObjectId> createUser(
-            @RequestBody UserEntity userEntity
-    ) {
+    @Override
+    public ResponseEntity<ObjectId> createUser(UserInfo user) {
         return ResponseEntity.ok(userDaoService.save(userEntity).getId());
     }
 
+    @Override
+    public ResponseEntity<UserInfo> getUserById(ObjectId id) {
+        return ResponseEntity.ok(userDaoService.loadUserByUsername(username));
+    }
 }
