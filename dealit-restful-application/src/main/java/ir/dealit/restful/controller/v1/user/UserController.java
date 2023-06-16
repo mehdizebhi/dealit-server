@@ -1,20 +1,18 @@
 package ir.dealit.restful.controller.v1.user;
 
-import ir.dealit.restful.api.v1.user.UserApi;
+import ir.dealit.restful.api.user.UserApiV1;
 import ir.dealit.restful.dto.user.UserInfo;
-import ir.dealit.restful.entity.user.UserEntity;
 import ir.dealit.restful.service.user.UserDaoService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController implements UserApi {
+public class UserController implements UserApiV1 {
 
     private final UserDaoService userDaoService;
 

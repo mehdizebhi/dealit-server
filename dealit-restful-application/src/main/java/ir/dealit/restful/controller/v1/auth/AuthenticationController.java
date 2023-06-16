@@ -1,6 +1,6 @@
 package ir.dealit.restful.controller.v1.auth;
 
-import ir.dealit.restful.api.v1.auth.AuthenticationApi;
+import ir.dealit.restful.api.auth.AuthenticationApiV1;
 import ir.dealit.restful.dto.auth.AuthTokenReq;
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.service.auth.AuthenticationService;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class AuthenticationController implements AuthenticationApi {
+public class AuthenticationController implements AuthenticationApiV1 {
 
     private final AuthenticationService authService;
 

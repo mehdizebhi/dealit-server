@@ -1,4 +1,4 @@
-package ir.dealit.restful.api.v1.user;
+package ir.dealit.restful.api.user;
 
 import ir.dealit.restful.dto.user.UserInfo;
 import org.bson.types.ObjectId;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequestMapping("/v1/users")
-public interface UserApi {
+public interface UserApiV1 {
 
     @GetMapping("")
     ResponseEntity<List<UserInfo>> getAllUsers();

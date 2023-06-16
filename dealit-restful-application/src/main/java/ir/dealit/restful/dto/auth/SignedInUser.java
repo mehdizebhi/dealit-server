@@ -12,7 +12,7 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 public class SignedInUser {
 
-    private String accessToekn;
+    private String accessToken;
     private String username;
     private ObjectId userId;
 
