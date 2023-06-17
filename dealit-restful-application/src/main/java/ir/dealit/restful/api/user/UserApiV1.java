@@ -1,5 +1,6 @@
 package ir.dealit.restful.api.user;
 
+import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.UserInfo;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,8 @@ public interface UserApiV1 {
     ResponseEntity<List<UserInfo>> getAllUsers();
 
     @PostMapping("")
-    ResponseEntity<ObjectId> createUser (
-            @RequestBody UserInfo user
+    ResponseEntity<UserInfo> createUser (
+            @RequestBody NewUser newUser
     );
 
     @GetMapping("/{id}")

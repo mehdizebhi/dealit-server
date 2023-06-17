@@ -1,7 +1,7 @@
 package ir.dealit.restful.config.security.jwt.filter;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtils;
-import ir.dealit.restful.service.user.UserDaoService;
+import ir.dealit.restful.service.user.UserDaoServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,14 +18,14 @@ import java.io.IOException;
 public class JwtAuthFilterImpl extends JwtAuthFilter {
 
     private final JwtUtils jwtUtils;
-    private final UserDaoService userDaoService;
+    private final UserDaoServiceImpl userDaoServiceImpl;
 
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-        super.defaultDoFilterInternal(request, response, filterChain, userDaoService);
+        super.defaultDoFilterInternal(request, response, filterChain, userDaoServiceImpl);
     }
 
     @Override

@@ -15,4 +15,7 @@ public interface UserRepository extends MongoRepository<UserEntity, ObjectId> {
 
     @Query("{'name':  ?0}")
     Optional<UserEntity> findByUsernameOptionally(String username);
+
+    Integer countByUsernameOrEmail(String username, String email);
+
 }
