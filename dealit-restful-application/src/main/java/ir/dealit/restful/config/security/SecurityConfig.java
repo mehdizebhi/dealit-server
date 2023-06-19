@@ -2,7 +2,7 @@ package ir.dealit.restful.config.security;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtils;
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
-import ir.dealit.restful.service.user.UserDaoServiceImpl;
+import ir.dealit.restful.service.user.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserDaoServiceImpl userDaoServiceImpl;
+    private final UserDetailsServiceImpl service;
 
     @Bean
     @Primary
@@ -27,11 +27,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDaoServiceImpl);
-        authProvider.setPasswordEncoder(passwordEncoder);
+        authProvider.setUserDetailsService(service);
+        authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

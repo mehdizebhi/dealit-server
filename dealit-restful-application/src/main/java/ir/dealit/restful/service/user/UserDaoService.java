@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface UserDaoService {
 
+    UserEntity findUserByUsername(String username);
     Optional<UserEntity> findUserById(ObjectId id);
     Optional<UserEntity> registerUser(NewUser newUser);
     Optional<UserEntity> partialUpdateUser(User user);

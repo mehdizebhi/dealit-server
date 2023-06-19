@@ -19,13 +19,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserDaoServiceImpl implements UserDetailsService, UserDaoService {
+public class UserDaoServiceImpl implements UserDaoService {
 
     private final UserRepository repository;
     private final PasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserEntity findUserByUsername(String username) {
         return repository.findByUsername(username);
     }
 
