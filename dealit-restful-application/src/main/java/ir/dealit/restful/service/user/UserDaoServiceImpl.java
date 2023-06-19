@@ -62,6 +62,11 @@ public class UserDaoServiceImpl implements UserDaoService {
         UserEntity entity = new UserEntity();
         BeanUtils.copyProperties(newUser, entity);
         entity.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+        // Set "true" value for some property for signup users
+        entity.setEnabled(true);
+        entity.setAccountNonExpired(true);
+        entity.setCredentialsNonExpired(true);
+        entity.setAccountNonLocked(true);
         return entity;
     }
 }
