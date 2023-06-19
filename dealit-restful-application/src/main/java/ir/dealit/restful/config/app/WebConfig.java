@@ -1,4 +1,4 @@
-package ir.dealit.restful.config.application;
+package ir.dealit.restful.config.app;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
