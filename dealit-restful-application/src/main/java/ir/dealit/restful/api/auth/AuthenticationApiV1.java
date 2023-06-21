@@ -2,6 +2,7 @@ package ir.dealit.restful.api.auth;
 
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.auth.AuthTokenReq;
+import ir.dealit.restful.dto.auth.SignedInUser;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.UserInfo;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface AuthenticationApiV1 {
 
     @PostMapping("/token")
-    ResponseEntity<AuthToken> authenticate(
+    ResponseEntity<AuthToken> signIn(
             @RequestBody AuthTokenReq request
     );
 
     @PostMapping("/signup")
-    ResponseEntity<UserInfo> singUp (
+    ResponseEntity<SignedInUser> singUp (
             @RequestBody NewUser newUser
     );
 
