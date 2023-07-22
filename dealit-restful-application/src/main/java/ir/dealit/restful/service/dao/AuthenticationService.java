@@ -1,4 +1,4 @@
-package ir.dealit.restful.service;
+package ir.dealit.restful.service.dao;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
 import ir.dealit.restful.dto.auth.*;

@@ -2,7 +2,7 @@ package ir.dealit.restful.config.security;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtils;
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
-import ir.dealit.restful.service.UserDetailsServiceImpl;
+import ir.dealit.restful.service.dao.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

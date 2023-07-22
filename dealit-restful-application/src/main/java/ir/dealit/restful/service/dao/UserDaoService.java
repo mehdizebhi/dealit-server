@@ -1,4 +1,4 @@
-package ir.dealit.restful.service;
+package ir.dealit.restful.service.dao;
 
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.User;
