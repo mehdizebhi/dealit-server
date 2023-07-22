@@ -1,13 +1,12 @@
-package ir.dealit.restful.controller.v1.user;
+package ir.dealit.restful.controller.v1;
 
 import static org.springframework.http.ResponseEntity.*;
 
-import ir.dealit.restful.api.user.UserApiV1;
+import ir.dealit.restful.controller.v1.api.UserApi;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.UserInfo;
-import ir.dealit.restful.entity.user.UserEntity;
 import ir.dealit.restful.hateoas.assembler.UserInfoRepresentationModelAssembler;
-import ir.dealit.restful.service.user.UserDaoServiceImpl;
+import ir.dealit.restful.service.UserDaoService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
@@ -15,13 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController implements UserApiV1 {
+public class UserController implements UserApi {
 
-    private final UserDaoServiceImpl service;
+    private final UserDaoService service;
     private final UserInfoRepresentationModelAssembler assembler;
 
 //    @GetMapping("/{username}")

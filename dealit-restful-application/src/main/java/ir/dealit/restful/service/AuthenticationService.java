@@ -1,10 +1,9 @@
-package ir.dealit.restful.service.auth;
+package ir.dealit.restful.service;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
 import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.user.NewUser;
-import ir.dealit.restful.entity.user.UserEntity;
-import ir.dealit.restful.service.user.UserDaoServiceImpl;
+import ir.dealit.restful.repository.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,13 +15,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl implements AuthenticationService {
+public class AuthenticationService {
 
     private final JwtUtilsImpl jwtUtils;
     private final AuthenticationManager authenticationManager;
-    private final UserDaoServiceImpl service;
+    private final UserDaoService service;
 
-    @Override
     public Optional<SignedInUser> register(NewUser newUser) {
         Optional<UserEntity> userEntity = service.registerUser(newUser);
         return userEntity.map(u -> {
@@ -35,7 +33,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }).orElse(Optional.empty());
     }
 
-    @Override
     public Optional<SignedInUser> authenticate(AuthTokenReq req) {
         try {
             authenticationManager.authenticate(

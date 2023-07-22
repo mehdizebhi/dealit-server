@@ -1,4 +1,4 @@
-package ir.dealit.restful.entity.user;
+package ir.dealit.restful.repository.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

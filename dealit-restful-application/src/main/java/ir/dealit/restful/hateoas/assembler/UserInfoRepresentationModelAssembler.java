@@ -1,12 +1,11 @@
 package ir.dealit.restful.hateoas.assembler;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import ir.dealit.restful.controller.v1.user.UserController;
+import ir.dealit.restful.controller.v1.UserController;
 import ir.dealit.restful.dto.user.UserInfo;
-import ir.dealit.restful.entity.user.UserEntity;
+import ir.dealit.restful.repository.entity.UserEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;

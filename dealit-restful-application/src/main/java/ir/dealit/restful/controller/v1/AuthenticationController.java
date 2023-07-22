@@ -1,14 +1,12 @@
-package ir.dealit.restful.controller.v1.auth;
+package ir.dealit.restful.controller.v1;
 
-import ir.dealit.restful.api.auth.AuthenticationApiV1;
+import ir.dealit.restful.controller.v1.api.AuthenticationApi;
 import ir.dealit.restful.dto.auth.AuthTokenReq;
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.auth.SignedInUser;
 import ir.dealit.restful.dto.user.NewUser;
-import ir.dealit.restful.dto.user.UserInfo;
 import ir.dealit.restful.hateoas.assembler.UserInfoRepresentationModelAssembler;
-import ir.dealit.restful.service.auth.AuthenticationServiceImpl;
-import ir.dealit.restful.service.user.UserDaoServiceImpl;
+import ir.dealit.restful.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,9 +18,9 @@ import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequiredArgsConstructor
-public class AuthenticationController implements AuthenticationApiV1 {
+public class AuthenticationController implements AuthenticationApi {
 
-    private final AuthenticationServiceImpl service;
+    private final AuthenticationService service;
     private final UserInfoRepresentationModelAssembler assembler;
 
 //    @PostMapping("/register")

@@ -1,6 +1,6 @@
-package ir.dealit.restful.service.user;
+package ir.dealit.restful.service;
 
-import ir.dealit.restful.repository.user.UserRepository;
+import ir.dealit.restful.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

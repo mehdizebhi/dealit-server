@@ -1,40 +1,34 @@
-package ir.dealit.restful.service.user;
+package ir.dealit.restful.service;
 
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.User;
-import ir.dealit.restful.entity.user.UserEntity;
-import ir.dealit.restful.repository.user.UserRepository;
+import ir.dealit.restful.repository.entity.UserEntity;
+import ir.dealit.restful.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserDaoServiceImpl implements UserDaoService {
+public class UserDaoService {
 
     private final UserRepository repository;
     private final PasswordEncoder bCryptPasswordEncoder;
 
-    @Override
     public UserEntity findUserByUsername(String username) {
         return repository.findByUsername(username);
     }
 
-    @Override
     public Optional<UserEntity> findUserById(ObjectId id) {
         return repository.findById(id);
     }
 
-    @Override
+
 //    @Transactional
     public Optional<UserEntity> registerUser(NewUser newUser) {
         Integer count = repository.countByUsernameOrEmail(
@@ -48,12 +42,11 @@ public class UserDaoServiceImpl implements UserDaoService {
         return Optional.of(userEntity);
     }
 
-    @Override
+
     public Optional<UserEntity> partialUpdateUser(User user) {
         return Optional.empty();
     }
 
-    @Override
     public List<UserEntity> findAllUsers() {
         return repository.findAll();
     }

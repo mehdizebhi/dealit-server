@@ -1,4 +1,4 @@
-package ir.dealit.restful.api.user;
+package ir.dealit.restful.controller.v1.api;
 
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.UserInfo;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequestMapping("/v1/users")
-public interface UserApiV1 {
+public interface UserApi {
 
     @GetMapping("")
     ResponseEntity<List<UserInfo>> getAllUsers();

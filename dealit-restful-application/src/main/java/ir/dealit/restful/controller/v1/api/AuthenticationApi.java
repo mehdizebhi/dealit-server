@@ -1,17 +1,16 @@
-package ir.dealit.restful.api.auth;
+package ir.dealit.restful.controller.v1.api;
 
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.auth.AuthTokenReq;
 import ir.dealit.restful.dto.auth.SignedInUser;
 import ir.dealit.restful.dto.user.NewUser;
-import ir.dealit.restful.dto.user.UserInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/v1/auth")
-public interface AuthenticationApiV1 {
+public interface AuthenticationApi {
 
     @PostMapping("/token")
     ResponseEntity<AuthToken> signIn(

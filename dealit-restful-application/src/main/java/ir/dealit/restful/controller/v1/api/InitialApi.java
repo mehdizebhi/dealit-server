@@ -1,4 +1,4 @@
-package ir.dealit.restful.api.root;
+package ir.dealit.restful.controller.v1.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
