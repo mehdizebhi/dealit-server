@@ -1,4 +1,4 @@
-package ir.dealit.restful.web.controller.v1.api;
+package ir.dealit.restful.controller.v1.api;
 
 import ir.dealit.restful.dto.account.AccountOverview;
 import ir.dealit.restful.dto.user.NewUser;

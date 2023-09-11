@@ -13,5 +13,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthToken extends RepresentationModel<AuthToken> implements Serializable {
+
     private String token;
+    private String type;
+    private long exp;
 }

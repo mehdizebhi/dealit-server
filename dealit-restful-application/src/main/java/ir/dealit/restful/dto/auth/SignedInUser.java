@@ -15,8 +15,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class SignedInUser extends RepresentationModel<SignedInUser> implements Serializable {
 
-    private String accessToken;
+    private AuthToken accessToken;
     private String username;
-    private ObjectId userId;
+    private String userId;
 
 }

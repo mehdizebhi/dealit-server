@@ -1,8 +1,8 @@
-package ir.dealit.restful.web.controller.v1;
+package ir.dealit.restful.controller.v1;
 
 import static org.springframework.http.ResponseEntity.*;
 
-import ir.dealit.restful.web.controller.v1.api.UserApi;
+import ir.dealit.restful.controller.v1.api.UserApi;
 import ir.dealit.restful.dto.account.AccountOverview;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.UserInfo;

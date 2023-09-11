@@ -18,4 +18,6 @@ public class NewUser extends RepresentationModel<NewUser> implements Serializabl
     private String password;
     private String email;
     private String displayName;
+    private String phoneNumber = "";
+    private String account;
 }

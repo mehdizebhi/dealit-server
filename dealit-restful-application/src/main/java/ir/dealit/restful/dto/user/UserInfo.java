@@ -8,6 +8,7 @@ import org.bson.types.ObjectId;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,8 +16,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class UserInfo extends RepresentationModel<UserInfo> implements Serializable {
 
-    private ObjectId id;
+    private String id;
     private String username;
     private String displayName;
     private String email;
+    private List<String> accountsId;
 }
