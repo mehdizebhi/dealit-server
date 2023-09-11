@@ -1,4 +1,4 @@
-package ir.dealit.restful.controller.v1.api;
+package ir.dealit.restful.web.controller.v1.api;
 
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.auth.AuthTokenReq;
@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/v1/auth")
 public interface AuthenticationApi {
@@ -22,5 +23,8 @@ public interface AuthenticationApi {
             @RequestBody NewUser newUser
     );
 
-
+    @PostMapping("/reset-password")
+    ResponseEntity<String> resetPassword(
+            @RequestParam(value = "email", required = true) String email
+    );
 }

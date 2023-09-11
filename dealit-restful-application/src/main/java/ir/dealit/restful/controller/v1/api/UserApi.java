@@ -1,5 +1,6 @@
-package ir.dealit.restful.controller.v1.api;
+package ir.dealit.restful.web.controller.v1.api;
 
+import ir.dealit.restful.dto.account.AccountOverview;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.UserInfo;
 import org.bson.types.ObjectId;
@@ -23,6 +24,17 @@ public interface UserApi {
     ResponseEntity<UserInfo> getUserById (
             @PathVariable("id") ObjectId id
     );
+
+    @GetMapping("/{userId}/accounts")
+    ResponseEntity<AccountOverview> getAccountOverview(
+            @PathVariable("userId") ObjectId userId
+    );
+
+
+//    @GetMapping("/{id}/accounts")
+//    ResponseEntity<List<String>> getAccountIds(
+//            @PathVariable("id") ObjectId id
+//    );
 
 /*    @GetMapping("")
     ResponseEntity<UserInfo> getUserByUsername (

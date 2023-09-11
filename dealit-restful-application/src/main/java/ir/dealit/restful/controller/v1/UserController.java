@@ -1,10 +1,12 @@
-package ir.dealit.restful.controller.v1;
+package ir.dealit.restful.web.controller.v1;
 
 import static org.springframework.http.ResponseEntity.*;
 
-import ir.dealit.restful.controller.v1.api.UserApi;
+import ir.dealit.restful.web.controller.v1.api.UserApi;
+import ir.dealit.restful.dto.account.AccountOverview;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.UserInfo;
+import ir.dealit.restful.repository.UserRepository;
 import ir.dealit.restful.util.hateoas.assembler.UserInfoRepresentationModelAssembler;
 import ir.dealit.restful.service.dao.UserDaoService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class UserController implements UserApi {
 
     private final UserDaoService service;
     private final UserInfoRepresentationModelAssembler assembler;
+    private final UserRepository repository;
 
 //    @GetMapping("/{username}")
 //    public ResponseEntity<UserDetails> getUserById(
@@ -61,4 +64,17 @@ public class UserController implements UserApi {
                 .map(ResponseEntity::ok)
                 .orElse(notFound().build());
     }
+
+    @Override
+    public ResponseEntity<AccountOverview> getAccountOverview(ObjectId userId) {
+        return null;
+    }
+
+    /*@Override
+    public ResponseEntity<List<String>> getAccountIds(ObjectId id) {
+        return service.findAllAccountsByUserId(id)
+//                .map(list -> list.stream().map(it -> it.toString()).collect(Collectors.toList()))
+                .map(ResponseEntity::ok)
+                .orElse(badRequest().build());
+    }*/
 }
