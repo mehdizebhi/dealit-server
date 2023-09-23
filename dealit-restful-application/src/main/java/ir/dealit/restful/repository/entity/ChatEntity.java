@@ -22,7 +22,7 @@ public class ChatEntity {
 
     private @MongoId ObjectId id;
     private @DocumentReference @Indexed(unique = true) AccountEntity owner;
-    private List<ConversationEntity> conversations;
+    private @DocumentReference List<ConversationEntity> conversations;
 //    private List<MessageChatEntity> messages;
 
 

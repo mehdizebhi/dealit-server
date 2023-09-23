@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.status;
@@ -39,8 +40,16 @@ public class AttachmentController implements AttachmentApi {
 
     @Override
     public ResponseEntity<List<Attachment>> uploadAll(List<MultipartFile> files) {
-        files.forEach(file -> log.info("file = {}", file.getName() + " " + file.getContentType()));
-        return null;
+        var attachments = files.stream()
+                .map(file -> {
+                    try {
+                        return attachmentService.save(assembler.multipartFileToModel(file)).get();
+                    } catch (Exception e) {
+                        throw new RuntimeException("Unable to upload files.", e);
+                    }
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(attachments);
     }
 
     @Override

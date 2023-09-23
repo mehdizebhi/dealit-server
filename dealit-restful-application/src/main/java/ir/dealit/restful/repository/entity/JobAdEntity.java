@@ -32,6 +32,7 @@ public class JobAdEntity {
     private FieldEntity field;
     private int projectLength;
     private int weeklyLoad;
+    private List<TagEntity> tags;
     private @DocumentReference List<AttachmentEntity> attachment;
     private @CreatedDate LocalDateTime createdAt;
     private @LastModifiedDate LocalDateTime updatedAt;
