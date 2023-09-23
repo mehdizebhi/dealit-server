@@ -3,6 +3,7 @@ package ir.dealit.restful.service.arvan;
 import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.service.attachment.AttachmentService;
 import ir.dealit.restful.service.dao.AttachmentDaoService;
+import ir.dealit.restful.util.AttachmentHelper;
 import ir.dealit.restful.util.hateoas.assembler.AttachmentModelAssembler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,8 @@ public class ArvanCloudStorageService implements AttachmentService {
         try {
             PutObjectRequest putOb = PutObjectRequest.builder()
                     .bucket(defaultBucketName)
-                    .key(attachment.getFileId() + "." + attachment.getFileName().split("\\.")[1])
+//                    .key(attachment.getFileId() + "." + AttachmentHelper.getFileExtension(attachment.getFileName()))
+                    .key(attachment.getFileId())
                     .build();
 
             s3.putObject(putOb, RequestBody.fromBytes(attachment.getData()));
@@ -53,7 +55,8 @@ public class ArvanCloudStorageService implements AttachmentService {
         try {
             var entity = attachmentDaoService.findById(id).get();
             GetObjectRequest objectRequest = GetObjectRequest.builder()
-                    .key(entity.getFileId() + "." + entity.getFileName().split("\\.")[1])
+//                    .key(entity.getFileId() + "." + AttachmentHelper.getFileExtension(entity.getFileName()))
+                    .key(entity.getFileId())
                     .bucket(defaultBucketName)
                     .build();
 

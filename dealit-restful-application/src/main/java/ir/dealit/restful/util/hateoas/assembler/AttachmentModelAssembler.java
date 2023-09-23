@@ -31,6 +31,7 @@ public class AttachmentModelAssembler extends RepresentationModelAssemblerSuppor
         if (Objects.nonNull(entity)) {
             Attachment model = createModelWithId(entity.getId(), entity);
             BeanUtils.copyProperties(entity, model);
+            model.setId(entity.getId().toString());
             model.add(getLinks(entity));
             return model;
         }

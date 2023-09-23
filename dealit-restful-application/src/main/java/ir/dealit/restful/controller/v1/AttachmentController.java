@@ -3,6 +3,7 @@ package ir.dealit.restful.controller.v1;
 import ir.dealit.restful.controller.v1.api.AttachmentApi;
 import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.service.attachment.AttachmentService;
+import ir.dealit.restful.service.dao.AttachmentDaoService;
 import ir.dealit.restful.util.hateoas.assembler.AttachmentModelAssembler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
@@ -24,10 +26,9 @@ import static org.springframework.http.ResponseEntity.status;
 @Slf4j
 public class AttachmentController implements AttachmentApi {
 
-
     private final AttachmentService attachmentService;
+    private final AttachmentDaoService daoService;
     private final AttachmentModelAssembler assembler;
-
 
     @Override
     public ResponseEntity<Attachment> upload(MultipartFile file) throws Exception {
@@ -50,5 +51,13 @@ public class AttachmentController implements AttachmentApi {
                 .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(attachment.getFileSize()))
                 .header(HttpHeaders.CONTENT_DISPOSITION,  "attachment; filename=\"" + attachment.getFileName() + "\"")
                 .body(new ByteArrayResource(attachment.getData()));
+    }
+
+    @Override
+    public ResponseEntity<Attachment> getAttachmentInfo(ObjectId id) {
+        return daoService.findById(id)
+                .map(assembler::toModel)
+                .map(ResponseEntity::ok)
+                .orElse(notFound().build());
     }
 }

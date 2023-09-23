@@ -26,4 +26,9 @@ public interface AttachmentApi {
     ResponseEntity<Resource> download(
             @PathVariable("id") ObjectId id
     );
+
+    @GetMapping("/{id}")
+    ResponseEntity<Attachment> getAttachmentInfo(
+            @PathVariable("id") ObjectId id
+    );
 }
