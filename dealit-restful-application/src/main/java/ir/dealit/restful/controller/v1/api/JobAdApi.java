@@ -1,32 +1,47 @@
 package ir.dealit.restful.controller.v1.api;
 
 import ir.dealit.restful.dto.job.JobAd;
+import ir.dealit.restful.dto.job.JobFilter;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
-import java.util.List;
 
 @RequestMapping("/v1/jobs")
 public interface JobAdApi {
 
     @GetMapping("/{id}")
     ResponseEntity<JobAd> getJobAd(
-            @PathVariable String id
+            @PathVariable ObjectId id
+    );
+
+    @GetMapping("/all")
+    ResponseEntity<Collection<JobAd>> getAllJobAds(
+            @PageableDefault Pageable pageable
     );
 
     @GetMapping("")
     ResponseEntity<Collection<JobAd>> getJobAds(
-            @PageableDefault(size = 10) Pageable pageable
+            @PageableDefault Pageable pageable,
+            @RequestBody JobFilter filter
     );
 
     @PostMapping("")
-    ResponseEntity<String> createJobAd(
-            @RequestPart JobAd jobAd,
-            @RequestPart List<MultipartFile> files
+    ResponseEntity<JobAd> createJobAd(
+            @RequestBody JobAd jobAd
+    );
+
+    @PutMapping("")
+    ResponseEntity<JobAd> updateJobAd(
+            @RequestBody JobAd jobAd
+    );
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteJobAd(
+            @PathVariable ObjectId id
     );
 
 }

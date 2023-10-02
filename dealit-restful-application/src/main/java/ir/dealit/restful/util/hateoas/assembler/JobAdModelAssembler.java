@@ -1,0 +1,43 @@
+package ir.dealit.restful.util.hateoas.assembler;
+
+import ir.dealit.restful.controller.v1.JobAdController;
+import ir.dealit.restful.dto.job.JobAd;
+import ir.dealit.restful.repository.entity.JobAdEntity;
+import ir.dealit.restful.repository.entity.TagEntity;
+import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+@Component
+public class JobAdModelAssembler extends RepresentationModelAssemblerSupport<JobAdEntity, JobAd> {
+
+    public JobAdModelAssembler() {
+        super(JobAdController.class, JobAd.class);
+    }
+
+    @Override
+    public JobAd toModel(JobAdEntity entity) {
+        if (Objects.nonNull(entity)) {
+            JobAd model = createModelWithId(entity.getId(), entity);
+            BeanUtils.copyProperties(entity, model);
+            model.setId(entity.getId().toString());
+            model.setCreatedAt(entity.getCreatedAt().toString());
+            model.setUpdatedAt(entity.getUpdatedAt().toString());
+            model.setOwnerId(entity.getOwner().getId().toString());
+            model.add(getLinks(entity));
+            return model;
+        }
+        return null;
+    }
+
+    private List<Link> getLinks(JobAdEntity entity) {
+        List<Link> links = new ArrayList<>();
+        return links;
+    }
+}
