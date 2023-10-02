@@ -1,4 +1,4 @@
-package ir.dealit.restful.service.arvan;
+package ir.dealit.restful.service.external;
 
 import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.service.attachment.AttachmentService;

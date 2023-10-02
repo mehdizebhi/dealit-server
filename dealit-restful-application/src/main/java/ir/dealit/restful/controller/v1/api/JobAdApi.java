@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RequestMapping("/v1/jobs")
-public interface JobAdController {
+public interface JobAdApi {
 
     @GetMapping("/{id}")
     ResponseEntity<JobAd> getJobAd(
