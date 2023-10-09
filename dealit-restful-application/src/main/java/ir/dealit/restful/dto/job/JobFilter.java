@@ -24,6 +24,7 @@ public class JobFilter {
     private @Nullable SubmitRange submitRange;
     private @Nullable List<ExperienceLevel> experienceLevels;
     private boolean fixedPrice = false;
+    private boolean hourly = false;
     private boolean paymentVerified = false;
     private boolean fromPreviousClients = false;
 }

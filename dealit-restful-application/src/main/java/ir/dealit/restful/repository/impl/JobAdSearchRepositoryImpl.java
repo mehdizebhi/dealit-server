@@ -3,7 +3,7 @@ package ir.dealit.restful.repository.impl;
 import ir.dealit.restful.dto.job.JobFilter;
 import ir.dealit.restful.repository.JobAdSearchRepository;
 import ir.dealit.restful.repository.entity.JobAdEntity;
-import ir.dealit.restful.util.SearchExtractHelper;
+import ir.dealit.restful.util.helper.SearchExtractHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

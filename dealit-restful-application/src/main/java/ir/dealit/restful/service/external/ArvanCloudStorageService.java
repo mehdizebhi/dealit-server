@@ -3,7 +3,6 @@ package ir.dealit.restful.service.external;
 import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.service.attachment.AttachmentService;
 import ir.dealit.restful.service.dao.AttachmentDaoService;
-import ir.dealit.restful.util.AttachmentHelper;
 import ir.dealit.restful.util.hateoas.assembler.AttachmentModelAssembler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

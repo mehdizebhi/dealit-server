@@ -1,4 +1,4 @@
 package ir.dealit.restful.repository.entity;
 
-public class ProfileEntity {
+public class FreelancerProfileEntity {
 }

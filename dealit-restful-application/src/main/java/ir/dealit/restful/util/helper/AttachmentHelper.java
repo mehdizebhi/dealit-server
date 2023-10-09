@@ -1,4 +1,4 @@
-package ir.dealit.restful.util;
+package ir.dealit.restful.util.helper;
 
 public class AttachmentHelper {
 
