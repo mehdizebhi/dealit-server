@@ -1,6 +1,13 @@
 package ir.dealit.restful.util.factory;
 
-import ir.dealit.restful.repository.entity.*;
+import ir.dealit.restful.module.account.entity.AccountEntity;
+import ir.dealit.restful.module.account.entity.ClientAccountEntity;
+import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
+import ir.dealit.restful.module.chat.entity.ChatEntity;
+import ir.dealit.restful.module.inbox.entity.InboxEntity;
+import ir.dealit.restful.module.wallet.entity.AssetEntity;
+import ir.dealit.restful.module.wallet.entity.Currency;
+import ir.dealit.restful.module.wallet.entity.WalletEntity;
 
 import java.math.BigDecimal;
 import java.util.Collections;

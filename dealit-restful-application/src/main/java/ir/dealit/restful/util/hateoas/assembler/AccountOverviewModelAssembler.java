@@ -1,10 +1,10 @@
 package ir.dealit.restful.util.hateoas.assembler;
 
-import ir.dealit.restful.controller.v1.AccountController;
+import ir.dealit.restful.module.account.controller.AccountController;
 import ir.dealit.restful.dto.account.AccountOverview;
-import ir.dealit.restful.repository.entity.AccountEntity;
-import ir.dealit.restful.repository.entity.ClientAccountEntity;
-import ir.dealit.restful.repository.entity.FreelancerAccountEntity;
+import ir.dealit.restful.module.account.entity.AccountEntity;
+import ir.dealit.restful.module.account.entity.ClientAccountEntity;
+import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;

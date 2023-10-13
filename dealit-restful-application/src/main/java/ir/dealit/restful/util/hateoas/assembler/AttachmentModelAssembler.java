@@ -1,9 +1,9 @@
 package ir.dealit.restful.util.hateoas.assembler;
 
-import ir.dealit.restful.controller.v1.AttachmentController;
-import ir.dealit.restful.controller.v1.api.AttachmentApi;
+import ir.dealit.restful.module.attachment.controller.AttachmentController;
+import ir.dealit.restful.api.AttachmentApi;
 import ir.dealit.restful.dto.attachment.Attachment;
-import ir.dealit.restful.repository.entity.AttachmentEntity;
+import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;

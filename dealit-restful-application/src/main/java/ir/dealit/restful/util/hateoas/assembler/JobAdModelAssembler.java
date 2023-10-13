@@ -1,9 +1,8 @@
 package ir.dealit.restful.util.hateoas.assembler;
 
-import ir.dealit.restful.controller.v1.JobAdController;
+import ir.dealit.restful.module.job.controller.JobAdController;
 import ir.dealit.restful.dto.job.JobAd;
-import ir.dealit.restful.repository.entity.JobAdEntity;
-import ir.dealit.restful.repository.entity.TagEntity;
+import ir.dealit.restful.module.job.entity.JobAdEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
 public class JobAdModelAssembler extends RepresentationModelAssemblerSupport<JobAdEntity, JobAd> {
