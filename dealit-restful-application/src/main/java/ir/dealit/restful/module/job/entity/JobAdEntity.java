@@ -31,14 +31,15 @@ public class JobAdEntity {
     private List<String> tags;
     private ExperienceLevel experienceLevel;
     private boolean fixedPrice;
-    private Double minPrice;
-    private Double maxPrice;
+    private Double minBudget;
+    private Double maxBudget;
     private ProjectLength projectLength;
     private WeeklyLoad weeklyLoad;
     private @DocumentReference List<AttachmentEntity> attachment;
     private @CreatedDate LocalDateTime createdAt;
     private @LastModifiedDate LocalDateTime updatedAt;
     private @DocumentReference(lazy = true) AccountEntity owner;
+    private List<String> questions;
 
     private @TextScore Float score;
 }

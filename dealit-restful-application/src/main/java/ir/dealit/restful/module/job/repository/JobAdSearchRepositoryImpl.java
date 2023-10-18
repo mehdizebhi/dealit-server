@@ -43,10 +43,10 @@ public class JobAdSearchRepositoryImpl implements JobAdSearchRepository {
         Query query = TextQuery.queryText(criteria).sortByScore();
 
         if (filter.getMinPrice() != null) {
-            query.addCriteria(Criteria.where("minPrice").gte(filter.getMinPrice()));
+            query.addCriteria(Criteria.where("minBudget").gte(filter.getMinPrice()));
         }
         if (filter.getMaxPrice() != null) {
-            query.addCriteria(Criteria.where("maxPrice").lte(filter.getMaxPrice()));
+            query.addCriteria(Criteria.where("maxBudget").lte(filter.getMaxPrice()));
         }
         if (filter.getProjectLengths() != null && !filter.getProjectLengths().isEmpty()) {
             query.addCriteria(Criteria.where("projectLength").in(filter.getProjectLengths()));

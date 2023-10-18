@@ -23,8 +23,8 @@ public class JobAd extends RepresentationModel<JobAd> {
     private @NotNull String title;
     private @NotNull String description;
     private @NotNull boolean fixedPrice;
-    private @NotNull Double minPrice;
-    private @NotNull Double maxPrice;
+    private @NotNull Double minBudget;
+    private @NotNull Double maxBudget;
     private @NotNull String ownerId;
 
     private @Nullable ProjectLength projectLength;
