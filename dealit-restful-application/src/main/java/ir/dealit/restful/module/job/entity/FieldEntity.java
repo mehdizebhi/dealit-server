@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "fields")
+@Document(collection = "job_fields")
 public class FieldEntity {
     private @MongoId ObjectId id;
     private String title;
