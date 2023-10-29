@@ -25,7 +25,7 @@ public class JobAdController implements JobAdApi {
     private final JobAdDaoService jobAdDaoService;
     private final JobAdModelAssembler assembler;
 
-    @Override
+    /*@Override
     public ResponseEntity<JobAd> getJobAd(ObjectId id) {
         return jobAdDaoService.findById(id)
                 .map(assembler::toModel)
@@ -49,7 +49,7 @@ public class JobAdController implements JobAdApi {
                         .stream()
                         .map(assembler::toModel)
                         .collect(Collectors.toList()));
-    }
+    }*/
 
     @Override
     public ResponseEntity<JobAd> createJobAd(JobAd jobAd) {
