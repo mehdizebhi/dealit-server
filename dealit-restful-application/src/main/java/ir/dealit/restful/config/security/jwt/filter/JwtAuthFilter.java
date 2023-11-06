@@ -43,8 +43,8 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
         if (isSubjectValid(username) && !isAlreadyAuthenticated()) {
             UserDetails user = loadUserBySubject(username, userDetailsService);
             if (isLoadedUserValid(user) && isTokenValid(jwt, user)) {
-                setAuthenticationSecurityContextHolder(createAthenticationToken(
-                        user, null, user.getAuthorities(), request
+                setAuthenticationSecurityContextHolder(createAuthenticationToken(
+                        user, user.getPassword(), user.getAuthorities(), request
                 ));
             }
         }
@@ -52,10 +52,11 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     protected boolean isAlreadyAuthenticated() {
-        return SecurityContextHolder.getContext().getAuthentication() != null;
+        return SecurityContextHolder.getContext().getAuthentication() != null
+                && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
-    protected Authentication createAthenticationToken(
+    protected Authentication createAuthenticationToken(
             Object principal,
             Object credentials,
             Collection<? extends GrantedAuthority> authorities,

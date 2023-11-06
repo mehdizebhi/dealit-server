@@ -1,7 +1,7 @@
 package ir.dealit.restful.config.security.jwt.filter;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtils;
-import ir.dealit.restful.module.user.service.UserDetailsServiceImpl;
+import ir.dealit.restful.module.user.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,5 +64,4 @@ public class JwtAuthFilterImpl extends JwtAuthFilter {
                 && loadedUser.isAccountNonExpired()
                 && loadedUser.isEnabled();
     }
-
 }

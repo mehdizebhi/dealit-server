@@ -2,7 +2,7 @@ package ir.dealit.restful.config.security;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtils;
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
-import ir.dealit.restful.module.user.service.UserDetailsServiceImpl;
+import ir.dealit.restful.module.user.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,11 +11,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true
+)
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl service;
