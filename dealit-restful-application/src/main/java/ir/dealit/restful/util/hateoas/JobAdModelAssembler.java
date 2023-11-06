@@ -1,6 +1,6 @@
 package ir.dealit.restful.util.hateoas.assembler;
 
-import ir.dealit.restful.module.job.controller.JobAdController;
+import ir.dealit.restful.module.job.controller.CommandJobAdController;
 import ir.dealit.restful.dto.job.JobAd;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
 import org.springframework.beans.BeanUtils;
@@ -13,10 +13,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class JobAdModelAssembler extends RepresentationModelAssemblerSupport<JobAdEntity, JobAd> {
+public class JobAdModelAssembler {
+
+}
+/*public class JobAdModelAssembler extends RepresentationModelAssemblerSupport<JobAdEntity, JobAd> {
 
     public JobAdModelAssembler() {
-        super(JobAdController.class, JobAd.class);
+        super(CommandJobAdController.class, JobAd.class);
     }
 
     @Override
@@ -28,7 +31,7 @@ public class JobAdModelAssembler extends RepresentationModelAssemblerSupport<Job
             model.setCreatedAt(entity.getCreatedAt().toString());
             model.setUpdatedAt(entity.getUpdatedAt().toString());
             model.setOwnerId(entity.getOwner().getId().toString());
-            model.add(getLinks(entity));
+//            model.add(getLinks(entity));
             return model;
         }
         return null;
@@ -38,4 +41,4 @@ public class JobAdModelAssembler extends RepresentationModelAssemblerSupport<Job
         List<Link> links = new ArrayList<>();
         return links;
     }
-}
+}*/

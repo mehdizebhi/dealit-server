@@ -17,12 +17,15 @@ import java.util.Objects;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Component
-public class AccountOverviewModelAssembler extends
+public class AccountOverviewModelAssembler {
+
+}
+/*public class AccountOverviewModelAssembler extends
         RepresentationModelAssemblerSupport<AccountEntity, AccountOverview> {
 
-    /**
+    *//**
      * Creates a new {@link RepresentationModelAssemblerSupport} using the given controller class and resource type.
-     */
+     *//*
     public AccountOverviewModelAssembler() {
         super(AccountController.class, AccountOverview.class);
     }
@@ -32,19 +35,17 @@ public class AccountOverviewModelAssembler extends
         if (Objects.isNull(entity)) {
             return null;
         }
+        AccountOverview model = createModelWithId(entity.getId(), entity);
+        BeanUtils.copyProperties(entity, model);
         if (entity instanceof FreelancerAccountEntity) {
-            AccountOverview model = createModelWithId(entity.getId(), entity);
-            BeanUtils.copyProperties(entity, model);
-            model.setId(entity.getId().toString());
+//            model.setId(entity.getId().toString());
 //            model.setAccountsId(entity.getAccounts().stream().map(account -> account.getId().toString()).collect(Collectors.toList()));
-            model.add(getLinks(entity));
+//            model.add(getLinks(entity));
             return model;
         } else if (entity instanceof ClientAccountEntity) {
-            AccountOverview model = createModelWithId(entity.getId(), entity);
-            BeanUtils.copyProperties(entity, model);
-            model.setId(entity.getId().toString());
+//            model.setId(entity.getId().toString());
 //            model.setAccountsId(entity.getAccounts().stream().map(account -> account.getId().toString()).collect(Collectors.toList()));
-            model.add(getLinks(entity));
+//            model.add(getLinks(entity));
             return model;
         }
         return null;
@@ -54,4 +55,4 @@ public class AccountOverviewModelAssembler extends
         List<Link> links = new ArrayList<>();
         return links;
     }
-}
+}*/
