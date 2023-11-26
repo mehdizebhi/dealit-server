@@ -1,4 +1,4 @@
-package ir.dealit.restful.module.job.entity;
+package ir.dealit.restful.dto.enums;
 
 public enum ProjectLength {
     LESS_THAN_ONE_MONTH,

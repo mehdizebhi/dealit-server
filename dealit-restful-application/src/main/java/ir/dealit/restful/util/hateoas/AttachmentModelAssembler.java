@@ -1,4 +1,4 @@
-package ir.dealit.restful.util.hateoas.assembler;
+package ir.dealit.restful.util.hateoas;
 
 import ir.dealit.restful.module.attachment.controller.AttachmentController;
 import ir.dealit.restful.api.AttachmentApi;

@@ -1,10 +1,15 @@
 package ir.dealit.restful.module.user.service;
 
+import ir.dealit.restful.dto.enums.Authority;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.User;
 import ir.dealit.restful.module.account.entity.AccountEntity;
+import ir.dealit.restful.module.account.entity.ClientAccountEntity;
+import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import ir.dealit.restful.module.account.service.AccountDaoService;
+import ir.dealit.restful.module.user.entity.RoleEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
+import ir.dealit.restful.module.user.repository.RoleRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.util.exception.UserFoundExeption;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +26,7 @@ import java.util.*;
 public class UserDaoService {
 
     private final UserRepository repository;
+    private final RoleDaoService roleDaoService;
     private final AccountDaoService accountDaoService;
     private final PasswordEncoder bCryptPasswordEncoder;
 
@@ -42,9 +48,16 @@ public class UserDaoService {
             throw new UserFoundExeption("username or email is exist!");
         }
         //Todo: validate UserEntity object
-        UserEntity userEntity = repository.save(toEntity(newUser));
+        UserEntity userEntity = toEntity(newUser);
+        userEntity.addRoles(roleDaoService.loadRoleByName("ROLE_USER"));
+        userEntity = repository.save(userEntity);
         AccountEntity account = accountDaoService.setupAccount(userEntity, newUser.getAccount());
         userEntity.addAccount(account);
+        if (account instanceof FreelancerAccountEntity) {
+            userEntity.addRoles(roleDaoService.loadRoleByName("ROLE_FREELANCER"));
+        } else if (account instanceof ClientAccountEntity) {
+            userEntity.addRoles(roleDaoService.loadRoleByName("ROLE_CLIENT"));
+        }
         userEntity = repository.save(userEntity);
         return Optional.of(userEntity);
     }
@@ -69,7 +82,7 @@ public class UserDaoService {
         UserEntity entity = new UserEntity();
         BeanUtils.copyProperties(newUser, entity);
         entity.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-        entity.setRoles(Collections.emptyList());
+        entity.setRoles(new HashSet<>());
         // Set "true" value for some property for signup users
         entity.setEnabled(true);
         entity.setAccountNonExpired(true);

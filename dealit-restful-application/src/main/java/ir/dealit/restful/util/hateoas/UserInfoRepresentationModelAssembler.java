@@ -1,4 +1,4 @@
-package ir.dealit.restful.util.hateoas.assembler;
+package ir.dealit.restful.util.hateoas;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

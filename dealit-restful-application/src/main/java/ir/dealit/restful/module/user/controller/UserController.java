@@ -7,7 +7,7 @@ import ir.dealit.restful.dto.account.AccountOverview;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.UserInfo;
 import ir.dealit.restful.module.user.repository.UserRepository;
-import ir.dealit.restful.util.hateoas.assembler.UserInfoRepresentationModelAssembler;
+import ir.dealit.restful.util.hateoas.UserInfoRepresentationModelAssembler;
 import ir.dealit.restful.module.user.service.UserDaoService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;

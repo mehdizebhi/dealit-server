@@ -1,6 +1,6 @@
 package ir.dealit.restful.module.wallet.entity;
 
-import ir.dealit.restful.module.wallet.entity.Currency;
+import ir.dealit.restful.dto.enums.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class AssetEntity {
-
-    private BigDecimal amount;
+    private BigDecimal balance;
     private Currency currency;
 }

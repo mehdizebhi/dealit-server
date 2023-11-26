@@ -1,4 +1,4 @@
-package ir.dealit.restful.dto.job;
+package ir.dealit.restful.dto.contract;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

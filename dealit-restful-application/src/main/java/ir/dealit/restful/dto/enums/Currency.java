@@ -1,4 +1,4 @@
-package ir.dealit.restful.module.wallet.entity;
+package ir.dealit.restful.dto.enums;
 
 public enum Currency {
     RIAL, TOMAN, USD;

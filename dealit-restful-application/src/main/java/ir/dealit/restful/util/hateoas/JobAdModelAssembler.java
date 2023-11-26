@@ -1,4 +1,4 @@
-package ir.dealit.restful.util.hateoas.assembler;
+package ir.dealit.restful.util.hateoas;
 
 import ir.dealit.restful.module.job.controller.CommandJobAdController;
 import ir.dealit.restful.dto.job.JobAd;

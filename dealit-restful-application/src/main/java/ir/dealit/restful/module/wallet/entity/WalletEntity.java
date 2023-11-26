@@ -27,8 +27,8 @@ public class WalletEntity {
     private @MongoId ObjectId id;
     private List<AssetEntity> assets;
     private @DocumentReference @Indexed(unique = true) AccountEntity owner;
-    private List<InvoiceEntity> invoices;
-    private List<PaymentEntity> payments;
+    private @DocumentReference List<InvoiceEntity> invoices;
+    private @DocumentReference List<PaymentEntity> payments;
 
     public WalletEntity(AccountEntity owner) {
         this.owner = owner;

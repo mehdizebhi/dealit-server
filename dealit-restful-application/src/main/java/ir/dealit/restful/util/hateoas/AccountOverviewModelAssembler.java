@@ -1,4 +1,4 @@
-package ir.dealit.restful.util.hateoas.assembler;
+package ir.dealit.restful.util.hateoas;
 
 import ir.dealit.restful.module.account.controller.AccountController;
 import ir.dealit.restful.dto.account.AccountOverview;

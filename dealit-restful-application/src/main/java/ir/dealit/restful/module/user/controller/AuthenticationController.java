@@ -6,7 +6,7 @@ import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.auth.SignedInUser;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.util.exception.UserFoundExeption;
-import ir.dealit.restful.util.hateoas.assembler.UserInfoRepresentationModelAssembler;
+import ir.dealit.restful.util.hateoas.UserInfoRepresentationModelAssembler;
 import ir.dealit.restful.module.user.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

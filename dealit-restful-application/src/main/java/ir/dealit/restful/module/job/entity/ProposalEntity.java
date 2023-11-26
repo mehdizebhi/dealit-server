@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.job.entity;
 
-import ir.dealit.restful.dto.job.MileStone;
+import ir.dealit.restful.dto.enums.ProposalStatus;
+import ir.dealit.restful.dto.contract.MileStone;
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,7 @@ public class ProposalEntity {
     private String coverLetter;
     private Map<String, String> answers;
     private @DocumentReference(lazy = true) AccountEntity owner;
+    private ProposalStatus status;
     private @DocumentReference JobAdEntity jobAd;
     private @CreatedDate LocalDateTime createdAt;
     private @LastModifiedDate LocalDateTime updatedAt;

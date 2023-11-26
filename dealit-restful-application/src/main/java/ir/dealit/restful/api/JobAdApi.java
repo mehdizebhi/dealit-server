@@ -13,7 +13,7 @@ import java.util.Collection;
 @RequestMapping("/v1/jobs")
 public interface JobAdApi {
 
-    @GetMapping("/{id}")
+ /*   @GetMapping("/{id}")
     ResponseEntity<JobAd> getJobAd(
             @PathVariable ObjectId id
     );
@@ -27,9 +27,9 @@ public interface JobAdApi {
     ResponseEntity<Collection<JobAd>> getJobAds(
             @PageableDefault Pageable pageable,
             @RequestBody JobFilter filter
-    );
+    );*/
 
-    @PostMapping("")
+/*    @PostMapping("")
     ResponseEntity<JobAd> createJobAd(
             @RequestBody JobAd jobAd
     );
@@ -42,6 +42,6 @@ public interface JobAdApi {
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteJobAd(
             @PathVariable ObjectId id
-    );
+    );*/
 
 }

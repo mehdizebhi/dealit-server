@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -16,9 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -43,12 +42,13 @@ public class UserEntity implements UserDetails {
 //    @ReadOnlyProperty
 //    @DocumentReference(lookup = "{'user':?#{#self._id}}")
 
-    private @DocumentReference List<AccountEntity> accounts;
-    private List<RoleEntity> roles;
+    private @DocumentReference(lazy = true) List<AccountEntity> accounts;
+    private @DocumentReference Set<RoleEntity> roles;
+    private @Transient Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+        return this.authorities;
     }
 
     public void addAccount(AccountEntity accountEntity) {
@@ -56,5 +56,12 @@ public class UserEntity implements UserDetails {
             this.accounts = new ArrayList<>();
         }
         this.accounts.add(accountEntity);
+    }
+
+    public void addRoles(RoleEntity... roles) {
+        if (this.roles == null) {
+            this.roles = new HashSet<>();
+        }
+        this.roles.addAll(Set.of(roles));
     }
 }

@@ -1,5 +1,8 @@
 package ir.dealit.restful.module.job.entity;
 
+import ir.dealit.restful.dto.enums.ExperienceLevel;
+import ir.dealit.restful.dto.enums.ProjectLength;
+import ir.dealit.restful.dto.enums.WeeklyLoad;
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
 import lombok.AllArgsConstructor;
@@ -35,11 +38,12 @@ public class JobAdEntity {
     private Double maxBudget;
     private ProjectLength projectLength;
     private WeeklyLoad weeklyLoad;
-    private @DocumentReference List<AttachmentEntity> attachment;
+    private @DocumentReference(lazy = true) List<AttachmentEntity> attachment;
     private @CreatedDate LocalDateTime createdAt;
     private @LastModifiedDate LocalDateTime updatedAt;
     private @DocumentReference(lazy = true) AccountEntity owner;
     private List<String> questions;
+    private ObjectId jobPositionId;
 
     private @TextScore Float score;
 }

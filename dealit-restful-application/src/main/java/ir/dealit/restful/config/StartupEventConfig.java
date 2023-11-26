@@ -19,7 +19,7 @@ public class StartupEventConfig {
     @EventListener(StartupEvent.class)
     public void handleStartupEvent(){
         log.info("Application Starting up!");
-//        mongoMigration.init();
+        mongoMigration.init();
         log.info("Application is ready now!");
     }
 }

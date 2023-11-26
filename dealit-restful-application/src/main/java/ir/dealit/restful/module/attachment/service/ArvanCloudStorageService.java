@@ -1,7 +1,7 @@
 package ir.dealit.restful.module.attachment.service;
 
 import ir.dealit.restful.dto.attachment.Attachment;
-import ir.dealit.restful.util.hateoas.assembler.AttachmentModelAssembler;
+import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;

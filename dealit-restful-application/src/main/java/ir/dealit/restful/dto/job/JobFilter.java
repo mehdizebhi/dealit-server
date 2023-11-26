@@ -1,8 +1,8 @@
 package ir.dealit.restful.dto.job;
 
-import ir.dealit.restful.module.job.entity.ExperienceLevel;
-import ir.dealit.restful.module.job.entity.ProjectLength;
-import ir.dealit.restful.module.job.entity.WeeklyLoad;
+import ir.dealit.restful.dto.enums.ExperienceLevel;
+import ir.dealit.restful.dto.enums.ProjectLength;
+import ir.dealit.restful.dto.enums.WeeklyLoad;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

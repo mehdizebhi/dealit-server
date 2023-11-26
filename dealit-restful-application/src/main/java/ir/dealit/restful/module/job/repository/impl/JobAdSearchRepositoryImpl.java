@@ -1,4 +1,4 @@
-package ir.dealit.restful.module.job.repository;
+package ir.dealit.restful.module.job.repository.impl;
 
 import ir.dealit.restful.dto.job.JobFilter;
 import ir.dealit.restful.module.job.repository.JobAdSearchRepository;

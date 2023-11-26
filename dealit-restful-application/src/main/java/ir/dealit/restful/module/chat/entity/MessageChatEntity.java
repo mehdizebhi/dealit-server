@@ -18,5 +18,5 @@ public class MessageChatEntity {
     private AccountEntity to;
     private String text;
     private LocalDateTime timestamp;
-
+    private boolean seen;
 }

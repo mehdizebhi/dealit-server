@@ -1,9 +1,9 @@
 package ir.dealit.restful.dto.job;
 
-import ir.dealit.restful.module.job.entity.ExperienceLevel;
+import ir.dealit.restful.dto.enums.ExperienceLevel;
 import ir.dealit.restful.module.job.entity.FieldEntity;
-import ir.dealit.restful.module.job.entity.ProjectLength;
-import ir.dealit.restful.module.job.entity.WeeklyLoad;
+import ir.dealit.restful.dto.enums.ProjectLength;
+import ir.dealit.restful.dto.enums.WeeklyLoad;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JobAd extends RepresentationModel<JobAd> {
+public class JobAd {
     private @NotNull String id;
     private @NotNull String title;
     private @NotNull String description;

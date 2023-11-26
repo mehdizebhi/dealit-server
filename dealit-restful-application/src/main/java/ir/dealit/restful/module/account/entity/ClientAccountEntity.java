@@ -1,7 +1,6 @@
 package ir.dealit.restful.module.account.entity;
 
-import ir.dealit.restful.module.job.entity.JobAdEntity;
-import ir.dealit.restful.module.job.entity.JobEntity;
+import ir.dealit.restful.module.project.entity.ProjectSpaceEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,11 +18,5 @@ import java.util.List;
 @Document(collection = "accounts")
 @TypeAlias("ClientAccount")
 public class ClientAccountEntity extends AccountEntity{
-
-    @DocumentReference
-    private List<JobEntity> jobs;
-
-    @DocumentReference
-    private List<JobAdEntity> ads;
-
+    private @DocumentReference List<ProjectSpaceEntity> projectSpaces;
 }
