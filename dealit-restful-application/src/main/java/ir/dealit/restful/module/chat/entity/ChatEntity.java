@@ -1,6 +1,6 @@
 package ir.dealit.restful.module.chat.entity;
 
-import ir.dealit.restful.module.account.entity.AccountEntity;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,12 +22,10 @@ import java.util.List;
 public class ChatEntity {
 
     private @MongoId ObjectId id;
-    private @DocumentReference @Indexed(unique = true) AccountEntity owner;
+    private @DocumentReference @Indexed(unique = true) UserEntity owner;
     private @DocumentReference List<ConversationEntity> conversations;
-//    private List<MessageChatEntity> messages;
 
-
-    public ChatEntity(AccountEntity owner) {
+    public ChatEntity(UserEntity owner) {
         this.owner = owner;
         this.conversations = Collections.emptyList();
     }

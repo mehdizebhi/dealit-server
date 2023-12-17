@@ -1,5 +1,7 @@
 package ir.dealit.restful.dto.user;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,10 +16,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class NewUser extends RepresentationModel<NewUser> implements Serializable {
 
-    private String username;
-    private String password;
-    private String email;
-    private String displayName;
-    private String phoneNumber = "";
-    private String account;
+    private @NotNull String username;
+    private @NotNull String password;
+    private @NotNull String confirmPassword;
+    private @NotNull @Email String email;
+    private @NotNull String displayName;
+    private @NotNull String phoneNumber = "";
+    private @NotNull String account;
 }

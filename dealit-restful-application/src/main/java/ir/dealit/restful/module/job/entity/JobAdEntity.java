@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.job.entity;
 
 import ir.dealit.restful.dto.enums.ExperienceLevel;
+import ir.dealit.restful.dto.enums.JobAdStatus;
 import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
 import ir.dealit.restful.module.account.entity.AccountEntity;
@@ -18,7 +19,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.data.mongodb.core.mapping.TextScore;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -39,11 +40,12 @@ public class JobAdEntity {
     private ProjectLength projectLength;
     private WeeklyLoad weeklyLoad;
     private @DocumentReference(lazy = true) List<AttachmentEntity> attachment;
-    private @CreatedDate LocalDateTime createdAt;
-    private @LastModifiedDate LocalDateTime updatedAt;
+    private @CreatedDate Date createdAt;
+    private @LastModifiedDate Date updatedAt;
     private @DocumentReference(lazy = true) AccountEntity owner;
     private List<String> questions;
     private ObjectId jobPositionId;
+    private JobAdStatus status;
 
     private @TextScore Float score;
 }

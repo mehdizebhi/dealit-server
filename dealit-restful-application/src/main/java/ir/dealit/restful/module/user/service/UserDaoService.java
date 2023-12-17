@@ -7,11 +7,15 @@ import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.account.entity.ClientAccountEntity;
 import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import ir.dealit.restful.module.account.service.AccountDaoService;
+import ir.dealit.restful.module.chat.repository.ChatRepository;
+import ir.dealit.restful.module.inbox.repository.InboxRepository;
 import ir.dealit.restful.module.user.entity.RoleEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.RoleRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
+import ir.dealit.restful.module.wallet.repository.WalletRepository;
 import ir.dealit.restful.util.exception.UserFoundExeption;
+import ir.dealit.restful.util.factory.AccountFactory;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +33,9 @@ public class UserDaoService {
     private final RoleDaoService roleDaoService;
     private final AccountDaoService accountDaoService;
     private final PasswordEncoder bCryptPasswordEncoder;
+    private final WalletRepository walletRepository;
+    private final InboxRepository inboxRepository;
+    private final ChatRepository chatRepository;
 
     public UserEntity findUserByUsername(String username) {
         return repository.findByUsername(username);
@@ -51,6 +58,9 @@ public class UserDaoService {
         UserEntity userEntity = toEntity(newUser);
         userEntity.addRoles(roleDaoService.loadRoleByName("ROLE_USER"));
         userEntity = repository.save(userEntity);
+        userEntity.setWallet(walletRepository.save(AccountFactory.wallet(userEntity)));
+        userEntity.setInbox(inboxRepository.save(AccountFactory.inbox(userEntity)));
+        userEntity.setChat(chatRepository.save(AccountFactory.chat(userEntity)));
         AccountEntity account = accountDaoService.setupAccount(userEntity, newUser.getAccount());
         userEntity.addAccount(account);
         if (account instanceof FreelancerAccountEntity) {
@@ -83,11 +93,14 @@ public class UserDaoService {
         BeanUtils.copyProperties(newUser, entity);
         entity.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
         entity.setRoles(new HashSet<>());
-        // Set "true" value for some property for signup users
+        entity.setPictureHref("https://dealit.s3.ir-thr-at1.arvanstorage.ir/user.png");
+        entity.setConnections(0);
         entity.setEnabled(true);
         entity.setAccountNonExpired(true);
         entity.setCredentialsNonExpired(true);
         entity.setAccountNonLocked(true);
+        entity.setPhoneConfirmed(false);
+        entity.setEmailConfirmed(false);
         return entity;
     }
 }

@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 
 public interface AttachmentService {
 
-    Optional<Attachment> save(Attachment attachment) throws Exception;
+    Optional<Attachment> save(Attachment attachment, boolean isPublic) throws Exception;
 
-    default Optional<List<Attachment>> saveAll(List<Attachment> attachments) {
+    default Optional<List<Attachment>> saveAll(List<Attachment> attachments, boolean isPublic) {
         return Optional.of(attachments.stream()
                 .map(attachment -> {
                     try {
-                        return save(attachment);
+                        return save(attachment, isPublic);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -28,4 +28,7 @@ public interface AttachmentService {
 
     Optional<Attachment> loadById(ObjectId id);
 
+    void delete(Attachment attachment);
+
+    void deleteAll(List<Attachment> attachments);
 }

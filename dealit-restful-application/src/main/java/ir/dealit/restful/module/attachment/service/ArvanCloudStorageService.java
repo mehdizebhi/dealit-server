@@ -2,20 +2,22 @@ package ir.dealit.restful.module.attachment.service;
 
 import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
+import ir.dealit.restful.util.helper.AttachmentHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,13 +32,17 @@ public class ArvanCloudStorageService implements AttachmentService {
     private final AttachmentModelAssembler assembler;
 
     @Override
-    public Optional<Attachment> save(Attachment attachment) throws Exception {
+    public Optional<Attachment> save(Attachment attachment, boolean isPublic) throws Exception {
         try {
-            PutObjectRequest putOb = PutObjectRequest.builder()
+            var putObjectBuilder = PutObjectRequest.builder()
                     .bucket(defaultBucketName)
-//                    .key(attachment.getFileId() + "." + AttachmentHelper.getFileExtension(attachment.getFileName()))
-                    .key(attachment.getFileId())
-                    .build();
+                    .key(AttachmentHelper.getKey(attachment));
+            if (isPublic) {
+                putObjectBuilder.acl(ObjectCannedACL.PUBLIC_READ);
+            } else {
+                putObjectBuilder.acl(ObjectCannedACL.PRIVATE);
+            }
+            PutObjectRequest putOb = putObjectBuilder.build();
 
             s3.putObject(putOb, RequestBody.fromBytes(attachment.getData()));
             return attachmentDaoService.register(attachment).map(assembler::toModel);
@@ -52,8 +58,7 @@ public class ArvanCloudStorageService implements AttachmentService {
         try {
             var entity = attachmentDaoService.findById(id).get();
             GetObjectRequest objectRequest = GetObjectRequest.builder()
-//                    .key(entity.getFileId() + "." + AttachmentHelper.getFileExtension(entity.getFileName()))
-                    .key(entity.getFileId())
+                    .key(AttachmentHelper.getKey(entity))
                     .bucket(defaultBucketName)
                     .build();
 
@@ -62,9 +67,51 @@ public class ArvanCloudStorageService implements AttachmentService {
             attachment.setData(objectBytes.asByteArray());
             return Optional.of(attachment);
         } catch (S3Exception e) {
-            log.error("S3 has problem with downloading fileId = {}", id);
+            log.error("S3 Client has problem with downloading fileId = {}", id);
             return Optional.empty();
         }
     }
 
+    @Override
+    @Transactional
+    public void delete(Attachment attachment) {
+        try {
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(defaultBucketName)
+                    .key(AttachmentHelper.getKey(attachment))
+                    .build();
+
+            s3.deleteObject(deleteObjectRequest);
+            attachmentDaoService.delete(new ObjectId(attachment.getId()));
+        } catch (S3Exception e) {
+            log.error("S3 Client Can not delete object = {}", AttachmentHelper.getKey(attachment));
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteAll(List<Attachment> attachments) {
+        List<ObjectIdentifier> keys = attachments.stream()
+                .map(attachment -> ObjectIdentifier.builder().key(AttachmentHelper.getKey(attachment)).build())
+                .collect(Collectors.toList());
+
+        List<ObjectId> ids = attachments.stream()
+                .map(attachment -> new ObjectId(attachment.getId()))
+                .collect(Collectors.toList());
+
+        Delete delete = Delete.builder()
+                .objects(keys)
+                .build();
+        try {
+            DeleteObjectsRequest  multiObjectDeleteRequest = DeleteObjectsRequest.builder()
+                    .bucket(defaultBucketName)
+                    .delete(delete)
+                    .build();
+
+            s3.deleteObjects(multiObjectDeleteRequest);
+            attachmentDaoService.deleteAll(ids);
+        } catch (S3Exception e) {
+            log.error("S3 Client Can not delete objects = {}", keys);
+        }
+    }
 }

@@ -8,6 +8,7 @@ import ir.dealit.restful.dto.job.JobAd;
 import ir.dealit.restful.dto.job.JobFilter;
 import ir.dealit.restful.dto.job.SubmitRange;
 import ir.dealit.restful.module.job.service.JobAdService;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.http.ResponseEntity.notFound;
+import static ir.dealit.restful.util.helper.ControllerResponseHelper.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,18 +30,18 @@ public class QueryJobAdController implements QueryJobAdApi {
 
     @Override
     public ResponseEntity<EntityModel<JobAd>> getJobAd(ObjectId id, Authentication authentication) {
-        return jobAdService
-                .jobAd(id, authentication)
-                .map(ResponseEntity::ok)
-                .orElse(notFound().build());
+        var model = EntityModel.of(jobAdService
+                .jobAd(id, (UserEntity) authentication.getPrincipal()));
+
+        return ResponseEntity.ok(model);
     }
 
     @Override
     public ResponseEntity<PagedModel<JobAd>> getAllJobAds(Pageable pageable, Authentication authentication) {
-        return jobAdService
-                .allJobAds(pageable, authentication)
-                .map(ResponseEntity::ok)
-                .orElse(notFound().build());
+        var models = toPagedModel(jobAdService
+                .jobAds(pageable, (UserEntity) authentication.getPrincipal()));
+
+        return ResponseEntity.ok(models);
     }
 
     @Override
@@ -61,10 +62,10 @@ public class QueryJobAdController implements QueryJobAdApi {
                 .paymentVerified(verified)
                 .fromPreviousClients(previous)
                 .build();
-        return jobAdService
-                .allJobAdsByFilter(pageable, filter, authentication)
-                .map(ResponseEntity::ok)
-                .orElse(notFound().build());
+        var models = toPagedModel(jobAdService
+                .jobAdsByFilter(pageable, filter, (UserEntity) authentication.getPrincipal()));
+
+        return ResponseEntity.ok(models);
     }
 
     /*@Override

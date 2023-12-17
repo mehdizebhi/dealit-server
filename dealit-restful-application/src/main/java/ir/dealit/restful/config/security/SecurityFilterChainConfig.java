@@ -11,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +29,7 @@ public class SecurityFilterChainConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf((csrf) -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
                                 .requestMatchers("/v1/auth/**", "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
@@ -47,16 +53,16 @@ public class SecurityFilterChainConfig {
         return source;
     }*/
 
-    /*@Bean
+    @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
         corsConfiguration.setAllowedMethods(Arrays.asList(CorsConfiguration.ALL));
         corsConfiguration.setAllowedHeaders(Arrays.asList(CorsConfiguration.ALL));
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
-    }*/
+    }
 }

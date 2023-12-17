@@ -4,7 +4,9 @@ import ir.dealit.restful.module.attachment.controller.AttachmentController;
 import ir.dealit.restful.api.AttachmentApi;
 import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
+import ir.dealit.restful.util.helper.AttachmentHelper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class AttachmentModelAssembler extends RepresentationModelAssemblerSupport<AttachmentEntity, Attachment> {
+
+    @Value("${arvan.s3.bucket_name}")
+    private String defaultBucketName;
+
+    @Value("${arvan.s3.endpoint}")
+    private String storageEndpoint;
 
     public AttachmentModelAssembler() {
         super(AttachmentController.class, Attachment.class);
@@ -39,13 +47,15 @@ public class AttachmentModelAssembler extends RepresentationModelAssemblerSuppor
     }
 
     public Attachment multipartFileToModel (MultipartFile file) throws IOException {
+        String fileId = UUID.randomUUID().toString();
         return Attachment.builder()
-                .fileId(UUID.randomUUID().toString())
+                .fileId(fileId)
                 .fileName(file.getOriginalFilename())
                 .fileType(file.getContentType())
                 .fileExtension(file.getContentType().split("/")[1])
                 .fileSize(file.getSize())
                 .data(file.getBytes())
+                .uri(getBasedUri() + "/" + fileId + "." + AttachmentHelper.getFileExtension(file.getOriginalFilename()))
                 .build();
     }
 
@@ -53,5 +63,9 @@ public class AttachmentModelAssembler extends RepresentationModelAssemblerSuppor
         List<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(AttachmentApi.class).download(entity.getId())).withRel("download"));
         return links;
+    }
+
+    private String getBasedUri() {
+        return storageEndpoint.substring(0,8) + defaultBucketName + "." + storageEndpoint.substring(8);
     }
 }

@@ -44,7 +44,7 @@ public abstract class JwtAuthFilter extends OncePerRequestFilter {
             UserDetails user = loadUserBySubject(username, userDetailsService);
             if (isLoadedUserValid(user) && isTokenValid(jwt, user)) {
                 setAuthenticationSecurityContextHolder(createAuthenticationToken(
-                        user, user.getPassword(), user.getAuthorities(), request
+                        user, jwt, user.getAuthorities(), request
                 ));
             }
         }

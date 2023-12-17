@@ -1,6 +1,5 @@
 package ir.dealit.restful.module.chat.entity;
 
-import ir.dealit.restful.module.chat.entity.MessageEntity;
 import ir.dealit.restful.module.contract.entity.ContractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +19,7 @@ import java.util.List;
 @Document(collection = "conversations")
 public class ConversationEntity {
     private @MongoId ObjectId id;
-    private List<MessageEntity> messages;
-    private @DocumentReference ContractEntity contract;
+    private List<MessageChatEntity> messages;
+    private @DocumentReference(lazy = true) ContractEntity contract;
+    private @DocumentReference ChatEntity chat;
 }

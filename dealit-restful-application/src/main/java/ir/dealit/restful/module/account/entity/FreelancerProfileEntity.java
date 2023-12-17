@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public class FreelancerProfileEntity {
     private List<Experience> experiences;
     private List<Education> educations;
     private Map<String, String> links;
-    private @LastModifiedDate LocalDateTime updatedAt;
+    private @LastModifiedDate Date updatedAt;
     private @DocumentReference AccountEntity owner;
 
     public FreelancerProfileEntity(AccountEntity owner) {

@@ -7,12 +7,36 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 @RequestMapping("/v1/accounts")
 public interface QueryAccountApi {
 
+    @GetMapping("/info")
+    ResponseEntity<EntityModel<AccountInfo>> getAccountInfo(
+            Authentication authentication
+    );
+
+    @GetMapping("/stats")
+    ResponseEntity<EntityModel<AccountStats>> getAccountStats(
+            Authentication authentication
+    );
+
     @GetMapping("/overview")
     ResponseEntity<EntityModel<AccountOverview>> getAccountOverview(
+            Authentication authentication
+    );
+
+    /*@GetMapping("/freelancer/stats")
+    ResponseEntity<EntityModel<TinyStats.FreelancerTinyStats>> getFreelancerStats(
+            Authentication authentication
+    );
+
+    @GetMapping("/client/stats")
+    ResponseEntity<EntityModel<TinyStats.ClientTinyStats>> getClientStats(
+            Authentication authentication
+    );
+
+    @GetMapping("/notification")
+    ResponseEntity<PagedModel<Notification>> getNotifications(
             Authentication authentication
     );
 
@@ -31,8 +55,13 @@ public interface QueryAccountApi {
             Authentication authentication
     );
 
-    @GetMapping("activities")
+    @GetMapping("/activities")
     ResponseEntity<EntityModel<AccountActivity>> getAccountActivity(
             Authentication authentication
     );
+
+    @GetMapping("/connections")
+    ResponseEntity<Map<String, Object>> getAccountConnections(
+            Authentication authentication
+    );*/
 }

@@ -1,11 +1,14 @@
 package ir.dealit.restful.module.contract.service.impl;
 
 import ir.dealit.restful.dto.contract.Contract;
+import ir.dealit.restful.dto.enums.AccountType;
 import ir.dealit.restful.dto.enums.ContractStatus;
 import ir.dealit.restful.module.contract.repository.ContractRepository;
 import ir.dealit.restful.module.contract.service.ContractService;
 import ir.dealit.restful.module.user.entity.UserEntity;
+import ir.dealit.restful.module.user.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -20,22 +23,24 @@ import java.util.*;
 public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;
+    private final UserAuthService userAuthService;
 
     @Override
-    public Optional<PagedModel<Contract>> allContracts(Pageable pageable, ContractStatus status, Authentication authentication) {
-        UserEntity user = (UserEntity) authentication.getPrincipal();
-        Collection<Contract> contracts = new ArrayList<>();
-        var models = PagedModel.of(contracts);
-
-        return Optional.of((PagedModel<Contract>) models);
+    public Page<Contract> contracts(Pageable pageable, ContractStatus status, UserEntity user) {
+        return null;
     }
 
     @Override
-    public Optional<EntityModel<Contract>> contract(Authentication authentication) {
-        UserEntity user = (UserEntity) authentication.getPrincipal();
-        var model = EntityModel.of(Contract.builder()
-                .build());
+    public Contract contract(ObjectId id, UserEntity user) {
+        return null;
+    }
 
-        return Optional.of(model);
+    @Override
+    public Integer countFreelancerContracts(ContractStatus status, UserEntity user) {
+        var accountId = userAuthService.getAccountId(user, AccountType.FREELANCER);
+        if (accountId.isPresent()) {
+            return contractRepository.countByStatusAndUser(status, accountId.get());
+        }
+        throw new RuntimeException("There is no AccountStats found");
     }
 }

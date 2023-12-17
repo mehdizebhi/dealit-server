@@ -1,19 +1,23 @@
 package ir.dealit.restful.module.user.service;
 
+import ir.dealit.restful.dto.enums.AccountType;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import org.bson.types.ObjectId;
-import org.springframework.security.access.annotation.Secured;
 
 import java.util.List;
 import java.util.Optional;
 
 //@Secured("ROLE_USER")
-public interface UserAuthenticatedService {
+public interface UserAuthService {
     Optional<UserEntity> getUser(ObjectId userId);
 
     List<ObjectId> getAccountIds(ObjectId userId);
 
+    Optional<ObjectId> getAccountId(UserEntity user, AccountType type);
+
     List<ObjectId> getRoleIds(ObjectId userId);
+
+    List<AccountType> getAccountTypes(UserEntity user);
 
     Optional<ObjectId> getWalletId(ObjectId userId);
 

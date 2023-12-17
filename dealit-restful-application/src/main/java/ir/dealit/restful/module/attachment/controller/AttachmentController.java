@@ -32,18 +32,39 @@ public class AttachmentController implements AttachmentApi {
     private final AttachmentModelAssembler assembler;
 
     @Override
-    public ResponseEntity<Attachment> upload(MultipartFile file) throws Exception {
-        return attachmentService.save(assembler.multipartFileToModel(file))
+    public ResponseEntity<Attachment> publicUpload(MultipartFile file) throws Exception {
+        return attachmentService.save(assembler.multipartFileToModel(file), true)
                 .map(ResponseEntity::ok)
                 .orElse(status(HttpStatus.UNAUTHORIZED).build());
     }
 
     @Override
-    public ResponseEntity<List<Attachment>> uploadAll(List<MultipartFile> files) {
+    public ResponseEntity<List<Attachment>> publicUploadAll(List<MultipartFile> files) {
         var attachments = files.stream()
                 .map(file -> {
                     try {
-                        return attachmentService.save(assembler.multipartFileToModel(file)).get();
+                        return attachmentService.save(assembler.multipartFileToModel(file), true).get();
+                    } catch (Exception e) {
+                        throw new RuntimeException("Unable to upload files.", e);
+                    }
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(attachments);
+    }
+
+    @Override
+    public ResponseEntity<Attachment> privateUpload(MultipartFile file) throws Exception {
+        return attachmentService.save(assembler.multipartFileToModel(file), false)
+                .map(ResponseEntity::ok)
+                .orElse(status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    @Override
+    public ResponseEntity<List<Attachment>> privateUploadAll(List<MultipartFile> files) {
+        var attachments = files.stream()
+                .map(file -> {
+                    try {
+                        return attachmentService.save(assembler.multipartFileToModel(file), false).get();
                     } catch (Exception e) {
                         throw new RuntimeException("Unable to upload files.", e);
                     }

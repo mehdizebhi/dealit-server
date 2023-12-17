@@ -20,14 +20,7 @@ public abstract class AccountEntity {
 
     protected @MongoId ObjectId id;
     protected @DocumentReference(lazy = true) UserEntity user;
-    protected @DocumentReference WalletEntity wallet;
-    protected @DocumentReference InboxEntity inbox;
-    protected @DocumentReference ChatEntity chat;
-
-    public AccountEntity(UserEntity user, WalletEntity wallet, InboxEntity inbox, ChatEntity chat) {
+    public AccountEntity(UserEntity user) {
         this.user = user;
-        this.wallet = wallet;
-        this.inbox = inbox;
-        this.chat = chat;
     }
 }

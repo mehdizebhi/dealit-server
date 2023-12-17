@@ -24,5 +24,4 @@ public interface JwtUtils {
     String generateToken(Map<String, Object> extraClaims, UserDetails user);
 
     boolean isTokenValid(String token, UserDetails user);
-
 }

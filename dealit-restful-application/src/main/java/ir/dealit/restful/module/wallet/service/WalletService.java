@@ -1,28 +1,31 @@
 package ir.dealit.restful.module.wallet.service;
 
 import ir.dealit.restful.dto.wallet.Asset;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import org.bson.types.ObjectId;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import ir.dealit.restful.dto.enums.Currency;
 
-import java.util.Currency;
 import java.util.Optional;
 
+@Secured("ROLE_USER")
 public interface WalletService {
     //--------------------------------------
     // Fetching Data
     //--------------------------------------
-    Optional<?> allAssets(Authentication authentication);
+    Optional<?> allAssets(UserEntity user);
 
-    Optional<?> asset(Currency currency, Authentication authentication);
+    Optional<?> asset(Currency currency, UserEntity user);
 
-    Optional<?> totalAmount(Authentication authentication);
+    double totalBalance(UserEntity user);
 
     //--------------------------------------
     // Manipulate Data
     //--------------------------------------
-    void addAsset(Asset newAsset, Authentication authentication);
+    void addAsset(Asset newAsset, UserEntity user);
 
-    void updateAsset(Asset asset, Authentication authentication);
+    void updateAsset(Asset asset, UserEntity user);
 
-    void transfer(Asset asset, ObjectId toAccountId, Authentication authentication);
+    void transfer(Asset asset, ObjectId toAccountId, UserEntity user);
 }

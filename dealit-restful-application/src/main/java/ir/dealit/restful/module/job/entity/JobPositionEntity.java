@@ -10,7 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -22,6 +22,6 @@ public class JobPositionEntity {
     private String title;
     private @DocumentReference(lazy = true) List<JobAdEntity> jobAds;
     private @DocumentReference(lazy = true) List<ContractEntity> contracts;
-    private @CreatedDate LocalDateTime createdAt;
-    private @LastModifiedDate LocalDateTime updatedAt;
+    private @CreatedDate Date createdAt;
+    private @LastModifiedDate Date updatedAt;
 }

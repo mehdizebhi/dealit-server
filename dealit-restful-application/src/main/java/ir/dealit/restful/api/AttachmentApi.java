@@ -12,13 +12,23 @@ import java.util.List;
 @RequestMapping("/v1/attachments")
 public interface AttachmentApi {
 
+    @PostMapping("/pub-upload")
+    ResponseEntity<Attachment> publicUpload(
+            @RequestPart MultipartFile file
+    ) throws Exception;
+
+    @PostMapping("/pub-upload-all")
+    ResponseEntity<List<Attachment>> publicUploadAll(
+            @RequestPart List<MultipartFile> files
+    );
+
     @PostMapping("/upload")
-    ResponseEntity<Attachment> upload(
+    ResponseEntity<Attachment> privateUpload(
             @RequestPart MultipartFile file
     ) throws Exception;
 
     @PostMapping("/upload-all")
-    ResponseEntity<List<Attachment>> uploadAll(
+    ResponseEntity<List<Attachment>> privateUploadAll(
             @RequestPart List<MultipartFile> files
     );
 

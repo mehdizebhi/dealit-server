@@ -25,11 +25,11 @@ public class SecurityConfig {
 
     private final UserDetailsServiceImpl service;
 
-    @Bean
+    /*@Bean
     @Primary
     public JwtUtils getJwtUtilsBean() {
         return new JwtUtilsImpl();
-    }
+    }*/
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

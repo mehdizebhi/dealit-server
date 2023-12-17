@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+
 
 @Data
 @NoArgsConstructor
@@ -13,6 +14,6 @@ import java.time.LocalDateTime;
 @Builder
 public class WorkTimeEntity {
     private String title;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private Date start;
+    private Date end;
 }

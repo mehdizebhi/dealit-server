@@ -7,6 +7,8 @@ import org.springframework.hateoas.RepresentationModel;
 @Data
 @Builder
 public class TinyNotification extends RepresentationModel<TinyNotification> {
+
+    private String id;
     private String color;
     private String header;
     private String text;

@@ -5,7 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import ir.dealit.restful.module.user.entity.TokenEntity;
+import ir.dealit.restful.module.user.repository.TokenRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -14,11 +17,15 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Component
 @Slf4j
 public class JwtUtilsImpl implements JwtUtils {
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
     @Value("${app.security.jwt.key}")
     private String SECRET_KEY;
@@ -91,7 +98,11 @@ public class JwtUtilsImpl implements JwtUtils {
 
     @Override
     public boolean isTokenValid(String token, UserDetails user) {
+        final Optional<TokenEntity> tokenEntity = this.tokenRepository.findByToken(token);
         final String username = extractSubject(token);
-        return username.equals(user.getUsername()) && !isTokenExpired(token);
+        return tokenEntity.isPresent() &&
+                !tokenEntity.get().isBlocked() &&
+                username.equals(user.getUsername()) &&
+                !isTokenExpired(token);
     }
 }

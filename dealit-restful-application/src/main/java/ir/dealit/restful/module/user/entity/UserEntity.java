@@ -1,6 +1,9 @@
 package ir.dealit.restful.module.user.entity;
 
 import ir.dealit.restful.module.account.entity.AccountEntity;
+import ir.dealit.restful.module.chat.entity.ChatEntity;
+import ir.dealit.restful.module.inbox.entity.InboxEntity;
+import ir.dealit.restful.module.wallet.entity.WalletEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +19,6 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
@@ -32,16 +34,19 @@ public class UserEntity implements UserDetails {
     private String displayName;
     private String email;
     private String phoneNumber;
-    private @CreatedDate LocalDateTime createdAt;
-    private @LastModifiedDate LocalDateTime updatedAt;
+    private @CreatedDate Date createdAt;
+    private @LastModifiedDate Date updatedAt;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-
-//    @ReadOnlyProperty
-//    @DocumentReference(lookup = "{'user':?#{#self._id}}")
-
+    private boolean phoneConfirmed;
+    private boolean emailConfirmed;
+    private int connections;
+    private String pictureHref;
+    private @DocumentReference(lazy = true) WalletEntity wallet;
+    private @DocumentReference(lazy = true) InboxEntity inbox;
+    private @DocumentReference(lazy = true) ChatEntity chat;
     private @DocumentReference(lazy = true) List<AccountEntity> accounts;
     private @DocumentReference Set<RoleEntity> roles;
     private @Transient Collection<? extends GrantedAuthority> authorities;

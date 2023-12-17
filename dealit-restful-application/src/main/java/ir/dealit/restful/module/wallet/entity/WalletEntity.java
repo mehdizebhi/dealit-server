@@ -1,8 +1,7 @@
 package ir.dealit.restful.module.wallet.entity;
 
-import ir.dealit.restful.module.account.entity.AccountEntity;
-import ir.dealit.restful.module.payment.entity.InvoiceEntity;
 import ir.dealit.restful.module.payment.entity.PaymentEntity;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,14 +25,16 @@ public class WalletEntity {
 
     private @MongoId ObjectId id;
     private List<AssetEntity> assets;
-    private @DocumentReference @Indexed(unique = true) AccountEntity owner;
+    private @DocumentReference @Indexed(unique = true) UserEntity owner;
     private @DocumentReference List<InvoiceEntity> invoices;
     private @DocumentReference List<PaymentEntity> payments;
+    private @DocumentReference List<TransactionEntity> transactions;
 
-    public WalletEntity(AccountEntity owner) {
+    public WalletEntity(UserEntity owner) {
         this.owner = owner;
         this.invoices = Collections.emptyList();
         this.payments = Collections.emptyList();
+        this.transactions = Collections.emptyList();
     }
 
     public void addAsset(AssetEntity assetEntity) {

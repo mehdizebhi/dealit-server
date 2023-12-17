@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -27,8 +27,8 @@ public class ProjectSpaceEntity {
     private String title;
     private @DocumentReference AccountEntity owner;
     private List<JobPositionEntity> jobPositions;
-    private @CreatedDate LocalDateTime createdAt;
-    private @LastModifiedDate LocalDateTime updatedAt;
+    private @CreatedDate Date createdAt;
+    private @LastModifiedDate Date updatedAt;
 
     public ProjectSpaceEntity(AccountEntity owner, String title) {
         this.owner = owner;

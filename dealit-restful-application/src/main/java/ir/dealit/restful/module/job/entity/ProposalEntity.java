@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +32,7 @@ public class ProposalEntity {
     private @DocumentReference(lazy = true) AccountEntity owner;
     private ProposalStatus status;
     private @DocumentReference JobAdEntity jobAd;
-    private @CreatedDate LocalDateTime createdAt;
-    private @LastModifiedDate LocalDateTime updatedAt;
+    private @CreatedDate Date createdAt;
+    private @LastModifiedDate Date updatedAt;
+    private boolean seenByClient;
 }

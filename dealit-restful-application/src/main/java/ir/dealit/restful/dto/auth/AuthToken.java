@@ -1,5 +1,7 @@
 package ir.dealit.restful.dto.auth;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +16,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class AuthToken extends RepresentationModel<AuthToken> implements Serializable {
 
-    private String token;
-    private String type;
-    private long exp;
+    private @NotNull String accessToken;
+    private @Nullable String refreshToken;
+    private @NotNull String type;
+    private @Nullable long exp;
 }

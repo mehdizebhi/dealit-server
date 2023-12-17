@@ -1,8 +1,8 @@
 package ir.dealit.restful.module.contract.entity;
 
+import ir.dealit.restful.dto.enums.ContractStatus;
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.dto.enums.Currency;
-import ir.dealit.restful.module.job.entity.JobPositionEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -31,8 +31,9 @@ public class ContractEntity {
     private boolean fixedPrice;
     private Double budget;
     private Currency currency;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private @CreatedDate LocalDateTime createdAt;
-    private @LastModifiedDate LocalDateTime updatedAt;
+    private Date start;
+    private Date end;
+    private @CreatedDate Date createdAt;
+    private @LastModifiedDate Date updatedAt;
+    private ContractStatus status;
 }

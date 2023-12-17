@@ -5,6 +5,7 @@ import ir.dealit.restful.dto.job.ChangeJobAd;
 import ir.dealit.restful.dto.job.JobAd;
 import ir.dealit.restful.dto.job.NewJobAd;
 import ir.dealit.restful.module.job.service.JobAdService;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,7 @@ public class CommandJobAdController implements CommandJobAdApi {
 
     @Override
     public ResponseEntity<Void> createJobAd(NewJobAd newJobAd, Authentication authentication) {
-        var id = jobAdService.createJobAd(newJobAd, authentication);
+        var id = jobAdService.createJobAd(newJobAd, (UserEntity) authentication.getPrincipal());
         return id.isPresent() ? ResponseEntity
                 .status(201)
                 .header("Location", id.get().toString())
@@ -58,7 +59,7 @@ public class CommandJobAdController implements CommandJobAdApi {
 
     @Override
     public ResponseEntity<Void> updateJobAd(ChangeJobAd jobAd, Authentication authentication) {
-        jobAdService.updateJobAd(jobAd, authentication);
+        jobAdService.updateJobAd(jobAd, (UserEntity) authentication.getPrincipal());
         return ResponseEntity
                 .status(204)
                 .build();
@@ -66,7 +67,7 @@ public class CommandJobAdController implements CommandJobAdApi {
 
     @Override
     public ResponseEntity<Void> deleteJobAd(ObjectId id, Authentication authentication) {
-        jobAdService.removeJobAd(id, authentication);
+        jobAdService.removeJobAd(id, (UserEntity) authentication.getPrincipal());
         return ResponseEntity
                 .status(204)
                 .build();
