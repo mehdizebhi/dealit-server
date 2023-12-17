@@ -1,5 +1,6 @@
 package ir.dealit.restful.config.app;
 
+import ir.dealit.restful.client.ExchangeRateCurrencyClient;
 import ir.dealit.restful.client.SMSClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,9 @@ public class ExternalClientConfig {
     @Value("${arvan.s3.endpoint}")
     private String s3Endpoint;
 
+    @Value("${services.exchangerate.baseUrl}")
+    private String exchangerateBaseUrl;
+
     @Bean
     public S3Client s3Client() {
         AwsBasicCredentials credentials = AwsBasicCredentials.create(s3AccessKey, s3SecretKey);
@@ -51,5 +55,19 @@ public class ExternalClientConfig {
                         .build();
 
         return httpServiceProxyFactory.createClient(SMSClient.class);
+    }
+
+    @Bean
+    public ExchangeRateCurrencyClient exchangeRateCurrencyClient() {
+        WebClient webClient = WebClient.builder()
+                .baseUrl(exchangerateBaseUrl)
+                .defaultHeader("Accept", "*/*")
+                .build();
+
+        HttpServiceProxyFactory httpServiceProxyFactory =
+                HttpServiceProxyFactory.builder(WebClientAdapter.forClient(webClient))
+                        .build();
+
+        return httpServiceProxyFactory.createClient(ExchangeRateCurrencyClient.class);
     }
 }

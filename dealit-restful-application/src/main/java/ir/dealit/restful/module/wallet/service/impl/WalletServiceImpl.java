@@ -37,7 +37,7 @@ public class WalletServiceImpl implements WalletService {
         var walletId = userAuthService.getWalletId(user.getId());
         if (walletId.isPresent()) {
             var wallet = walletRepository.findById(walletId.get());
-            return getTotalBalanceInTOMAN(wallet.get().getAssets()).doubleValue();
+            return 0d;
         }
         return 0d;
     }
@@ -60,7 +60,7 @@ public class WalletServiceImpl implements WalletService {
     private BigDecimal getTotalBalanceInTOMAN(List<AssetEntity> assets) {
         BigDecimal total = BigDecimal.ZERO;
         for (var asset : assets) {
-            total.add(asset.getBalance().multiply(convertToTOMAN(asset.getCurrency())));
+            total.add(asset.getAmount().multiply(convertToTOMAN(asset.getCurrency())));
         }
         return total;
     }

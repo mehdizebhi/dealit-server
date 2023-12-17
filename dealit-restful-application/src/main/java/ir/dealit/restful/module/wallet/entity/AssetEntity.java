@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class AssetEntity {
-    private BigDecimal balance;
+    private BigDecimal amount;
     private Currency currency;
 }

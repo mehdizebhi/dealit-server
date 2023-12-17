@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.joda.money.Money;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -24,7 +25,7 @@ import java.util.List;
 public class WalletEntity {
 
     private @MongoId ObjectId id;
-    private List<AssetEntity> assets;
+    private List<Money> monies;
     private @DocumentReference @Indexed(unique = true) UserEntity owner;
     private @DocumentReference List<InvoiceEntity> invoices;
     private @DocumentReference List<PaymentEntity> payments;
@@ -37,10 +38,10 @@ public class WalletEntity {
         this.transactions = Collections.emptyList();
     }
 
-    public void addAsset(AssetEntity assetEntity) {
-        if (this.assets == null) {
-            this.assets = new ArrayList<>();
+    public void addMoney(Money money) {
+        if (this.monies == null) {
+            this.monies = new ArrayList<>();
         }
-        this.assets.add(assetEntity);
+        this.monies.add(money);
     }
 }

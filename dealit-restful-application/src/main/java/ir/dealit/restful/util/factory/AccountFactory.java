@@ -3,17 +3,16 @@ package ir.dealit.restful.util.factory;
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.account.entity.ClientAccountEntity;
 import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
-import ir.dealit.restful.module.account.entity.FreelancerProfileEntity;
 import ir.dealit.restful.module.chat.entity.ChatEntity;
 import ir.dealit.restful.module.inbox.entity.InboxEntity;
-import ir.dealit.restful.module.job.entity.JobSpaceEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.wallet.entity.AssetEntity;
 import ir.dealit.restful.dto.enums.Currency;
 import ir.dealit.restful.module.wallet.entity.WalletEntity;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 
 public class AccountFactory {
 
@@ -29,7 +28,7 @@ public class AccountFactory {
 
     public static WalletEntity wallet(UserEntity owner) {
         WalletEntity wallet = new WalletEntity(owner);
-        wallet.addAsset(new AssetEntity(BigDecimal.ZERO, Currency.TOMAN));
+//        wallet.addMoney(Money.of(CurrencyUnit));
         return wallet;
     }
 

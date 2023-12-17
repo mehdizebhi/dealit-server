@@ -21,27 +21,27 @@ public class AssetServiceImpl implements AssetService {
 
     private BigDecimal toUSD(AssetEntity asset) {
         return switch (asset.getCurrency()) {
-            case USD  -> asset.getBalance();
-            case RIAL -> asset.getBalance().divide(new BigDecimal(500_000));
-            case TOMAN -> asset.getBalance().divide(new BigDecimal(50_000));
+            case USD  -> asset.getAmount();
+            case RIAL -> asset.getAmount().divide(new BigDecimal(500_000));
+            case TOMAN -> asset.getAmount().divide(new BigDecimal(50_000));
             default -> throw new RuntimeException(String.format("The Currency: %s is not exist!", asset.getCurrency()));
         };
     }
 
     private BigDecimal toRIAL(AssetEntity asset) {
         return switch (asset.getCurrency()) {
-            case USD  -> asset.getBalance().multiply(new BigDecimal(500_000));
-            case RIAL -> asset.getBalance();
-            case TOMAN -> asset.getBalance().multiply(new BigDecimal(10));
+            case USD  -> asset.getAmount().multiply(new BigDecimal(500_000));
+            case RIAL -> asset.getAmount();
+            case TOMAN -> asset.getAmount().multiply(new BigDecimal(10));
             default -> throw new RuntimeException(String.format("The Currency: %s is not exist!", asset.getCurrency()));
         };
     }
 
     private BigDecimal toTOMAN(AssetEntity asset) {
         return switch (asset.getCurrency()) {
-            case USD  -> asset.getBalance().multiply(new BigDecimal(50_000));
-            case RIAL -> asset.getBalance().divide(new BigDecimal(10));
-            case TOMAN -> asset.getBalance();
+            case USD  -> asset.getAmount().multiply(new BigDecimal(50_000));
+            case RIAL -> asset.getAmount().divide(new BigDecimal(10));
+            case TOMAN -> asset.getAmount();
             default -> throw new RuntimeException(String.format("The Currency: %s is not exist!", asset.getCurrency()));
         };
     }
