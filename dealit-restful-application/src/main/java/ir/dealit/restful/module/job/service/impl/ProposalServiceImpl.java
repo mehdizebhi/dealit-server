@@ -25,16 +25,6 @@ public class ProposalServiceImpl implements ProposalService {
     private final UserAuthService userAuthService;
 
     @Override
-    public Page<Proposal> allProposals(Pageable pageable, UserEntity user) {
-        return null;
-    }
-
-    @Override
-    public Proposal proposal(ObjectId id, UserEntity user) {
-        return null;
-    }
-
-    @Override
     public Integer countNewProposals(ProposalStatus status, UserEntity user) {
         var jobAds = jobAdService.allJobAd(JobAdStatus.ACTIVE, user);
         Integer count = 0;
@@ -47,20 +37,5 @@ public class ProposalServiceImpl implements ProposalService {
     @Override
     public Integer count(ProposalStatus status, UserEntity owner) {
         return proposalRepository.countByStatusAndOwner(status, owner.getId());
-    }
-
-    @Override
-    public Optional<ObjectId> createProposal(Proposal newProposal, UserEntity user) {
-        return Optional.empty();
-    }
-
-    @Override
-    public void updateProposal(Proposal proposal, UserEntity user) {
-
-    }
-
-    @Override
-    public void removeProposal(ObjectId id, UserEntity user) {
-
     }
 }

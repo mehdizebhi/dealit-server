@@ -3,6 +3,7 @@ package ir.dealit.restful.module.job.entity;
 import ir.dealit.restful.dto.enums.ProposalStatus;
 import ir.dealit.restful.dto.contract.MileStone;
 import ir.dealit.restful.module.account.entity.AccountEntity;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,12 +25,13 @@ import java.util.Map;
 @Builder
 @Document(collection = "proposals")
 public class ProposalEntity {
+
     private @MongoId ObjectId id;
     private Double hourlyPrice;
     private List<MileStone> mileStones;
     private String coverLetter;
     private Map<String, String> answers;
-    private @DocumentReference(lazy = true) AccountEntity owner;
+    private @DocumentReference UserEntity owner;
     private ProposalStatus status;
     private @DocumentReference JobAdEntity jobAd;
     private @CreatedDate Date createdAt;

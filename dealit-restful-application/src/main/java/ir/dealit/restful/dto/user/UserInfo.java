@@ -1,24 +1,23 @@
 package ir.dealit.restful.dto.user;
 
-import lombok.AllArgsConstructor;
+import ir.dealit.restful.dto.enums.AccountType;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.hateoas.RepresentationModel;
+import org.joda.time.DateTime;
 
-import java.io.Serializable;
 import java.util.List;
 
-@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserInfo extends RepresentationModel<UserInfo> implements Serializable {
-
-    private String id;
-    private String username;
-    private String displayName;
-    private String email;
-    private List<String> accountsId;
+public record UserInfo(
+        String displayName,
+        String username,
+        String phoneNumber,
+        String email,
+        int connections,
+        boolean confirmedEmail,
+        boolean confirmedPhone,
+        String pictureHref,
+        List<AccountType> types,
+        DateTime createdAt,
+        DateTime updatedAt
+) {
 }

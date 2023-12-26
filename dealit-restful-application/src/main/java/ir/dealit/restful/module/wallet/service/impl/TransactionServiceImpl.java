@@ -8,7 +8,10 @@ import ir.dealit.restful.module.wallet.entity.TransactionEntity;
 import ir.dealit.restful.module.wallet.repository.TransactionRepository;
 import ir.dealit.restful.module.wallet.service.AssetService;
 import ir.dealit.restful.module.wallet.service.TransactionService;
+import ir.dealit.restful.service.ExchangeRateCurrencyService;
 import lombok.RequiredArgsConstructor;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +26,12 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserAuthService userAuthService;
     private final AssetService assetService;
+    private final ExchangeRateCurrencyService exchangeRateCurrencyService;
 
     @Override
-    public BigDecimal income(UserEntity user, Currency target) {
-        var walletId = userAuthService.getWalletId(user.getId());
-        if (walletId.isPresent()) {
-            var transactions = transactionRepository.findAllIncomeByWallet(walletId.get());
-            BigDecimal income = new BigDecimal(0);
-            transactions.forEach(transaction -> income.add(assetService.convert(transaction.getAmount(), target)));
-            return income;
-        }
-        return BigDecimal.ZERO;
+    public BigDecimal income(UserEntity user, CurrencyUnit target) {
+        List<TransactionEntity> incomeTransactions = transactionRepository.findAllIncomeByWallet(user.getWallet().getId());
+        return total(incomeTransactions, target);
     }
 
     @Override
@@ -42,15 +40,9 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public BigDecimal outcome(UserEntity user, Currency target) {
-        var walletId = userAuthService.getWalletId(user.getId());
-        if (walletId.isPresent()) {
-            var transactions = transactionRepository.findAllOutcomeByWallet(walletId.get());
-            BigDecimal outcome = new BigDecimal(0);
-            transactions.forEach(transaction -> outcome.add(assetService.convert(transaction.getAmount(), target)));
-            return outcome;
-        }
-        return BigDecimal.ZERO;
+    public BigDecimal outcome(UserEntity user, CurrencyUnit target) {
+        List<TransactionEntity> outcomeTransactions = transactionRepository.findAllOutcomeByWallet(user.getWallet().getId());
+        return total(outcomeTransactions, target);
     }
 
     @Override
@@ -77,5 +69,19 @@ public class TransactionServiceImpl implements TransactionService {
 //        return new TransactionSummary();
         return null;*/
         return null;
+    }
+
+    private BigDecimal total (List<TransactionEntity> transactions, CurrencyUnit target) {
+        Money income = Money.of(target, 0d);
+        for (var transaction : transactions) {
+            if (transaction.getMoney().isSameCurrency(income)){
+                income.plus(transaction.getMoney());
+            } else {
+                income.plus(exchangeRateCurrencyService.convert(transaction.getMoney().getCurrencyUnit().getCode(),
+                        target.getCode(),
+                        transaction.getMoney().getAmount().doubleValue()));
+            }
+        }
+        return income.getAmount();
     }
 }

@@ -3,6 +3,7 @@ package ir.dealit.restful.module.account.entity;
 import ir.dealit.restful.dto.profile.Education;
 import ir.dealit.restful.dto.profile.Experience;
 import ir.dealit.restful.dto.profile.PersonalProject;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,9 +32,9 @@ public class FreelancerProfileEntity {
     private List<Education> educations;
     private Map<String, String> links;
     private @LastModifiedDate Date updatedAt;
-    private @DocumentReference AccountEntity owner;
+    private @DocumentReference UserEntity owner;
 
-    public FreelancerProfileEntity(AccountEntity owner) {
+    public FreelancerProfileEntity(UserEntity owner) {
         this.owner = owner;
         this.bio = "";
         this.personalProjects = Collections.emptyList();

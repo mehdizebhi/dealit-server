@@ -3,6 +3,7 @@ package ir.dealit.restful.module.wallet.controller;
 import ir.dealit.restful.api.query.QueryTransactionApi;
 import ir.dealit.restful.dto.transaction.Transaction;
 import ir.dealit.restful.dto.transaction.TransactionSummary;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.wallet.service.TransactionService;
 import ir.dealit.restful.util.DateTimeUtils;
 import lombok.RequiredArgsConstructor;

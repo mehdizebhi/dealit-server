@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.chat.controller;
 
 import ir.dealit.restful.api.query.QueryChatApi;
+import ir.dealit.restful.dto.chat.ChatInfo;
 import ir.dealit.restful.dto.chat.Conversation;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class QueryChatController implements QueryChatApi {
+
+    @Override
+    public ResponseEntity<EntityModel<ChatInfo>> getChatInfo(Authentication authentication) {
+        return null;
+    }
+
     @Override
     public ResponseEntity<?> getChat(Authentication authentication) {
         return null;

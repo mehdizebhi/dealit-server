@@ -1,6 +1,9 @@
 package ir.dealit.restful.module.user.entity;
 
+import ir.dealit.restful.dto.enums.AccountType;
 import ir.dealit.restful.module.account.entity.AccountEntity;
+import ir.dealit.restful.module.account.entity.ClientAccountEntity;
+import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import ir.dealit.restful.module.chat.entity.ChatEntity;
 import ir.dealit.restful.module.inbox.entity.InboxEntity;
 import ir.dealit.restful.module.wallet.entity.WalletEntity;
@@ -44,8 +47,8 @@ public class UserEntity implements UserDetails {
     private boolean emailConfirmed;
     private int connections;
     private String pictureHref;
-    private @DocumentReference(lazy = true) WalletEntity wallet;
-    private @DocumentReference(lazy = true) InboxEntity inbox;
+    private @DocumentReference WalletEntity wallet;
+    private @DocumentReference InboxEntity inbox;
     private @DocumentReference(lazy = true) ChatEntity chat;
     private @DocumentReference(lazy = true) List<AccountEntity> accounts;
     private @DocumentReference Set<RoleEntity> roles;
@@ -68,5 +71,17 @@ public class UserEntity implements UserDetails {
             this.roles = new HashSet<>();
         }
         this.roles.addAll(Set.of(roles));
+    }
+
+    public List<AccountType> getAccountTypes() {
+        List<AccountType> types = new ArrayList<>();
+        for (var accountEntity : accounts) {
+            if (accountEntity instanceof ClientAccountEntity) {
+                types.add(AccountType.CLIENT);
+            } else if (accountEntity instanceof FreelancerAccountEntity) {
+                types.add(AccountType.FREELANCER);
+            }
+        }
+        return types;
     }
 }

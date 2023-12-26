@@ -6,6 +6,7 @@ import ir.dealit.restful.module.account.repository.AccountRepository;
 import ir.dealit.restful.module.job.repository.JobAdRepository;
 import ir.dealit.restful.module.job.repository.JobAdSearchRepository;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
+import ir.dealit.restful.module.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.BeanUtils;
@@ -24,6 +25,7 @@ public class JobAdDaoService {
     private final JobAdRepository repository;
     private final JobAdSearchRepository searchRepository;
     private final AccountRepository accountRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Optional<JobAdEntity> register(JobAd jobAd) {
@@ -65,7 +67,7 @@ public class JobAdDaoService {
     private JobAdEntity toEntity(JobAd jobAd) {
         var entity = new JobAdEntity();
         BeanUtils.copyProperties(jobAd, entity);
-        entity.setOwner(accountRepository.findById(new ObjectId(jobAd.getOwnerId())).get());
+        entity.setOwner(userRepository.findById(new ObjectId(jobAd.getOwnerId())).get());
         return entity;
     }
 }

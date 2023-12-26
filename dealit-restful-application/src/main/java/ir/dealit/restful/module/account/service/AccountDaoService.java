@@ -38,11 +38,11 @@ public class AccountDaoService {
         account.setUser(userEntity);
         account = accountRepository.save(account);
         if (account instanceof FreelancerAccountEntity freelancer) {
-            freelancer.setJobSpace(jobSpaceRepository.save(new JobSpaceEntity(account)));
-            freelancer.setProfile(profileRepository.save(new FreelancerProfileEntity(account)));
+            freelancer.setJobSpace(jobSpaceRepository.save(new JobSpaceEntity(userEntity)));
+            freelancer.setProfile(profileRepository.save(new FreelancerProfileEntity(userEntity)));
             return freelancerAccountRepository.save(freelancer);
         } else if (account instanceof ClientAccountEntity client) {
-            client.setProjectSpaces(Collections.singletonList(projectSpaceRepository.save(new ProjectSpaceEntity(account, "General"))));
+            client.setProjectSpaces(Collections.singletonList(projectSpaceRepository.save(new ProjectSpaceEntity(userEntity, "General"))));
             return clientAccountRepository.save(client);
         }
         return accountRepository.save(account);

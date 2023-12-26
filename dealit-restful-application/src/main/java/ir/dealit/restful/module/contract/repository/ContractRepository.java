@@ -11,5 +11,15 @@ import org.springframework.stereotype.Repository;
 public interface ContractRepository extends MongoRepository<ContractEntity, ObjectId> {
 
     @Query(value = "{'status': ?0, 'hired': ?1}", count = true)
-    Integer countByStatusAndUser(ContractStatus status, ObjectId accountId);
+    Integer countByStatusAndHired(ContractStatus status, ObjectId userId);
+
+    @Query(value = "{'hired': ?0}", count = true)
+    Integer countByHired(ObjectId userId);
+
+    @Query(value = "{'status': ?0, 'hiredBy': ?1}", count = true)
+    Integer countByStatusAndHiredBy(ContractStatus status, ObjectId userId);
+
+    @Query(value = "{'hiredBy': ?0}", count = true)
+    Integer countByHiredBy(ObjectId userId);
+
 }

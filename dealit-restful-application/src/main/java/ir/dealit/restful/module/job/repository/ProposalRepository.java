@@ -14,6 +14,8 @@ public interface ProposalRepository extends MongoRepository<ProposalEntity, Obje
     Integer countByJobAdAndSeenByClient(ObjectId jobAdId, boolean seenByClient);
 
     @Query(value = "{'status': ?0, 'owner': ?1}", count = true)
-    Integer countByStatusAndOwner(ProposalStatus status, ObjectId ownerId);
+    Integer countByStatusAndOwner(ProposalStatus status, ObjectId userId);
 
+    @Query(value = "{'owner': ?0}", count = true)
+    Integer countByOwner(ObjectId userId);
 }

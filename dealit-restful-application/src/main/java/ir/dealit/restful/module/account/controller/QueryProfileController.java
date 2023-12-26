@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.account.controller;
 
 import ir.dealit.restful.api.query.QueryProfileApi;
+import ir.dealit.restful.dto.profile.ClientProfile;
 import ir.dealit.restful.dto.profile.FreelancerProfile;
 import ir.dealit.restful.dto.profile.ProfileStats;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QueryProfileController implements QueryProfileApi {
     @Override
-    public ResponseEntity<EntityModel<FreelancerProfile>> getProfile(Authentication authentication) {
+    public ResponseEntity<EntityModel<FreelancerProfile>> getFreelancerProfileInfo(Authentication authentication) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<EntityModel<ClientProfile>> getClientProfileInfo(Authentication authentication) {
         return null;
     }
 

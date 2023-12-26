@@ -6,6 +6,7 @@ import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +29,7 @@ import java.util.List;
 @Builder
 @Document(collection = "job_ads")
 public class JobAdEntity {
+
     private @MongoId ObjectId id;
     private @TextIndexed(weight = 3) String title;
     private @TextIndexed(weight = 2) String description;
@@ -42,10 +44,9 @@ public class JobAdEntity {
     private @DocumentReference(lazy = true) List<AttachmentEntity> attachment;
     private @CreatedDate Date createdAt;
     private @LastModifiedDate Date updatedAt;
-    private @DocumentReference(lazy = true) AccountEntity owner;
+    private @DocumentReference UserEntity owner;
     private List<String> questions;
     private ObjectId jobPositionId;
     private JobAdStatus status;
-
     private @TextScore Float score;
 }

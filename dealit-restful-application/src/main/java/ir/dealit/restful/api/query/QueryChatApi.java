@@ -1,5 +1,6 @@
 package ir.dealit.restful.api.query;
 
+import ir.dealit.restful.dto.chat.ChatInfo;
 import ir.dealit.restful.dto.chat.Conversation;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/v1/chats")
 public interface QueryChatApi {
+
+    @GetMapping("/info")
+    ResponseEntity<EntityModel<ChatInfo>> getChatInfo(
+            Authentication authentication
+    );
 
     @GetMapping("/")
     ResponseEntity<?> getChat(

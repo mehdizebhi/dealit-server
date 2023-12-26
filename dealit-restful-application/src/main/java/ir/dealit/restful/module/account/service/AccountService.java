@@ -10,9 +10,14 @@ import org.springframework.security.access.annotation.Secured;
 @Secured("ROLE_USER")
 public interface AccountService {
 
-    AccountStats accountStats(UserEntity user);
-    AccountInfo accountInfo(UserEntity user);
-    AccountOverview accountOverview(UserEntity user);
+    FreelancerAccountInfo freelancerInfo(UserEntity user);
+
+    ClientAccountInfo clientInfo(UserEntity user);
+
+
+//    AccountStats accountStats(UserEntity user);
+//    AccountInfo accountInfo(UserEntity user);
+//    AccountOverview accountOverview(UserEntity user);
 //    TinyStats accountStats(UserEntity user);
 //    TinyStats.FreelancerTinyStats freelancerStats(UserEntity user);
 //    TinyStats.ClientTinyStats clientStats(UserEntity user);

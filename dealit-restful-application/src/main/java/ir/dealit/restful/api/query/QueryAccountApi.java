@@ -3,6 +3,7 @@ package ir.dealit.restful.api.query;
 import ir.dealit.restful.dto.account.*;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,20 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/v1/accounts")
 public interface QueryAccountApi {
 
-    @GetMapping("/info")
-    ResponseEntity<EntityModel<AccountInfo>> getAccountInfo(
+    @GetMapping("/freelancer-info")
+    @Secured("ROLE_FREELANCER")
+    ResponseEntity<EntityModel<FreelancerAccountInfo>> getFreelancerAccountInfo(
             Authentication authentication
     );
 
-    @GetMapping("/stats")
+    @GetMapping("/client-info")
+    @Secured("ROLE_CLIENT")
+    ResponseEntity<EntityModel<ClientAccountInfo>> getClientAccountInfo(
+            Authentication authentication
+    );
+
+    /*@GetMapping("/stats")
     ResponseEntity<EntityModel<AccountStats>> getAccountStats(
             Authentication authentication
-    );
-
-    @GetMapping("/overview")
-    ResponseEntity<EntityModel<AccountOverview>> getAccountOverview(
-            Authentication authentication
-    );
+    );*/
 
     /*@GetMapping("/freelancer/stats")
     ResponseEntity<EntityModel<TinyStats.FreelancerTinyStats>> getFreelancerStats(

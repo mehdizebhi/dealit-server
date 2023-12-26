@@ -12,10 +12,10 @@ public record AccountOverview(
         String username,
         String phoneNumber,
         String email,
-        double balance,
         int connections,
         boolean confirmedEmail,
         boolean confirmedPhone,
+        String pictureHref,
         List<AccountType> types,
         DateTime createdAt,
         DateTime updatedAt

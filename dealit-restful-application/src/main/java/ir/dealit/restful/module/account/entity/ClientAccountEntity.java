@@ -19,4 +19,5 @@ import java.util.List;
 @TypeAlias("ClientAccount")
 public class ClientAccountEntity extends AccountEntity{
     private @DocumentReference List<ProjectSpaceEntity> projectSpaces;
+    private @DocumentReference ClientProfileEntity profile;
 }

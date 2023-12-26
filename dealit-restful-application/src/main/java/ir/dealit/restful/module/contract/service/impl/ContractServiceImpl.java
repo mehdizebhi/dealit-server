@@ -11,12 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +34,7 @@ public class ContractServiceImpl implements ContractService {
     public Integer countFreelancerContracts(ContractStatus status, UserEntity user) {
         var accountId = userAuthService.getAccountId(user, AccountType.FREELANCER);
         if (accountId.isPresent()) {
-            return contractRepository.countByStatusAndUser(status, accountId.get());
+            return contractRepository.countByStatusAndHired(status, accountId.get());
         }
         throw new RuntimeException("There is no AccountStats found");
     }

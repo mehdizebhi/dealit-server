@@ -2,6 +2,7 @@ package ir.dealit.restful.module.job.entity;
 
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.contract.entity.ContractEntity;
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,9 +25,9 @@ public class JobSpaceEntity {
     private @DocumentReference(lazy = true) List<ProposalEntity> proposals;
     private @DocumentReference(lazy = true) List<InvitationEntity> invites;
     private @DocumentReference(lazy = true) List<ContractEntity> contracts;
-    private @DocumentReference AccountEntity owner;
+    private @DocumentReference UserEntity owner;
 
-    public JobSpaceEntity(AccountEntity owner) {
+    public JobSpaceEntity(UserEntity owner) {
         this.owner = owner;
         this.proposals = Collections.emptyList();
         this.invites = Collections.emptyList();

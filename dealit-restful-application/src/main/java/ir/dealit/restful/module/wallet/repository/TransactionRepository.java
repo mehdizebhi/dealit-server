@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -24,6 +25,6 @@ public interface TransactionRepository extends MongoRepository<TransactionEntity
     @Query(value = "{'to': ?0, 'seen': false}", count = true)
     Integer countNewTransaction(ObjectId walletId);
 
-    @Query(value = "{createdAt: {$gte: ?0}, createdAt: {$lte: ?1}, to: ?2}")
-    List<TransactionEntity> findAllIncomeTransactionByTime(LocalDateTime startTime, LocalDateTime endTime, ObjectId walletId);
+    @Query(value = "{'createdAt': {$gte: ?0}, 'createdAt': {$lte: ?1}, to: ?2}")
+    List<TransactionEntity> findAllIncomeTransactionByTime(Date startTime, Date endTime, ObjectId walletId);
 }

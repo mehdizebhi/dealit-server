@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 import java.math.BigDecimal;
 
@@ -13,6 +15,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class AssetEntity {
+
     private BigDecimal amount;
     private Currency currency;
+
+    public Money toMoney() {
+        return Money.of(CurrencyUnit.of(currency.getCode()), amount);
+    }
 }

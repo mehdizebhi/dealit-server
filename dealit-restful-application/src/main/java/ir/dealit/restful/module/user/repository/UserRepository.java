@@ -21,5 +21,4 @@ public interface UserRepository extends MongoRepository<UserEntity, ObjectId> {
 
     @Query(value = "{'_id': ?0}", fields = "{'accounts': 1, '_id': 0}")
     Optional<List<String>> findAccountByUserId(ObjectId id);
-
 }

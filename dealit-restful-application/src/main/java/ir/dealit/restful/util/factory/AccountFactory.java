@@ -28,7 +28,7 @@ public class AccountFactory {
 
     public static WalletEntity wallet(UserEntity owner) {
         WalletEntity wallet = new WalletEntity(owner);
-//        wallet.addMoney(Money.of(CurrencyUnit));
+        wallet.addMoney(Money.of(CurrencyUnit.of("IRR"), 0d));
         return wallet;
     }
 

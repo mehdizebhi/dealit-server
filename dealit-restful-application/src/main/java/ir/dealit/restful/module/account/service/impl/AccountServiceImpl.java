@@ -2,25 +2,15 @@ package ir.dealit.restful.module.account.service.impl;
 
 import ir.dealit.restful.dto.account.*;
 import ir.dealit.restful.dto.enums.*;
-import ir.dealit.restful.dto.notification.Notification;
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.account.entity.ClientAccountEntity;
 import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import ir.dealit.restful.module.account.service.AccountService;
-import ir.dealit.restful.module.chat.service.ChatService;
-import ir.dealit.restful.module.contract.service.ContractService;
-import ir.dealit.restful.module.job.service.JobAdService;
-import ir.dealit.restful.module.job.service.ProposalService;
-import ir.dealit.restful.module.notification.service.NotificationService;
+import ir.dealit.restful.module.contract.repository.ContractRepository;
+import ir.dealit.restful.module.job.repository.ProposalRepository;
+import ir.dealit.restful.module.project.repository.ProjectSpaceRepository;
 import ir.dealit.restful.module.user.entity.UserEntity;
-import ir.dealit.restful.module.user.service.UserAuthService;
-import ir.dealit.restful.module.wallet.service.TransactionService;
-import ir.dealit.restful.module.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.DateTime;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,19 +20,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private final UserAuthService userAuthService;
-    private final WalletService walletService;
-    private final NotificationService notificationService;
-    private final JobAdService jobAdService;
-    private final ProposalService proposalService;
-    private final TransactionService transactionService;
-    private final ContractService contractService;
-    private final ChatService chatService;
+    private final ContractRepository contractRepository;
+    private final ProposalRepository proposalRepository;
+    private final ProjectSpaceRepository projectSpaceRepository;
 
     @Override
+    public FreelancerAccountInfo freelancerInfo(UserEntity user) {
+        var info = FreelancerAccountInfo.builder()
+                .contracts(contractRepository.countByHired(user.getId()))
+                .activeContracts(contractRepository.countByStatusAndHired(ContractStatus.ACTIVE, user.getId()))
+                .proposals(proposalRepository.countByOwner(user.getId()))
+                .activeProposal(proposalRepository.countByStatusAndOwner(ProposalStatus.ACTIVE, user.getId()))
+                .invitations(0)
+                .build();
+
+        return info;
+    }
+
+    @Override
+    public ClientAccountInfo clientInfo(UserEntity user) {
+        /*var info = ClientAccountInfo.builder()
+                .projectSpaces(projectSpaceRepository.countByOwner(user.getId()))
+                .activePositions(projectSpaceRepository.countJobPositionsByOwner(user.getId()))
+                .contracts(contractRepository.countByHiredBy(user.getId()))
+                .activeContracts(contractRepository.countByStatusAndHiredBy(ContractStatus.ACTIVE, user.getId()))
+                .newProposal(proposalRepository.)
+                .activeJobAd()
+                .build();*/
+
+        return null;
+    }
+
+ /*   @Override
     public AccountStats accountStats(UserEntity user) {
         AccountStats accountStats = AccountStats.builder()
-                .balance(walletService.totalBalance(user))
+                .balance(walletService.totalBalance(user, CurrencyUnit.of("IRR")).doubleValue())
                 .newMessage(chatService.countNewMessage(user))
                 .newTransaction(transactionService.countNewTransaction(user))
                 .activeProposals(proposalService.count(ProposalStatus.ACTIVE, user))
@@ -50,14 +62,14 @@ public class AccountServiceImpl implements AccountService {
                 .newInvitations(0)
                 .newProposals(proposalService.countNewProposals(ProposalStatus.ACTIVE, user))
                 .activeAds(jobAdService.countClientJobAds(JobAdStatus.ACTIVE, user))
-                .income(transactionService.income(user, Currency.RIAL).doubleValue())
-                .outcome(transactionService.outcome(user, Currency.RIAL).doubleValue())
+                .income(transactionService.income(user, CurrencyUnit.of("IRR")).doubleValue())
+                .outcome(transactionService.outcome(user, CurrencyUnit.of("IRR")).doubleValue())
                 .build();
 
         return accountStats;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public AccountInfo accountInfo(UserEntity user) {
         return new AccountInfo(user.getUsername(),
                 user.getEmail(),
@@ -74,17 +86,18 @@ public class AccountServiceImpl implements AccountService {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .phoneNumber(user.getPhoneNumber())
-                .balance(walletService.totalBalance(user))
                 .connections(user.getConnections())
                 .confirmedEmail(user.isEmailConfirmed())
                 .confirmedPhone(user.isPhoneConfirmed())
                 .types(getAccountTypes(user.getAccounts()))
+                .pictureHref(user.getPictureHref())
                 .createdAt(new DateTime(user.getCreatedAt()))
                 .updatedAt(new DateTime(user.getUpdatedAt()))
                 .build();
 
         return model;
     }
+*/
 
 /*    @Override
     public TinyStats accountStats(UserEntity user) {

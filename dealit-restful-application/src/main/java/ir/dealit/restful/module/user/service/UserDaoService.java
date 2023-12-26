@@ -1,17 +1,13 @@
 package ir.dealit.restful.module.user.service;
 
-import ir.dealit.restful.dto.enums.Authority;
 import ir.dealit.restful.dto.user.NewUser;
-import ir.dealit.restful.dto.user.User;
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.account.entity.ClientAccountEntity;
 import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import ir.dealit.restful.module.account.service.AccountDaoService;
 import ir.dealit.restful.module.chat.repository.ChatRepository;
 import ir.dealit.restful.module.inbox.repository.InboxRepository;
-import ir.dealit.restful.module.user.entity.RoleEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
-import ir.dealit.restful.module.user.repository.RoleRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.module.wallet.repository.WalletRepository;
 import ir.dealit.restful.util.exception.UserFoundExeption;
@@ -71,19 +67,6 @@ public class UserDaoService {
         userEntity = repository.save(userEntity);
         return Optional.of(userEntity);
     }
-
-    public Optional<List<String>> findAllAccountsByUserId(ObjectId userId) {
-        return repository.findAccountByUserId(userId);
-//                .map(list ->
-//                        list.stream().map(account -> account.getId().toString())
-//                                .collect(Collectors.toList()));
-    }
-
-
-    public Optional<UserEntity> partialUpdateUser(User user) {
-        return Optional.empty();
-    }
-
     public List<UserEntity> findAllUsers() {
         return repository.findAll();
     }

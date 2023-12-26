@@ -1,6 +1,8 @@
 package ir.dealit.restful.api.query;
 
+import ir.dealit.restful.dto.proposal.ClientProposalInfo;
 import ir.dealit.restful.dto.proposal.Proposal;
+import ir.dealit.restful.dto.proposal.FreelancerProposalInfo;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -31,6 +33,16 @@ public interface QueryProposalApi {
     @GetMapping("/{id}")
     ResponseEntity<EntityModel<Proposal>> getProposal(
             @PathVariable("id") ObjectId id,
+            Authentication authentication
+    );
+
+    @GetMapping("/freelancer/info")
+    ResponseEntity<EntityModel<FreelancerProposalInfo>> getFreelancerProposalInfo(
+            Authentication authentication
+    );
+
+    @GetMapping("/client/info")
+    ResponseEntity<EntityModel<ClientProposalInfo>> getClientProposalInfo(
             Authentication authentication
     );
 }

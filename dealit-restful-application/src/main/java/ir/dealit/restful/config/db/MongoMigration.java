@@ -4,6 +4,7 @@ import ir.dealit.restful.module.chat.entity.ChatEntity;
 import ir.dealit.restful.module.chat.entity.ConversationEntity;
 import ir.dealit.restful.module.contract.entity.ContractEntity;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
+import ir.dealit.restful.module.job.entity.JobPositionEntity;
 import ir.dealit.restful.module.job.entity.ProposalEntity;
 import ir.dealit.restful.module.user.entity.RoleEntity;
 import ir.dealit.restful.module.user.entity.TokenEntity;
@@ -40,6 +41,7 @@ public class MongoMigration {
         if (!mongoTemplate.collectionExists(ChatEntity.class)) mongoTemplate.createCollection(ChatEntity.class);
         if (!mongoTemplate.collectionExists(ConversationEntity.class)) mongoTemplate.createCollection(ConversationEntity.class);
         if (!mongoTemplate.collectionExists(TokenEntity.class)) mongoTemplate.createCollection(TokenEntity.class);
+        if (!mongoTemplate.collectionExists(JobPositionEntity.class)) mongoTemplate.createCollection(JobPositionEntity.class);
     }
 
     private void createPrimitiveRoles() {

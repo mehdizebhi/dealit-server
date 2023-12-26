@@ -1,10 +1,11 @@
 package ir.dealit.restful.api.query;
 
+import ir.dealit.restful.dto.contract.ClientContractInfo;
 import ir.dealit.restful.dto.contract.Contract;
+import ir.dealit.restful.dto.contract.FreelancerContractInfo;
 import ir.dealit.restful.dto.contract.Workroom;
 import ir.dealit.restful.dto.enums.ContractStatus;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.EntityModel;
@@ -18,6 +19,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/v1/contracts")
 public interface QueryContractApi {
+
+    @GetMapping("/freelancer/info")
+    ResponseEntity<EntityModel<FreelancerContractInfo>> getFreelancerContractInfo(
+            Authentication authentication
+    );
+
+    @GetMapping("/client/info")
+    ResponseEntity<EntityModel<ClientContractInfo>> getClientContractInfo(
+            Authentication authentication
+    );
 
     @GetMapping("/")
     ResponseEntity<PagedModel<Contract>> getAllContracts(

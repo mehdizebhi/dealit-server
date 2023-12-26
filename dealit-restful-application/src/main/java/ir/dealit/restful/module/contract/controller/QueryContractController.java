@@ -1,7 +1,9 @@
 package ir.dealit.restful.module.contract.controller;
 
 import ir.dealit.restful.api.query.QueryContractApi;
+import ir.dealit.restful.dto.contract.ClientContractInfo;
 import ir.dealit.restful.dto.contract.Contract;
+import ir.dealit.restful.dto.contract.FreelancerContractInfo;
 import ir.dealit.restful.dto.contract.Workroom;
 import ir.dealit.restful.dto.enums.ContractStatus;
 import ir.dealit.restful.module.contract.service.ContractService;
@@ -15,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.ResponseEntity.*;
 import static ir.dealit.restful.util.helper.ControllerResponseHelper.*;
 
 @RestController
@@ -23,6 +24,16 @@ import static ir.dealit.restful.util.helper.ControllerResponseHelper.*;
 public class QueryContractController implements QueryContractApi {
 
     private final ContractService contractService;
+
+    @Override
+    public ResponseEntity<EntityModel<FreelancerContractInfo>> getFreelancerContractInfo(Authentication authentication) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<EntityModel<ClientContractInfo>> getClientContractInfo(Authentication authentication) {
+        return null;
+    }
 
     @Override
     public ResponseEntity<PagedModel<Contract>> getAllContracts(Pageable pageable, ContractStatus status, Authentication authentication) {
