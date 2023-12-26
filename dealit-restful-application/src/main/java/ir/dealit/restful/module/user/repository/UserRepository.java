@@ -19,6 +19,10 @@ public interface UserRepository extends MongoRepository<UserEntity, ObjectId> {
 
     Integer countByUsernameOrEmail(String username, String email);
 
+    Integer countByUsername(String username);
+
+    Integer countByEmail(String email);
+
     @Query(value = "{'_id': ?0}", fields = "{'accounts': 1, '_id': 0}")
     Optional<List<String>> findAccountByUserId(ObjectId id);
 }

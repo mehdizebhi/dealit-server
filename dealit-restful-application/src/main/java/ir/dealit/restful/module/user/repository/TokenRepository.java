@@ -10,5 +10,8 @@ import java.util.Optional;
 @Repository
 public interface TokenRepository extends MongoRepository<TokenEntity, ObjectId> {
     Optional<TokenEntity> findByToken(String token);
+
+    Optional<TokenEntity> findByRefreshToken(String refreshToken);
+
     void deleteByToken(String token);
 }

@@ -2,13 +2,11 @@ package ir.dealit.restful.module.user.controller;
 
 import ir.dealit.restful.api.AuthenticationApi;
 import ir.dealit.restful.dto.ResponseWrapper;
-import ir.dealit.restful.dto.auth.AuthTokenReq;
-import ir.dealit.restful.dto.auth.AuthToken;
-import ir.dealit.restful.dto.auth.OTPCode;
-import ir.dealit.restful.dto.auth.SignedInUser;
+import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.enums.OTPSenderMechanism;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.module.user.entity.UserEntity;
+import ir.dealit.restful.module.user.service.TokenService;
 import ir.dealit.restful.util.exception.UserFoundExeption;
 import ir.dealit.restful.module.user.service.AuthenticationService;
 import jakarta.validation.Valid;
@@ -28,10 +26,11 @@ import static org.springframework.http.ResponseEntity.status;
 public class AuthenticationController implements AuthenticationApi {
 
     private final AuthenticationService service;
+    private final TokenService tokenService;
 
     @Override
     public ResponseEntity<AuthToken> signIn(
-            @Valid AuthTokenReq request
+            @Valid AuthTokenRequest request
     ) {
             return service.authenticate(request)
                     .map(s -> s.getToken())
@@ -49,6 +48,11 @@ public class AuthenticationController implements AuthenticationApi {
         catch (UserFoundExeption exp) {
             return status(HttpStatus.NOT_ACCEPTABLE).build();
         }
+    }
+
+    @Override
+    public ResponseEntity<AuthToken> refreshAccessToken(TokenRefreshRequest request, Authentication authentication) {
+        return ResponseEntity.ok(tokenService.renewAccessToken(request.refreshToken()));
     }
 
     @Override

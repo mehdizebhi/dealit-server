@@ -7,6 +7,9 @@ import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import ir.dealit.restful.module.chat.entity.ChatEntity;
 import ir.dealit.restful.module.inbox.entity.InboxEntity;
 import ir.dealit.restful.module.wallet.entity.WalletEntity;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,8 +38,9 @@ public class UserEntity implements UserDetails {
     private @Indexed(unique = true) String username;
     private String password;
     private String displayName;
-    private String email;
-    private String phoneNumber;
+    private @Email String email;
+    private @Size(min = 11, max = 11, message = "Phone number must be 11 digits")
+            @Pattern(regexp = "^09\\d{9}$", message = "Invalid phone number format") String phoneNumber;
     private @CreatedDate Date createdAt;
     private @LastModifiedDate Date updatedAt;
     private boolean accountNonExpired;

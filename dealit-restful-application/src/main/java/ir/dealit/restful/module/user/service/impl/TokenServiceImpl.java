@@ -13,9 +13,8 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +31,7 @@ public class TokenServiceImpl implements TokenService {
         var expiredAt = DateTime.now().plusSeconds((int) (EXPIRATION_PERIOD / 1_000));
         var token = AuthToken.builder()
                 .accessToken(jwtUtils.generateToken(user))
-                .refreshToken(null)
+                .refreshToken(UUID.randomUUID().toString())
                 .type("Bearer")
                 .exp(expiredAt.getMillis() / 1_000)
                 .build();
@@ -40,8 +39,9 @@ public class TokenServiceImpl implements TokenService {
         tokenRepository.save(TokenEntity.builder()
                         .token(token.getAccessToken())
                         .expiredAt(expiredAt.toDate())
+                        .refreshToken(token.getRefreshToken())
                         .user(user)
-                        .blocked(false)
+                        .expired(false)
                 .build());
 
         return token;
@@ -50,5 +50,45 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public void remove(String token) {
         tokenRepository.deleteByToken(token);
+    }
+
+    @Override
+    public void expireToken(String token) {
+        var entityOptional = tokenRepository.findByToken(token);
+        if (entityOptional.isPresent()){
+            var entity = entityOptional.get();
+            entity.setExpired(true);
+            entity.setExpiredAt(new Date());
+            tokenRepository.save(entity);
+        }
+    }
+
+    @Override
+    public AuthToken renewAccessToken(String refreshToken){
+        var tokenOptional = tokenRepository.findByRefreshToken(refreshToken);
+        if (tokenOptional.isPresent()){
+            var tokenEntity = tokenOptional.get();
+            var expiredAt = DateTime.now().plusSeconds((int) (EXPIRATION_PERIOD / 1_000));
+            tokenEntity.setToken(jwtUtils.generateToken(tokenEntity.getUser()));
+            tokenEntity.setExpiredAt(expiredAt.toDate());
+            tokenRepository.save(tokenEntity);
+
+            return AuthToken.builder()
+                    .accessToken(tokenEntity.getToken())
+                    .refreshToken(tokenEntity.getRefreshToken())
+                    .type("Bearer")
+                    .exp(expiredAt.getMillis() / 1_000)
+                    .build();
+        }
+        throw new RuntimeException("Invalid Refresh Token!");
+    }
+
+    @Override
+    public String getRefreshToken(String token) {
+        var tokenOptional = tokenRepository.findByToken(token);
+        if (tokenOptional.isPresent()){
+            return tokenOptional.get().getRefreshToken();
+        }
+        throw new RuntimeException("Invalid Access Token!");
     }
 }

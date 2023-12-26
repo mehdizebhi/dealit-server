@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthTokenReq extends RepresentationModel<AuthTokenReq> implements Serializable {
+public class AuthTokenRequest extends RepresentationModel<AuthTokenRequest> implements Serializable {
 
     private String username;
     private String password;

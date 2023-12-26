@@ -1,10 +1,7 @@
 package ir.dealit.restful.api;
 
 import ir.dealit.restful.dto.ResponseWrapper;
-import ir.dealit.restful.dto.auth.AuthToken;
-import ir.dealit.restful.dto.auth.AuthTokenReq;
-import ir.dealit.restful.dto.auth.OTPCode;
-import ir.dealit.restful.dto.auth.SignedInUser;
+import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.user.NewUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,12 +15,18 @@ public interface AuthenticationApi {
 
     @PostMapping("/token")
     ResponseEntity<AuthToken> signIn(
-            @RequestBody AuthTokenReq request
+            @RequestBody AuthTokenRequest request
     );
 
     @PostMapping("/signup")
     ResponseEntity<SignedInUser> singUp (
             @RequestBody NewUser newUser
+    );
+
+    @PostMapping("/refresh-token")
+    ResponseEntity<AuthToken> refreshAccessToken(
+            @RequestBody TokenRefreshRequest request,
+            Authentication authentication
     );
 
     @PostMapping("/logout")

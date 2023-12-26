@@ -21,8 +21,9 @@ import java.util.Date;
 public class TokenEntity {
     private @MongoId ObjectId id;
     private @Indexed(unique = true) String token;
+    private @Indexed(unique = true) String refreshToken;
     private @DocumentReference UserEntity user;
     private @CreatedDate Date createdAt;
     private Date expiredAt;
-    private boolean blocked;
+    private boolean expired;
 }

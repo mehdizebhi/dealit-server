@@ -101,7 +101,7 @@ public class JwtUtilsImpl implements JwtUtils {
         final Optional<TokenEntity> tokenEntity = this.tokenRepository.findByToken(token);
         final String username = extractSubject(token);
         return tokenEntity.isPresent() &&
-                !tokenEntity.get().isBlocked() &&
+                !tokenEntity.get().isExpired() &&
                 username.equals(user.getUsername()) &&
                 !isTokenExpired(token);
     }

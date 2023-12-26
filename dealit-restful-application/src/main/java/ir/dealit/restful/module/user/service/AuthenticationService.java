@@ -48,7 +48,7 @@ public class AuthenticationService {
         }).orElse(Optional.empty());
     }
 
-    public Optional<SignedInUser> authenticate(AuthTokenReq req) {
+    public Optional<SignedInUser> authenticate(AuthTokenRequest req) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -71,7 +71,7 @@ public class AuthenticationService {
     }
 
     public void logout(String token){
-        tokenService.remove(token);
+        tokenService.expireToken(token);
     }
 
     public void sendOTP(UserEntity user, OTPSenderMechanism senderMechanism) {
@@ -124,7 +124,7 @@ public class AuthenticationService {
                 : UserSignUpRes.builder().successfulRegister(false).build();
     }*/
 
-/*    public AuthToken authenticate(AuthTokenReq authReauest) {
+/*    public AuthToken authenticate(AuthTokenRequest authReauest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

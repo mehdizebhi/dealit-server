@@ -1,5 +1,7 @@
 package ir.dealit.restful.api.command;
 
+import ir.dealit.restful.dto.auth.AuthToken;
+import ir.dealit.restful.dto.user.PartialUserUpdate;
 import ir.dealit.restful.dto.user.UpdateUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -10,6 +12,12 @@ import java.io.IOException;
 
 @RequestMapping("/v1/users")
 public interface CommandUserApi {
+
+    @PatchMapping(value = {"", "/"})
+    ResponseEntity<AuthToken> partialUserUpdate(
+            @RequestBody PartialUserUpdate userUpdate,
+            Authentication authentication
+    );
 
     @PostMapping("/picture")
     ResponseEntity<Void> updatePicture(
