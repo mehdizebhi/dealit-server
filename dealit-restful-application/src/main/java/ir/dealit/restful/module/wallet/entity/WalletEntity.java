@@ -42,7 +42,7 @@ public class WalletEntity {
         this.payments = Collections.emptyList();
         this.transactions = Collections.emptyList();
         this.defaultCurrency = Currency.IRR;
-        this.creditCard = null;
+        this.creditCard = CreditCardEntity.builder().build();
     }
 
     public void addMoney(Money money) {
