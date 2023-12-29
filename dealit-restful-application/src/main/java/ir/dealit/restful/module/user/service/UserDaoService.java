@@ -10,7 +10,7 @@ import ir.dealit.restful.module.inbox.repository.InboxRepository;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.module.wallet.repository.WalletRepository;
-import ir.dealit.restful.util.exception.UserFoundExeption;
+import ir.dealit.restful.util.exception.UserFoundException;
 import ir.dealit.restful.util.factory.AccountFactory;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -48,7 +48,7 @@ public class UserDaoService {
                 newUser.getUsername(),
                 newUser.getEmail());
         if (count > 0) {
-            throw new UserFoundExeption("username or email is exist!");
+            throw new UserFoundException("username or email is exist!");
         }
         //Todo: validate UserEntity object
         UserEntity userEntity = toEntity(newUser);

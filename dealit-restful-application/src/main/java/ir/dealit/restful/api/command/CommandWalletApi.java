@@ -1,9 +1,6 @@
 package ir.dealit.restful.api.command;
 
-import ir.dealit.restful.dto.wallet.ChangeCheckout;
-import ir.dealit.restful.dto.wallet.ChangeFund;
-import ir.dealit.restful.dto.wallet.NewCheckout;
-import ir.dealit.restful.dto.wallet.NewFund;
+import ir.dealit.restful.dto.wallet.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,6 +32,12 @@ public interface CommandWalletApi {
     @PatchMapping("/funds")
     ResponseEntity<Void> updateFunds(
             @RequestBody ChangeFund changeFund,
+            Authentication authentication
+    );
+
+    @PostMapping("/credit-card")
+    ResponseEntity<Void> addCreditCard(
+            @RequestBody NewCreditCard newCreditCard,
             Authentication authentication
     );
 }

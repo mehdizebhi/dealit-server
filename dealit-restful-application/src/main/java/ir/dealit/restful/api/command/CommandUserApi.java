@@ -2,6 +2,7 @@ package ir.dealit.restful.api.command;
 
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.user.PartialUserUpdate;
+import ir.dealit.restful.dto.user.UpdatePasswordForm;
 import ir.dealit.restful.dto.user.UpdateUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,12 +31,6 @@ public interface CommandUserApi {
             Authentication authentication
     ) throws Exception;
 
-    @PutMapping("/")
-    ResponseEntity<Void> updateUser(
-            @RequestBody UpdateUser updateUserReq,
-            Authentication authentication
-    );
-
     @PatchMapping("/disable")
     ResponseEntity<Void> disableUser(
             Authentication authentication
@@ -43,6 +38,12 @@ public interface CommandUserApi {
 
     @PatchMapping("/enable")
     ResponseEntity<Void> enableUser(
+            Authentication authentication
+    );
+
+    @PatchMapping("/password")
+    ResponseEntity<Void> updatePassword(
+            @RequestBody UpdatePasswordForm updatePasswordForm,
             Authentication authentication
     );
 }

@@ -29,10 +29,4 @@ public class QueryWalletController implements QueryWalletApi {
                 walletService.creditCard((UserEntity) authentication.getPrincipal())
         ));
     }
-
-    @Override
-    public ResponseEntity<Void> addCreditCard(NewCreditCard newCreditCard, Authentication authentication) {
-        walletService.newCreditCard(newCreditCard, (UserEntity) authentication.getPrincipal());
-        return ResponseEntity.status(201).build();
-    }
 }

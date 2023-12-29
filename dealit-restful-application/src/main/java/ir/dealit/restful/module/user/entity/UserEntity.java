@@ -36,7 +36,7 @@ public class UserEntity implements UserDetails {
 
     private @MongoId ObjectId id;
     private @Indexed(unique = true) String username;
-    private String password;
+    private @Size(min = 6, message = "Password must be 6 char") String password;
     private String displayName;
     private @Email String email;
     private @Size(min = 11, max = 11, message = "Phone number must be 11 digits")

@@ -7,7 +7,7 @@ import ir.dealit.restful.dto.enums.OTPSenderMechanism;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.service.TokenService;
-import ir.dealit.restful.util.exception.UserFoundExeption;
+import ir.dealit.restful.util.exception.UserFoundException;
 import ir.dealit.restful.module.user.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class AuthenticationController implements AuthenticationApi {
                     .map(model -> status(HttpStatus.CREATED).body(model))
                     .orElse(badRequest().build());
         }
-        catch (UserFoundExeption exp) {
+        catch (UserFoundException exp) {
             return status(HttpStatus.NOT_ACCEPTABLE).build();
         }
     }

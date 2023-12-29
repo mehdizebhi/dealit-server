@@ -3,17 +3,19 @@ package ir.dealit.restful.module.user.controller;
 import ir.dealit.restful.api.command.CommandUserApi;
 import ir.dealit.restful.dto.auth.AuthToken;
 import ir.dealit.restful.dto.user.PartialUserUpdate;
-import ir.dealit.restful.dto.user.UpdateUser;
+import ir.dealit.restful.dto.user.UpdatePasswordForm;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.service.TokenService;
 import ir.dealit.restful.module.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 public class CommandUserController implements CommandUserApi {
 
@@ -50,11 +52,6 @@ public class CommandUserController implements CommandUserApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateUser(UpdateUser updateUserReq, Authentication authentication) {
-        return null;
-    }
-
-    @Override
     public ResponseEntity<Void> disableUser(Authentication authentication) {
         return null;
     }
@@ -62,5 +59,12 @@ public class CommandUserController implements CommandUserApi {
     @Override
     public ResponseEntity<Void> enableUser(Authentication authentication) {
         return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> updatePassword(UpdatePasswordForm updatePasswordForm, Authentication authentication) {
+        userService.updatePassword(updatePasswordForm.currentPassword(), updatePasswordForm.newPassword(), updatePasswordForm.confirmNewPassword(),
+                (UserEntity) authentication.getPrincipal());
+        return ResponseEntity.status(201).build();
     }
 }

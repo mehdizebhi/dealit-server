@@ -8,6 +8,7 @@ import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.ConfirmationCodeRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.service.SMSService;
+import ir.dealit.restful.util.exception.IncorrectPasswordException;
 import lombok.RequiredArgsConstructor;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,9 @@ public class AuthenticationService {
     private String smsNumber;
 
     public Optional<SignedInUser> register(NewUser newUser) {
+        if (!newUser.getPassword().equals(newUser.getConfirmPassword())) {
+            throw new IncorrectPasswordException("Your password and confirm password is not match.");
+        }
         Optional<UserEntity> userEntity = service.registerUser(newUser);
         return userEntity.map(u -> {
             return Optional.of(SignedInUser.builder()
