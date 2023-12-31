@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
             }
             throw new InvalidPasswordException("Your new password not match with confirm password!");
         }
-        throw new IncorrectPasswordException("Your username is incorrect!");
+        throw new IncorrectPasswordException("Your password is incorrect!");
     }
 
     @Override

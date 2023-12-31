@@ -17,7 +17,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "confirmation-codes")
+@Document(collection = "confirmation_codes")
 public class ConfirmationCodeEntity {
     private @MongoId ObjectId id;
     private @Indexed(unique = true) String code;
