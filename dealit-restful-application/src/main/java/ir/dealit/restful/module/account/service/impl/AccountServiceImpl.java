@@ -45,16 +45,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ClientAccountInfo clientInfo(UserEntity user) {
-        /*var info = ClientAccountInfo.builder()
+        var info = ClientAccountInfo.builder()
                 .projectSpaces(projectSpaceRepository.countByOwner(user.getId()))
                 .activePositions(projectSpaceRepository.countJobPositionsByOwner(user.getId()))
                 .contracts(contractRepository.countByHiredBy(user.getId()))
                 .activeContracts(contractRepository.countByStatusAndHiredBy(ContractStatus.ACTIVE, user.getId()))
-                .newProposal(proposalRepository.)
-                .activeJobAd()
-                .build();*/
+                .newProposal(0)
+                .activeJobAd(0)
+                .build();
 
-        return null;
+        return info;
     }
 
  /*   @Override
