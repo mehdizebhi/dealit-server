@@ -34,7 +34,8 @@ public class TokenServiceImpl implements TokenService {
         var token = AuthToken.builder()
                 .accessToken(jwtUtils.generateToken(
                         Map.of("isFreelancer", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_FREELANCER")).count() == 1,
-                                "isClient", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_CLIENT")).count() == 1),
+                                "isClient", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_CLIENT")).count() == 1,
+                                "isAdmin", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_ADMIN")).count() == 1),
                         user))
                 .refreshToken(UUID.randomUUID().toString())
                 .type("Bearer")
