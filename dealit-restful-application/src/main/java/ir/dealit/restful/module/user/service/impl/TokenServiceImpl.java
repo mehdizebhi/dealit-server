@@ -2,6 +2,7 @@ package ir.dealit.restful.module.user.service.impl;
 
 import ir.dealit.restful.config.security.jwt.util.JwtUtilsImpl;
 import ir.dealit.restful.dto.auth.AuthToken;
+import ir.dealit.restful.module.user.entity.RoleEntity;
 import ir.dealit.restful.module.user.entity.TokenEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.TokenRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -30,7 +32,10 @@ public class TokenServiceImpl implements TokenService {
     public AuthToken createToken(@Valid @NotNull UserEntity user) {
         var expiredAt = DateTime.now().plusSeconds((int) (EXPIRATION_PERIOD / 1_000));
         var token = AuthToken.builder()
-                .accessToken(jwtUtils.generateToken(user))
+                .accessToken(jwtUtils.generateToken(
+                        Map.of("isFreelancer", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_FREELANCER")).count() == 1,
+                                "isClient", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_CLIENT")).count() == 1),
+                        user))
                 .refreshToken(UUID.randomUUID().toString())
                 .type("Bearer")
                 .exp(expiredAt.getMillis() / 1_000)
