@@ -8,6 +8,7 @@ public record FreelancerAccountInfo(
         int activeContracts,
         int proposals,
         int activeProposal,
-        int invitations
+        int invitations,
+        double lastMonthIncome
 ) {
 }

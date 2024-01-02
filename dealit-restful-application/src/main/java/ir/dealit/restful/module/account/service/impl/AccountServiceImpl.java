@@ -10,7 +10,10 @@ import ir.dealit.restful.module.contract.repository.ContractRepository;
 import ir.dealit.restful.module.job.repository.ProposalRepository;
 import ir.dealit.restful.module.project.repository.ProjectSpaceRepository;
 import ir.dealit.restful.module.user.entity.UserEntity;
+import ir.dealit.restful.module.wallet.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.joda.money.CurrencyUnit;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final ContractRepository contractRepository;
     private final ProposalRepository proposalRepository;
+    private final TransactionService transactionService;
     private final ProjectSpaceRepository projectSpaceRepository;
 
     @Override
@@ -32,6 +36,8 @@ public class AccountServiceImpl implements AccountService {
                 .proposals(proposalRepository.countByOwner(user.getId()))
                 .activeProposal(proposalRepository.countByStatusAndOwner(ProposalStatus.ACTIVE, user.getId()))
                 .invitations(0)
+                .lastMonthIncome(transactionService.income(DateTime.now().minusDays(30), DateTime.now(), user,
+                        CurrencyUnit.of(user.getWallet().getDefaultCurrency().getCode())).doubleValue())
                 .build();
 
         return info;

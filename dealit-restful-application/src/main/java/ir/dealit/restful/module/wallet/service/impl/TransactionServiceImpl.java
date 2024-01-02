@@ -35,8 +35,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public BigDecimal income(LocalDateTime start, LocalDateTime end, UserEntity user) {
-        return null;
+    public BigDecimal income(DateTime start, DateTime end, UserEntity user, CurrencyUnit target) {
+        List<TransactionEntity> incomeTransactions = transactionRepository.findAllIncomeTransactionByTime(
+                start.toDate(), end.toDate(), user.getWallet().getId()
+        );
+        return total(incomeTransactions, target);
     }
 
     @Override
@@ -46,7 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public BigDecimal outcome(LocalDateTime start, LocalDateTime end, UserEntity user) {
+    public BigDecimal outcome(DateTime start, DateTime end, UserEntity user, CurrencyUnit target) {
         return null;
     }
 

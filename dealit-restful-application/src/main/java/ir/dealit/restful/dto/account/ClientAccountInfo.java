@@ -9,6 +9,7 @@ public record ClientAccountInfo(
         int contracts,
         int activeContracts,
         int newProposal,
-        int activeJobAd
+        int activeJobAd,
+        double lastMonthOutcome
 ) {
 }
