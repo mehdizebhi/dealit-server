@@ -1,11 +1,9 @@
 package ir.dealit.restful.util.hateoas;
 
 import ir.dealit.restful.dto.enums.AccountType;
-import ir.dealit.restful.dto.proposal.controller.QueryProposalController;
 import ir.dealit.restful.dto.user.UserInfo;
 import ir.dealit.restful.module.account.controller.QueryAccountController;
 import ir.dealit.restful.module.chat.controller.QueryChatController;
-import ir.dealit.restful.module.contract.controller.QueryContractController;
 import ir.dealit.restful.module.inbox.controller.QueryInboxController;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.wallet.controller.QueryWalletController;

@@ -1,7 +1,9 @@
 package ir.dealit.restful.module.user.service.impl;
 
+import ir.dealit.restful.dto.user.UserActivity;
 import ir.dealit.restful.module.attachment.service.AttachmentService;
 import ir.dealit.restful.module.user.entity.UserEntity;
+import ir.dealit.restful.module.user.repository.TokenRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.module.user.service.UserService;
 import ir.dealit.restful.util.exception.IncorrectPasswordException;
@@ -10,10 +12,19 @@ import ir.dealit.restful.util.exception.UserFoundException;
 import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final AttachmentModelAssembler assembler;
     private final UserRepository userRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
+    private final TokenRepository tokenRepository;
 
     @Override
     @Transactional
@@ -99,5 +111,29 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void resetPassword(String resetToken, String newPassword, String confirmNewPassword, UserEntity user) {
 
+    }
+
+    @Override
+    public Page<UserActivity> activities(UserEntity user, Pageable pageable) {
+        List<UserActivity> activities = new ArrayList<>();
+        var tokens = tokenRepository.findByUser(user, pageable);
+        tokens.forEach(token -> {
+            if (token.isExpired()) {
+                activities.add(UserActivity.builder()
+                        .type("LOGOUT")
+                        .title("logout")
+                        .description("ip=" + token.getIp())
+                        .timestamp(new DateTime(token.getExpiredAt()))
+                        .build());
+            } else {
+                activities.add(UserActivity.builder()
+                        .type("LOGIN")
+                        .title("login")
+                        .description("ip=" + token.getIp())
+                        .timestamp(new DateTime(token.getCreatedAt()))
+                        .build());
+            }
+        });
+        return new PageImpl<UserActivity>(activities, pageable, tokens.getTotalElements());
     }
 }

@@ -26,4 +26,5 @@ public class TokenEntity {
     private @CreatedDate Date createdAt;
     private Date expiredAt;
     private boolean expired;
+    private String ip;
 }

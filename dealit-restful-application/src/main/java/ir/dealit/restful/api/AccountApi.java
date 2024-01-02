@@ -1,6 +1,5 @@
 package ir.dealit.restful.api;
 
-import ir.dealit.restful.dto.account.AccountActivity;
 import ir.dealit.restful.dto.account.AccountOverview;
 import ir.dealit.restful.dto.account.TinyStats;
 import org.bson.types.ObjectId;

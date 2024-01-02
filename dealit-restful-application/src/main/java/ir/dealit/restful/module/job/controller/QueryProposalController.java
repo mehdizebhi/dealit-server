@@ -1,4 +1,4 @@
-package ir.dealit.restful.dto.proposal.controller;
+package ir.dealit.restful.module.job.controller;
 
 import ir.dealit.restful.api.query.QueryProposalApi;
 import ir.dealit.restful.dto.proposal.ClientProposalInfo;

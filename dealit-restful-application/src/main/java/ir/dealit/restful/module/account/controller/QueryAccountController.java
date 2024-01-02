@@ -2,7 +2,7 @@ package ir.dealit.restful.module.account.controller;
 
 import ir.dealit.restful.api.query.QueryAccountApi;
 import ir.dealit.restful.dto.account.*;
-import ir.dealit.restful.dto.proposal.controller.QueryProposalController;
+import ir.dealit.restful.module.job.controller.QueryProposalController;
 import ir.dealit.restful.module.account.service.AccountService;
 import ir.dealit.restful.module.contract.controller.QueryContractController;
 import ir.dealit.restful.module.user.entity.UserEntity;

@@ -7,6 +7,7 @@ import ir.dealit.restful.module.user.entity.TokenEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.TokenRepository;
 import ir.dealit.restful.module.user.service.TokenService;
+import ir.dealit.restful.util.HttpReqResUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,7 @@ public class TokenServiceImpl implements TokenService {
                         .expiredAt(expiredAt.toDate())
                         .refreshToken(token.getRefreshToken())
                         .user(user)
+                        .ip(HttpReqResUtils.getClientIpAddressIfServletRequestExist())
                         .expired(false)
                 .build());
 
