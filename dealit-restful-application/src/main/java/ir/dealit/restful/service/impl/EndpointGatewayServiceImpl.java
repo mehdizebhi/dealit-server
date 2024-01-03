@@ -1,6 +1,5 @@
 package ir.dealit.restful.service.impl;
 
-import ir.dealit.restful.dto.common.EndpointInfo;
 import ir.dealit.restful.dto.common.InitialSource;
 import ir.dealit.restful.service.EndpointGatewayService;
 import jakarta.annotation.Nullable;
@@ -22,13 +21,4 @@ public class EndpointGatewayServiceImpl implements EndpointGatewayService {
         return Optional.empty();
     }
 
-    /* @Override
-    public Optional<List<EndpointInfo>> initialSource(@Nullable ObjectId userId) {
-        if (userId == null) {
-
-            return Optional.empty();
-        }
-
-        return Optional.empty();
-    }*/
 }
