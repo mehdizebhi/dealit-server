@@ -3,7 +3,9 @@ package ir.dealit.restful.module.user.controller;
 import ir.dealit.restful.api.AuthenticationApi;
 import ir.dealit.restful.dto.ResponseWrapper;
 import ir.dealit.restful.dto.auth.*;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.enums.OTPSenderMechanism;
+import ir.dealit.restful.dto.enums.VerifyOTPType;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.service.TokenService;
@@ -56,9 +58,9 @@ public class AuthenticationController implements AuthenticationApi {
     }
 
     @Override
-    public ResponseEntity<Void> logout(Authentication authentication) {
+    public ResponseEntity<ResponseModel<Void>> logout(Authentication authentication) {
         service.logout((String) authentication.getCredentials());
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
     }
 
     @Override
@@ -67,30 +69,42 @@ public class AuthenticationController implements AuthenticationApi {
     }
 
     @Override
-    public ResponseEntity<ResponseWrapper<String>> createOTP(Authentication authentication) {
+    public ResponseEntity<ResponseModel<Void>> sendSmsOTP(Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
         if (!user.isPhoneConfirmed()) {
-            try {
-                service.sendOTP((UserEntity) authentication.getPrincipal(), OTPSenderMechanism.SMS);
-                return ResponseEntity.ok(new ResponseWrapper<>(null, "success"));
-            } catch (Exception exp) {
-                return ResponseEntity.badRequest().body(new ResponseWrapper<>(null, "fail"));
-            }
+            service.sendOTP(user, OTPSenderMechanism.SMS);
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
         }
-        return ResponseEntity.ok(new ResponseWrapper<>(null, "success"));
+        return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Phone Number is already verified").build());
     }
 
     @Override
-    public ResponseEntity<ResponseWrapper<String>> verifyOTP(OTPCode code, Authentication authentication) {
+    public ResponseEntity<ResponseModel<Void>> sendEmailOTP(Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
+        if (!user.isEmailConfirmed()) {
+            service.sendOTP(user, OTPSenderMechanism.EMAIL);
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
+        }
+        return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Email is already verified").build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseModel<Void>> verifySmsOTP(OTPCode otpCode, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
         if (!user.isPhoneConfirmed()) {
-            boolean verified = service.verifyOTPCode(code.code(), user);
-            if (verified) {
-                return ResponseEntity.ok(new ResponseWrapper<>(null, "success"));
-            } else {
-                return ResponseEntity.badRequest().body(new ResponseWrapper<>(null, "fail"));
-            }
+            service.verifyOTPCode(otpCode.code(), user, VerifyOTPType.PHONE_NUMBER);
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
         }
-        return ResponseEntity.ok(new ResponseWrapper<>(null, "success"));
+        return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Phone Number is already verified").build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseModel<Void>> verifyEmailOTP(OTPCode otpCode, Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
+        if (!user.isEmailConfirmed()) {
+            service.verifyOTPCode(otpCode.code(), user, VerifyOTPType.EMAIL);
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
+        }
+        return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Email is already verified").build());
     }
 }

@@ -1,18 +1,6 @@
 package ir.dealit.restful.util.hateoas;
 
-import ir.dealit.restful.module.account.controller.AccountController;
-import ir.dealit.restful.dto.account.AccountOverview;
-import ir.dealit.restful.module.account.entity.AccountEntity;
-import ir.dealit.restful.module.account.entity.ClientAccountEntity;
-import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
-import org.springframework.beans.BeanUtils;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 

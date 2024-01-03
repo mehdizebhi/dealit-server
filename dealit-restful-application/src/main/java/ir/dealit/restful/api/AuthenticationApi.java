@@ -1,7 +1,7 @@
 package ir.dealit.restful.api;
 
-import ir.dealit.restful.dto.ResponseWrapper;
 import ir.dealit.restful.dto.auth.*;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.user.NewUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,7 +30,7 @@ public interface AuthenticationApi {
     );
 
     @PostMapping("/logout")
-    ResponseEntity<Void> logout(
+    ResponseEntity<ResponseModel<Void>> logout(
             Authentication authentication
     );
 
@@ -39,14 +39,26 @@ public interface AuthenticationApi {
             @RequestParam(value = "email", required = true) String email
     );
 
-    @PostMapping("/otp")
-    ResponseEntity<ResponseWrapper<String>> createOTP(
+    @PostMapping("/sms-otp")
+    ResponseEntity<ResponseModel<Void>> sendSmsOTP(
             Authentication authentication
     );
 
-    @PostMapping("/verify-otp")
-    ResponseEntity<ResponseWrapper<String>> verifyOTP(
-            @RequestBody OTPCode code,
+    @PostMapping("/email-otp")
+    ResponseEntity<ResponseModel<Void>> sendEmailOTP(
             Authentication authentication
     );
+
+    @PostMapping("/verify-sms-otp")
+    ResponseEntity<ResponseModel<Void>> verifySmsOTP(
+            @RequestBody OTPCode otpCode,
+            Authentication authentication
+    );
+
+    @PostMapping("/verify-email-otp")
+    ResponseEntity<ResponseModel<Void>> verifyEmailOTP(
+            @RequestBody OTPCode otpCode,
+            Authentication authentication
+    );
+
 }

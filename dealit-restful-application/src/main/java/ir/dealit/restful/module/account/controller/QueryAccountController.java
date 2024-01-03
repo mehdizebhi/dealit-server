@@ -2,6 +2,7 @@ package ir.dealit.restful.module.account.controller;
 
 import ir.dealit.restful.api.query.QueryAccountApi;
 import ir.dealit.restful.dto.account.*;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.module.job.controller.QueryProposalController;
 import ir.dealit.restful.module.account.service.AccountService;
 import ir.dealit.restful.module.contract.controller.QueryContractController;
@@ -31,20 +32,26 @@ public class QueryAccountController implements QueryAccountApi {
     }*/
 
     @Override
-    public ResponseEntity<EntityModel<FreelancerAccountInfo>> getFreelancerAccountInfo(Authentication authentication) {
-        var model = EntityModel.of(accountService.freelancerInfo((UserEntity) authentication.getPrincipal()));
+    public ResponseEntity<ResponseModel<FreelancerAccountInfo>> getFreelancerAccountInfo(Authentication authentication) {
+        var model = new ResponseModel.Builder<FreelancerAccountInfo>()
+                .data(accountService.freelancerInfo((UserEntity) authentication.getPrincipal())).success().build();
+
         model.add(linkTo(methodOn(QueryContractController.class).getFreelancerContractInfo(authentication)).withRel("contracts"));
         model.add(linkTo(methodOn(QueryProposalController.class).getFreelancerProposalInfo(authentication)).withRel("proposals"));
         model.add(linkTo(methodOn(QueryProfileController.class).getFreelancerProfileInfo(authentication)).withRel("profile"));
+
         return ResponseEntity.ok(model);
     }
 
     @Override
-    public ResponseEntity<EntityModel<ClientAccountInfo>> getClientAccountInfo(Authentication authentication) {
-        var model = EntityModel.of(accountService.clientInfo((UserEntity) authentication.getPrincipal()));
+    public ResponseEntity<ResponseModel<ClientAccountInfo>> getClientAccountInfo(Authentication authentication) {
+        var model = new ResponseModel.Builder<ClientAccountInfo>()
+                .data(accountService.clientInfo((UserEntity) authentication.getPrincipal())).success().build();
+
         model.add(linkTo(methodOn(QueryContractController.class).getClientContractInfo(authentication)).withRel("contracts"));
         model.add(linkTo(methodOn(QueryProposalController.class).getClientProposalInfo(authentication)).withRel("proposals"));
         model.add(linkTo(methodOn(QueryProfileController.class).getClientProfileInfo(authentication)).withRel("profile"));
+
         return ResponseEntity.ok(model);
     }
 

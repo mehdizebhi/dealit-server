@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
@@ -31,20 +32,5 @@ public class ConfirmationCodeServiceImpl implements ConfirmationCodeService {
 
         confirmationCode = confirmationCodeRepository.save(confirmationCode);
         return confirmationCode.getCode();
-    }
-
-    @Override
-    public boolean verifyOTP(String code, UserEntity user) {
-        var confirmationCode = confirmationCodeRepository
-                .findByCodeAndUserAndUsedAndExpireAtIsAfter(code, user, false, DateTime.now().toDate());
-
-        if (confirmationCode.isPresent()) {
-            var usedConfirmationCode = new ConfirmationCodeEntity();
-            BeanUtils.copyProperties(confirmationCode.get(), usedConfirmationCode);
-            usedConfirmationCode.setUsed(true);
-            confirmationCodeRepository.save(usedConfirmationCode);
-            return true;
-        }
-        return false;
     }
 }

@@ -26,25 +26,33 @@ public class HTMLMailService implements MailService {
 
     @Override
     @Async
-    public void send(@Email String to, String subject, String text) throws MessagingException {
+    public void send(@Email String to, String subject, String text) {
         MimeMessage msg = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
-        helper.setFrom(usernameMail);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(text, true);
-        mailSender.send(msg);
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
+            helper.setFrom(usernameMail);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(text, true);
+            mailSender.send(msg);
+        } catch (MessagingException e) {
+            log.error("Can not send email.");
+        }
     }
 
     @Override
     @Async
-    public void sendAll(List<@Email String> to, String subject, String text) throws MessagingException {
+    public void sendAll(List<@Email String> to, String subject, String text) {
         MimeMessage msg = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
-        helper.setFrom(usernameMail);
-        helper.setTo((String[]) to.toArray());
-        helper.setSubject(subject);
-        helper.setText(text, true);
-        mailSender.send(msg);
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
+            helper.setFrom(usernameMail);
+            helper.setTo((String[]) to.toArray());
+            helper.setSubject(subject);
+            helper.setText(text, true);
+            mailSender.send(msg);
+        } catch (MessagingException e) {
+            log.error("Can not send emails.");
+        }
     }
 }

@@ -2,16 +2,21 @@ package ir.dealit.restful.module.user.service;
 
 import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.enums.OTPSenderMechanism;
+import ir.dealit.restful.dto.enums.VerifyOTPType;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.module.user.entity.ConfirmationCodeEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.ConfirmationCodeRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
+import ir.dealit.restful.service.MailService;
 import ir.dealit.restful.service.SMSService;
+import ir.dealit.restful.util.exception.DealitException;
 import ir.dealit.restful.util.exception.IncorrectPasswordException;
+import ir.dealit.restful.util.exception.InvalidConfirmCodeException;
 import lombok.RequiredArgsConstructor;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +37,8 @@ public class AuthenticationService {
     private final ConfirmationCodeRepository confirmationCodeRepository;
     private final UserRepository userRepository;
     private final TokenService tokenService;
+    private final ConfirmationCodeService confirmationCodeService;
+    private final MailService mailService;
 
 
     @Value("${services.sms.number}")
@@ -79,36 +86,30 @@ public class AuthenticationService {
     }
 
     public void sendOTP(UserEntity user, OTPSenderMechanism senderMechanism) {
-        int number = new Random().nextInt(999999);
-        String code = String.format("%06d", number);
-        var confirmationCode = ConfirmationCodeEntity.builder()
-                .code(code)
-                .expireAt(DateTime.now().plusMinutes(5).toDate())
-                .reason("Verify Phone Number")
-                .user(user)
-                .used(false)
-                .build();
-        confirmationCodeRepository.save(confirmationCode);
-        if (senderMechanism == OTPSenderMechanism.EMAIL) {
-            // TODO: Implement Email Sender for sending email to user
-        } else {
-            smsService.send(smsNumber, user.getPhoneNumber(), code);
+        switch (senderMechanism) {
+            case EMAIL -> mailService.send(user.getEmail(), "Verify Email", confirmationCodeService.newOTPCode("Verify Email", user));
+            case SMS -> smsService.send(smsNumber, user.getPhoneNumber(), confirmationCodeService.newOTPCode("Verify Phone Number", user));
+            default -> throw new DealitException("Invalid Sender Mechanism", HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
     @Transactional
-    public boolean verifyOTPCode(String code, UserEntity user) {
+    public void verifyOTPCode(String code, UserEntity user, VerifyOTPType verifyOTPType) {
         var confirmationCode = confirmationCodeRepository
                 .findByCodeAndUserAndUsedAndExpireAtIsAfter(code, user, false, DateTime.now().toDate());
 
         if (confirmationCode.isPresent()) {
             confirmationCode.get().setUsed(true);
             confirmationCodeRepository.save(confirmationCode.get());
-            user.setPhoneConfirmed(true);
+            switch (verifyOTPType) {
+                case EMAIL -> user.setPhoneConfirmed(true);
+                case PHONE_NUMBER -> user.setEmailConfirmed(true);
+                default -> throw new DealitException("Invalid OTP Type", HttpStatus.NOT_ACCEPTABLE);
+            }
             userRepository.save(user);
-            return true;
+            return;
         }
-        return false;
+        throw new InvalidConfirmCodeException(HttpStatus.NOT_FOUND);
     }
 
 
