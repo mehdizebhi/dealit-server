@@ -3,6 +3,7 @@ package ir.dealit.restful.api;
 import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.user.NewUser;
+import ir.dealit.restful.dto.user.ResetPassword;
 import jakarta.validation.constraints.Email;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,7 +21,7 @@ public interface AuthenticationApi {
     );
 
     @PostMapping("/signup")
-    ResponseEntity<SignedInUser> singUp (
+    ResponseEntity<SignedInUser> signUp(
             @RequestBody NewUser newUser
     );
 
@@ -41,7 +42,8 @@ public interface AuthenticationApi {
     );
 
     @PostMapping("/reset-password")
-    ResponseEntity<String> resetPassword(
-            @RequestParam(value = "email", required = true) String email
+    ResponseEntity<ResponseModel<Void>> resetPassword(
+            @RequestParam(value = "token") String token,
+            @RequestBody ResetPassword resetPassword
     );
 }

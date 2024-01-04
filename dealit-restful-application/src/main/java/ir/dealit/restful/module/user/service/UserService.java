@@ -25,7 +25,5 @@ public interface UserService {
 
     void updatePassword(String oldPassword, String newPassword, String confirmNewPassword, UserEntity user);
 
-    void resetPassword(String resetToken, String newPassword, String confirmNewPassword, UserEntity user);
-
     Page<UserActivity> activities(UserEntity user, Pageable pageable);
 }

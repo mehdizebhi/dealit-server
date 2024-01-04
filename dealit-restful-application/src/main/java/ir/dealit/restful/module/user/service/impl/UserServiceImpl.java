@@ -107,12 +107,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void resetPassword(String resetToken, String newPassword, String confirmNewPassword, UserEntity user) {
-
-    }
-
-    @Override
     public Page<UserActivity> activities(UserEntity user, Pageable pageable) {
         List<UserActivity> activities = new ArrayList<>();
         var tokens = tokenRepository.findByUser(user, pageable);

@@ -4,6 +4,7 @@ import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.enums.OTPSenderMechanism;
 import ir.dealit.restful.dto.enums.VerifyOTPType;
 import ir.dealit.restful.dto.user.NewUser;
+import ir.dealit.restful.dto.user.ResetPassword;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.ConfirmationCodeRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,9 +34,11 @@ public class AuthenticationService {
     private final SMSService smsService;
     private final ConfirmationCodeRepository confirmationCodeRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final TokenService tokenService;
     private final ConfirmationCodeService confirmationCodeService;
     private final MailService mailService;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
 
     @Value("${services.sms.number}")
@@ -114,6 +118,27 @@ public class AuthenticationService {
             return;
         }
         throw new UserNotFoundException(HttpStatus.NOT_FOUND);
+    }
+
+    @Transactional
+    public void verifyResetTokenAndUpdatePassword(String token, ResetPassword resetPassword) {
+        var confirmationCode = confirmationCodeRepository
+                .findByCodeAndUsedAndExpireAtIsAfter(token, false, DateTime.now().toDate());
+
+        if (confirmationCode.isPresent()) {
+            confirmationCode.get().setUsed(true);
+            confirmationCodeRepository.save(confirmationCode.get());
+
+            if (resetPassword.password().equals(resetPassword.confirmPassword())) {
+                var user = userRepository.findById(confirmationCode.get().getUser().getId()).get();
+                user.setPassword(bCryptPasswordEncoder.encode(resetPassword.password()));
+                userRepository.save(user);
+                return;
+            }
+            throw new InvalidPasswordException(HttpStatus.NOT_ACCEPTABLE);
+
+        }
+        throw new InvalidConfirmCodeException(HttpStatus.NOT_FOUND);
     }
 }
 

@@ -4,6 +4,7 @@ import ir.dealit.restful.api.AuthenticationApi;
 import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.user.NewUser;
+import ir.dealit.restful.dto.user.ResetPassword;
 import ir.dealit.restful.module.user.service.TokenService;
 import ir.dealit.restful.util.exception.UserFoundException;
 import ir.dealit.restful.module.user.service.AuthenticationService;
@@ -37,7 +38,7 @@ public class AuthenticationController implements AuthenticationApi {
     }
 
     @Override
-    public ResponseEntity<SignedInUser> singUp(NewUser newUser) {
+    public ResponseEntity<SignedInUser> signUp(NewUser newUser) {
         try {
             return service.register(newUser)
                     .map(model -> status(HttpStatus.CREATED).body(model))
@@ -66,7 +67,8 @@ public class AuthenticationController implements AuthenticationApi {
     }
 
     @Override
-    public ResponseEntity<String> resetPassword(String email) {
-        return null;
+    public ResponseEntity<ResponseModel<Void>> resetPassword(String token, ResetPassword resetPassword) {
+        service.verifyResetTokenAndUpdatePassword(token, resetPassword);
+        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
     }
 }
