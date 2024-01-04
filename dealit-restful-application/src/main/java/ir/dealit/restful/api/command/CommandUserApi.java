@@ -1,6 +1,8 @@
 package ir.dealit.restful.api.command;
 
 import ir.dealit.restful.dto.auth.AuthToken;
+import ir.dealit.restful.dto.auth.OTPCode;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.user.PartialUserUpdate;
 import ir.dealit.restful.dto.user.UpdatePasswordForm;
 import ir.dealit.restful.dto.user.UpdateUser;
@@ -44,6 +46,28 @@ public interface CommandUserApi {
     @PatchMapping("/password")
     ResponseEntity<Void> updatePassword(
             @RequestBody UpdatePasswordForm updatePasswordForm,
+            Authentication authentication
+    );
+
+    @PostMapping("/sms-otp")
+    ResponseEntity<ResponseModel<Void>> sendSmsOTP(
+            Authentication authentication
+    );
+
+    @PostMapping("/email-otp")
+    ResponseEntity<ResponseModel<Void>> sendEmailOTP(
+            Authentication authentication
+    );
+
+    @PostMapping("/verify-sms-otp")
+    ResponseEntity<ResponseModel<Void>> verifySmsOTP(
+            @RequestBody OTPCode otpCode,
+            Authentication authentication
+    );
+
+    @PostMapping("/verify-email-otp")
+    ResponseEntity<ResponseModel<Void>> verifyEmailOTP(
+            @RequestBody OTPCode otpCode,
             Authentication authentication
     );
 }

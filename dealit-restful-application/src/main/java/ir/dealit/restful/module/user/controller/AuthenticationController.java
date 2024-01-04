@@ -64,47 +64,12 @@ public class AuthenticationController implements AuthenticationApi {
     }
 
     @Override
-    public ResponseEntity<String> resetPassword(String email) {
+    public ResponseEntity<ResponseModel<Void>> forgetPassword(String email) {
         return null;
     }
 
     @Override
-    public ResponseEntity<ResponseModel<Void>> sendSmsOTP(Authentication authentication) {
-        var user = (UserEntity) authentication.getPrincipal();
-        if (!user.isPhoneConfirmed()) {
-            service.sendOTP(user, OTPSenderMechanism.SMS);
-            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
-        }
-        return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Phone Number is already verified").build());
-    }
-
-    @Override
-    public ResponseEntity<ResponseModel<Void>> sendEmailOTP(Authentication authentication) {
-        var user = (UserEntity) authentication.getPrincipal();
-        if (!user.isEmailConfirmed()) {
-            service.sendOTP(user, OTPSenderMechanism.EMAIL);
-            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
-        }
-        return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Email is already verified").build());
-    }
-
-    @Override
-    public ResponseEntity<ResponseModel<Void>> verifySmsOTP(OTPCode otpCode, Authentication authentication) {
-        var user = (UserEntity) authentication.getPrincipal();
-        if (!user.isPhoneConfirmed()) {
-            service.verifyOTPCode(otpCode.code(), user, VerifyOTPType.PHONE_NUMBER);
-            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
-        }
-        return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Phone Number is already verified").build());
-    }
-
-    @Override
-    public ResponseEntity<ResponseModel<Void>> verifyEmailOTP(OTPCode otpCode, Authentication authentication) {
-        var user = (UserEntity) authentication.getPrincipal();
-        if (!user.isEmailConfirmed()) {
-            service.verifyOTPCode(otpCode.code(), user, VerifyOTPType.EMAIL);
-            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
-        }
-        return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Email is already verified").build());
+    public ResponseEntity<String> resetPassword(String email) {
+        return null;
     }
 }
