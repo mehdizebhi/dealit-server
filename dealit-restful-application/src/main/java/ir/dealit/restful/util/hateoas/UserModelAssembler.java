@@ -1,5 +1,6 @@
 package ir.dealit.restful.util.hateoas;
 
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.enums.AccountType;
 import ir.dealit.restful.dto.user.UserInfo;
 import ir.dealit.restful.module.account.controller.QueryAccountController;
@@ -22,9 +23,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class UserModelAssembler {
 
-    public EntityModel<UserInfo> toModel(Authentication authentication) {
+    public ResponseModel<UserInfo> toModel(Authentication authentication) {
         UserEntity entity = (UserEntity) authentication.getPrincipal();
-        var model = EntityModel.of(UserInfo.builder()
+        var model = new ResponseModel.Builder<UserInfo>().data(UserInfo.builder()
                 .displayName(entity.getDisplayName())
                 .email(entity.getEmail())
                 .username(entity.getUsername())
@@ -36,7 +37,7 @@ public class UserModelAssembler {
                 .pictureHref(entity.getPictureHref())
                 .createdAt(new DateTime(entity.getCreatedAt()))
                 .updatedAt(new DateTime(entity.getUpdatedAt()))
-                .build());
+                .build()).success().build();
 
         model.add(getLinks(authentication, entity));
         return model;

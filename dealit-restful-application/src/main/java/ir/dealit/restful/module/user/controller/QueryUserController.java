@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.user.controller;
 
 import ir.dealit.restful.api.query.QueryUserApi;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.user.UserActivity;
 import ir.dealit.restful.dto.user.UserInfo;
 import ir.dealit.restful.module.user.entity.UserEntity;
@@ -16,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -25,12 +28,22 @@ public class QueryUserController implements QueryUserApi {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<EntityModel<UserInfo>> getUserInfo(Authentication authentication) {
+    public ResponseEntity<ResponseModel<UserInfo>> getUserInfo(Authentication authentication) {
         return ResponseEntity.ok(assembler.toModel(authentication));
     }
 
     @Override
-    public ResponseEntity<Page<UserActivity>> getUserActivities(Pageable pageable, Authentication authentication) {
-        return ResponseEntity.ok(userService.activities((UserEntity) authentication.getPrincipal(), pageable));
+    public ResponseEntity<ResponseModel<List<UserActivity>>> getUserActivities(Pageable pageable, Authentication authentication) {
+        var activities = userService.activities((UserEntity) authentication.getPrincipal(), pageable);
+        return ResponseEntity.ok(
+                new ResponseModel.Builder<List<UserActivity>>()
+                        .data(userService.activities((UserEntity) authentication.getPrincipal(), pageable).toList())
+                        .metadata("size", activities.getSize())
+                        .metadata("page", activities.getNumber())
+                        .metadata("totalPages", activities.getTotalPages())
+                        .metadata("totalElements", activities.getTotalElements())
+                        .success()
+                        .build()
+        );
     }
 }

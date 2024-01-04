@@ -127,6 +127,6 @@ public class UserServiceImpl implements UserService {
                         .build());
             }
         });
-        return new PageImpl<UserActivity>(activities, pageable, tokens.getTotalElements());
+        return new PageImpl<>(activities, pageable, tokens.getTotalElements());
     }
 }
