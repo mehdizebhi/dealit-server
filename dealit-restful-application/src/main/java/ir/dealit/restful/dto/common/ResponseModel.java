@@ -51,13 +51,13 @@ public class ResponseModel<T> extends RepresentationModel<ResponseModel<T>> {
         }
 
         public Builder<T> error(String errorMessage) {
-            this.message = "Error: " + errorMessage;
+            this.message = "Error:" + errorMessage;
             return this;
         }
 
         // Additional method to handle exceptions
         public Builder<T> error(Exception exception) {
-            this.message = "Error: " + exception.getMessage();
+            this.message = "Error:" + exception.getMessage();
             return this;
         }
     }

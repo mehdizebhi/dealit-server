@@ -1,23 +1,11 @@
 package ir.dealit.restful.util.exception;
 
-public class DuplicateEmailException extends RuntimeException {
-    public DuplicateEmailException() {
-        super();
-    }
+import ir.dealit.restful.util.constant.ExceptionMessages;
+import org.springframework.http.HttpStatus;
 
-    public DuplicateEmailException(String message) {
-        super(message);
-    }
+public class DuplicateEmailException extends DealitException {
 
-    public DuplicateEmailException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public DuplicateEmailException(Throwable cause) {
-        super(cause);
-    }
-
-    protected DuplicateEmailException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public DuplicateEmailException(HttpStatus httpStatus) {
+        super(ExceptionMessages.EMAIL_MUST_BE_UNIQUE, httpStatus);
     }
 }

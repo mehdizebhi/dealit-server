@@ -1,4 +1,11 @@
 package ir.dealit.restful.util.exception;
 
-public class InvalidAmountException extends RuntimeException {
+import ir.dealit.restful.util.constant.ExceptionMessages;
+import org.springframework.http.HttpStatus;
+
+public class InvalidAmountException extends DealitException {
+
+    public InvalidAmountException(HttpStatus httpStatus) {
+        super(ExceptionMessages.INVALID_AMOUNT, httpStatus);
+    }
 }

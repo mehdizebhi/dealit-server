@@ -15,6 +15,7 @@ import ir.dealit.restful.util.factory.AccountFactory;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +49,7 @@ public class UserDaoService {
                 newUser.getUsername(),
                 newUser.getEmail());
         if (count > 0) {
-            throw new UserFoundException("username or email is exist!");
+            throw new UserFoundException(HttpStatus.NOT_ACCEPTABLE);
         }
         //Todo: validate UserEntity object
         UserEntity userEntity = toEntity(newUser);

@@ -46,7 +46,7 @@ public class AuthenticationService {
 
     public Optional<SignedInUser> register(NewUser newUser) {
         if (!newUser.getPassword().equals(newUser.getConfirmPassword())) {
-            throw new IncorrectPasswordException("Your password and confirm password is not match.");
+            throw new IncorrectPasswordException(HttpStatus.NOT_ACCEPTABLE);
         }
         Optional<UserEntity> userEntity = service.registerUser(newUser);
         return userEntity.map(u -> {
@@ -87,8 +87,8 @@ public class AuthenticationService {
 
     public void sendOTP(UserEntity user, OTPSenderMechanism senderMechanism) {
         switch (senderMechanism) {
-            case EMAIL -> mailService.send(user.getEmail(), "Verify Email", confirmationCodeService.newOTPCode("Verify Email", user));
-            case SMS -> smsService.send(smsNumber, user.getPhoneNumber(), confirmationCodeService.newOTPCode("Verify Phone Number", user));
+            case EMAIL -> mailService.send(user.getEmail(), "Verify Email", confirmationCodeService.newOTPCode(VerifyOTPType.EMAIL.name(), user));
+            case SMS -> smsService.send(smsNumber, user.getPhoneNumber(), confirmationCodeService.newOTPCode(VerifyOTPType.PHONE_NUMBER.name(), user));
             default -> throw new DealitException("Invalid Sender Mechanism", HttpStatus.NOT_ACCEPTABLE);
         }
     }
@@ -96,14 +96,14 @@ public class AuthenticationService {
     @Transactional
     public void verifyOTPCode(String code, UserEntity user, VerifyOTPType verifyOTPType) {
         var confirmationCode = confirmationCodeRepository
-                .findByCodeAndUserAndUsedAndExpireAtIsAfter(code, user, false, DateTime.now().toDate());
+                .findByCodeAndUserAndUsedAndReasonAndExpireAtIsAfter(code, user, false, verifyOTPType.name(), DateTime.now().toDate());
 
         if (confirmationCode.isPresent()) {
             confirmationCode.get().setUsed(true);
             confirmationCodeRepository.save(confirmationCode.get());
             switch (verifyOTPType) {
-                case EMAIL -> user.setPhoneConfirmed(true);
-                case PHONE_NUMBER -> user.setEmailConfirmed(true);
+                case EMAIL -> user.setEmailConfirmed(true);
+                case PHONE_NUMBER -> user.setPhoneConfirmed(true);
                 default -> throw new DealitException("Invalid OTP Type", HttpStatus.NOT_ACCEPTABLE);
             }
             userRepository.save(user);

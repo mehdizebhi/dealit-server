@@ -6,9 +6,7 @@ import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.TokenRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.module.user.service.UserService;
-import ir.dealit.restful.util.exception.IncorrectPasswordException;
-import ir.dealit.restful.util.exception.InvalidPasswordException;
-import ir.dealit.restful.util.exception.UserFoundException;
+import ir.dealit.restful.util.exception.*;
 import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +14,7 @@ import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +59,7 @@ public class UserServiceImpl implements UserService {
     public void updateUsername(String username, UserEntity user) {
         int count = userRepository.countByUsername(username);
         if (count > 0) {
-            throw new UserFoundException("username is exist. you can not change your username;");
+            throw new DuplicateUsernameException(HttpStatus.NOT_ACCEPTABLE);
         }
         user.setUsername(username);
         userRepository.save(user);
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService {
     public void updateEmail(String email, UserEntity user) {
         int count = userRepository.countByEmail(email);
         if (count > 0) {
-            throw new UserFoundException("email is exist. you can not change your email;");
+            throw new DuplicateEmailException(HttpStatus.NOT_ACCEPTABLE);
         }
         user.setEmail(email);
         user.setEmailConfirmed(false);
@@ -102,9 +101,9 @@ public class UserServiceImpl implements UserService {
                 userRepository.save(user);
                 return;
             }
-            throw new InvalidPasswordException("Your new password not match with confirm password!");
+            throw new InvalidPasswordException(HttpStatus.NOT_ACCEPTABLE);
         }
-        throw new IncorrectPasswordException("Your password is incorrect!");
+        throw new IncorrectPasswordException(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @Override

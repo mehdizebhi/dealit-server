@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface ConfirmationCodeRepository extends MongoRepository<ConfirmationCodeEntity, ObjectId> {
 
-    Optional<ConfirmationCodeEntity> findByCodeAndUserAndUsedAndExpireAtIsAfter(String code, UserEntity user, boolean used, Date time);
+    Optional<ConfirmationCodeEntity> findByCodeAndUserAndUsedAndReasonAndExpireAtIsAfter(String code, UserEntity user, boolean used, String reason, Date time);
 }

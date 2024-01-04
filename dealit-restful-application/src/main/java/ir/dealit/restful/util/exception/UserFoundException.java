@@ -1,22 +1,11 @@
 package ir.dealit.restful.util.exception;
 
-public class UserFoundException extends RuntimeException {
-    public UserFoundException() {
-    }
+import ir.dealit.restful.util.constant.ExceptionMessages;
+import org.springframework.http.HttpStatus;
 
-    public UserFoundException(String message) {
-        super(message);
-    }
+public class UserFoundException extends DealitException {
 
-    public UserFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UserFoundException(Throwable cause) {
-        super(cause);
-    }
-
-    public UserFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public UserFoundException(HttpStatus httpStatus) {
+        super(ExceptionMessages.USER_FOUND, httpStatus);
     }
 }

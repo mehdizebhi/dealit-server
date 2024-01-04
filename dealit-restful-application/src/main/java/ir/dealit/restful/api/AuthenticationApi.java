@@ -60,5 +60,4 @@ public interface AuthenticationApi {
             @RequestBody OTPCode otpCode,
             Authentication authentication
     );
-
 }

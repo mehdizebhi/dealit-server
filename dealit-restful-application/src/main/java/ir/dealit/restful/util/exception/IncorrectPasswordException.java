@@ -1,23 +1,11 @@
 package ir.dealit.restful.util.exception;
 
-public class IncorrectPasswordException extends RuntimeException {
+import ir.dealit.restful.util.constant.ExceptionMessages;
+import org.springframework.http.HttpStatus;
 
-    public IncorrectPasswordException() {
-    }
+public class IncorrectPasswordException extends DealitException {
 
-    public IncorrectPasswordException(String message) {
-        super(message);
-    }
-
-    public IncorrectPasswordException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public IncorrectPasswordException(Throwable cause) {
-        super(cause);
-    }
-
-    public IncorrectPasswordException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public IncorrectPasswordException(HttpStatus httpStatus) {
+        super(ExceptionMessages.INCORRECT_PASSWORD, httpStatus);
     }
 }

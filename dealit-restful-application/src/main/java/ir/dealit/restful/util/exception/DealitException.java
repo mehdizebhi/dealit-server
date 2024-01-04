@@ -3,7 +3,7 @@ package ir.dealit.restful.util.exception;
 import org.springframework.http.HttpStatus;
 
 public class DealitException extends RuntimeException {
-    HttpStatus httpStatus;
+    protected HttpStatus httpStatus;
 
     public DealitException(String message, HttpStatus httpStatus) {
         super(message);
