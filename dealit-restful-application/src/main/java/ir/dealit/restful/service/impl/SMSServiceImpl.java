@@ -5,9 +5,11 @@ import ir.dealit.restful.client.SMSClient;
 import ir.dealit.restful.dto.enums.SMSMessageType;
 import ir.dealit.restful.dto.sms.*;
 import ir.dealit.restful.service.SMSService;
+import ir.dealit.restful.util.exception.NotEnoughCreditException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class SMSServiceImpl implements SMSService {
     @Override
     @Async
     public void send(String from, String to, String text) {
+        checkCredit();
         var body = new SMSSendRequest(to, from, text);
         smsClient.send(body, apiKey);
     }
@@ -33,6 +36,7 @@ public class SMSServiceImpl implements SMSService {
     @Override
     @Async
     public void sendAll(String from, List<String> to, String text) {
+        checkCredit();
         var body = new SMSSendAllRequest(from, to, text);
         smsClient.sendAll(body, apiKey);
     }
@@ -58,5 +62,11 @@ public class SMSServiceImpl implements SMSService {
     @Override
     public long credit() {
         return smsClient.getCredit(apiKey).amount();
+    }
+
+    private void checkCredit() {
+        if (smsClient.getCredit(apiKey).amount() < 10) {
+            throw new NotEnoughCreditException(HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 }
