@@ -11,6 +11,7 @@ public class ExceptionMessages {
     public static final String INVALID_CODE = "Invalid Confirmation Code";
     public static final String INVALID_AMOUNT = "The amount is invalid";
     public static final String USER_FOUND = "The user with username or email is already exist";
-    public static final String USER_NOT_FOUND = "The user with this data is not exist!";
+    public static final String USER_NOT_FOUND = "The user with this data is not exist";
     public static final String SMS_CREDIT_NOT_ENOUGH = "SMS credit is not enough";
+    public static final String BAD_CREDENTIAL = "Credential is invalid";
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +33,20 @@ public class ConfirmationCodeServiceImpl implements ConfirmationCodeService {
 
         confirmationCode = confirmationCodeRepository.save(confirmationCode);
         return confirmationCode.getCode();
+    }
+
+    @Override
+    public String newResetPasswordToken(UserEntity user) {
+        String uuid = UUID.randomUUID().toString();
+        var token = ConfirmationCodeEntity.builder()
+                .code(uuid)
+                .expireAt(DateTime.now().plusMinutes(5).toDate())
+                .reason("RESET_PASSWORD")
+                .user(user)
+                .used(false)
+                .build();
+
+        confirmationCodeRepository.save(token);
+        return uuid;
     }
 }

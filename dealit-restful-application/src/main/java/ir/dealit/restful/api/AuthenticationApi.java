@@ -3,6 +3,7 @@ package ir.dealit.restful.api;
 import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.user.NewUser;
+import jakarta.validation.constraints.Email;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ public interface AuthenticationApi {
 
     @PostMapping("/forget-password")
     ResponseEntity<ResponseModel<Void>> forgetPassword(
-            @RequestParam("email") String email
+            @RequestParam("email") @Email String email
     );
 
     @PostMapping("/reset-password")

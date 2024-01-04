@@ -1,13 +1,9 @@
 package ir.dealit.restful.module.user.controller;
 
 import ir.dealit.restful.api.AuthenticationApi;
-import ir.dealit.restful.dto.ResponseWrapper;
 import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.common.ResponseModel;
-import ir.dealit.restful.dto.enums.OTPSenderMechanism;
-import ir.dealit.restful.dto.enums.VerifyOTPType;
 import ir.dealit.restful.dto.user.NewUser;
-import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.service.TokenService;
 import ir.dealit.restful.util.exception.UserFoundException;
 import ir.dealit.restful.module.user.service.AuthenticationService;
@@ -65,7 +61,8 @@ public class AuthenticationController implements AuthenticationApi {
 
     @Override
     public ResponseEntity<ResponseModel<Void>> forgetPassword(String email) {
-        return null;
+        service.sendForgetPasswordToken(email);
+        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
     }
 
     @Override

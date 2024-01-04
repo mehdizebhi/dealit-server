@@ -4,28 +4,24 @@ import ir.dealit.restful.dto.auth.*;
 import ir.dealit.restful.dto.enums.OTPSenderMechanism;
 import ir.dealit.restful.dto.enums.VerifyOTPType;
 import ir.dealit.restful.dto.user.NewUser;
-import ir.dealit.restful.module.user.entity.ConfirmationCodeEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.ConfirmationCodeRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.service.MailService;
 import ir.dealit.restful.service.SMSService;
-import ir.dealit.restful.util.exception.DealitException;
-import ir.dealit.restful.util.exception.IncorrectPasswordException;
-import ir.dealit.restful.util.exception.InvalidConfirmCodeException;
+import ir.dealit.restful.util.exception.*;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +64,7 @@ public class AuthenticationService {
                     )
             );
         } catch (Exception exp) {
-            throw new BadCredentialsException("Something happen wrongly in authenticate");
+            throw new InvalidCredentialsException(HttpStatus.UNAUTHORIZED);
         }
         UserEntity user = service.findUserByUsername(req.getUsername());
         return Objects.nonNull(user) ? Optional.of(
@@ -78,7 +74,6 @@ public class AuthenticationService {
                         .token(tokenService.createToken(user))
                         .build()
         ) : Optional.empty();
-
     }
 
     public void logout(String token){
@@ -112,39 +107,13 @@ public class AuthenticationService {
         throw new InvalidConfirmCodeException(HttpStatus.NOT_FOUND);
     }
 
-
-/*    public UserSignUpRes register(UserSignUpReq regRequest) {
-        UserEntity userEntity = UserEntity.builder()
-                .username(regRequest.getUsername())
-                .password(passwordEncoder.encode(regRequest.getPassword()))
-                .displayName(regRequest.getDisplayName())
-                .email(regRequest.getEmail())
-                .accountNonExpired(true)
-                .credentialsNonExpired(true)
-                .accountNonLocked(true)
-                .enabled(true)
-                .build();
-        userRepository.save(userEntity);
-        return userEntity != null ? UserSignUpRes.builder().successfulRegister(true).build()
-                : UserSignUpRes.builder().successfulRegister(false).build();
-    }*/
-
-/*    public AuthToken authenticate(AuthTokenRequest authReauest) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authReauest.getUsername(),
-                            authReauest.getPassword()
-                    )
-            );
-        } catch (Exception exp) {
-            throw new BadCredentialsException("Something happen wrongly in authenticate");
+    public void sendForgetPasswordToken(@Email String email) {
+        var userOp = userRepository.findByEmail(email);
+        if (userOp.isPresent()) {
+            mailService.send(email, "Forget Password", confirmationCodeService.newResetPasswordToken(userOp.get()));
+            return;
         }
-        UserEntity userEntity = userRepository.findByUsername(authReauest.getUsername());
-        return userEntity != null ? AuthToken.builder()
-                .token(jwtUtils.generateToken(userEntity))
-                .build()
-                : AuthToken.builder().token(null).build();
-    }*/
+        throw new UserNotFoundException(HttpStatus.NOT_FOUND);
+    }
 }
 
