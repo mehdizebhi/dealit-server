@@ -13,7 +13,9 @@ import java.util.List;
 @Secured("ROLE_USER")
 public interface UserService {
 
-    boolean updateProfilePicture(MultipartFile img, UserEntity user) throws Exception;
+    void updateProfilePicture(MultipartFile img, UserEntity user) throws Exception;
+
+    void deleteProfilePicture(UserEntity user);
 
     void updateUsername(String username, UserEntity user);
 

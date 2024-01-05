@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.user.service.impl;
 
 import ir.dealit.restful.dto.user.UserActivity;
+import ir.dealit.restful.module.attachment.repository.AttachmentRepository;
 import ir.dealit.restful.module.attachment.service.AttachmentService;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.TokenRepository;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final AttachmentService attachmentService;
+    private final AttachmentRepository attachmentRepository;
     private final AttachmentModelAssembler assembler;
     private final UserRepository userRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
@@ -38,20 +40,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean updateProfilePicture(MultipartFile img, UserEntity user) throws Exception {
+    public void updateProfilePicture(MultipartFile img, UserEntity user) throws Exception {
         if (img.getContentType().split("/")[0].equals("image")) {
             var attachment = attachmentService.save(assembler.multipartFileToModel(img), true);
             if (attachment.isPresent()) {
                 String href = attachment.get().getUri();
                 user.setPictureHref(href);
                 userRepository.save(user);
-                return true;
-            } else {
-                return false;
             }
+            return;
         }
-        // TODO : Throw exception related to illegal file format
-        return false;
+        throw new IllegalFileFormatException(HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @Override
+    @Transactional
+    public void deleteProfilePicture(UserEntity user) {
+        var attachment = attachmentRepository.findByUri(user.getPictureHref());
+        if (attachment.isPresent()) {
+            attachmentRepository.deleteById(attachment.get().getId());
+        }
+        user.setPictureHref("https://dealit.s3.ir-thr-at1.arvanstorage.ir/user.png");
+        userRepository.save(user);
     }
 
     @Override

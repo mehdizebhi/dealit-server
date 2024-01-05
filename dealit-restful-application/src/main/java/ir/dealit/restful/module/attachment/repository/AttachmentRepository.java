@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface AttachmentRepository extends MongoRepository<AttachmentEntity, ObjectId> {
 
     Optional<AttachmentEntity> findByFileId(String fileId);
+
+    Optional<AttachmentEntity> findByUri(String uri);
 }

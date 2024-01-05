@@ -25,7 +25,7 @@ public class AttachmentEntity {
     private String fileType;
     private String fileExtension;
     private long fileSize;
-    private String uri;
+    private @Indexed(unique = true) String uri;
     private @CreatedDate Date createdAt;
     private @LastModifiedDate Date updatedAt;
 }

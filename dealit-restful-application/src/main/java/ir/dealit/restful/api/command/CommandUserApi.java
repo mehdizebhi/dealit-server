@@ -17,34 +17,24 @@ import java.io.IOException;
 public interface CommandUserApi {
 
     @PatchMapping(value = {"", "/"})
-    ResponseEntity<AuthToken> partialUserUpdate(
+    ResponseEntity<ResponseModel<AuthToken>> partialUserUpdate(
             @RequestBody PartialUserUpdate userUpdate,
             Authentication authentication
     );
 
     @PostMapping("/picture")
-    ResponseEntity<Void> updatePicture(
+    ResponseEntity<ResponseModel<Void>> updatePicture(
             @RequestPart MultipartFile file,
             Authentication authentication
     ) throws Exception;
 
     @DeleteMapping("/picture")
-    ResponseEntity<Void> deletePicture(
+    ResponseEntity<ResponseModel<Void>> deletePicture(
             Authentication authentication
     ) throws Exception;
 
-    @PatchMapping("/disable")
-    ResponseEntity<Void> disableUser(
-            Authentication authentication
-    );
-
-    @PatchMapping("/enable")
-    ResponseEntity<Void> enableUser(
-            Authentication authentication
-    );
-
     @PatchMapping("/password")
-    ResponseEntity<Void> updatePassword(
+    ResponseEntity<ResponseModel<Void>> updatePassword(
             @RequestBody UpdatePasswordForm updatePasswordForm,
             Authentication authentication
     );

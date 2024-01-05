@@ -57,18 +57,18 @@ public class AuthenticationController implements AuthenticationApi {
     @Override
     public ResponseEntity<ResponseModel<Void>> logout(Authentication authentication) {
         service.logout((String) authentication.getCredentials());
-        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
     }
 
     @Override
     public ResponseEntity<ResponseModel<Void>> forgetPassword(String email) {
         service.sendForgetPasswordToken(email);
-        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
     }
 
     @Override
     public ResponseEntity<ResponseModel<Void>> resetPassword(String token, ResetPassword resetPassword) {
         service.verifyResetTokenAndUpdatePassword(token, resetPassword);
-        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
     }
 }
