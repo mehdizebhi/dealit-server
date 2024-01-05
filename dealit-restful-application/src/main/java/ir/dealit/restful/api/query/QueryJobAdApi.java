@@ -32,7 +32,7 @@ public interface QueryJobAdApi {
     );
 
     @GetMapping("")
-    ResponseEntity<PagedModel<JobAd>> getJobAds(
+    ResponseEntity<ResponseModel<List<JobAd>>> getJobAds(
             @RequestParam("search") String search,
             @RequestParam(value = "min", required = false) Double min,
             @RequestParam(value = "max", required = false) Double max,
@@ -40,10 +40,10 @@ public interface QueryJobAdApi {
             @RequestParam(value = "lengths", required = false) List<ProjectLength> lengths,
             @RequestParam(value = "loads", required = false) List<WeeklyLoad> loads,
             @RequestParam(value = "levels", required = false) List<ExperienceLevel> levels,
-            @RequestParam(value = "fixed", required = false) Boolean fixed,
-            @RequestParam(value = "hourly", required = false) Boolean hourly,
-            @RequestParam(value = "verified", required = false) Boolean verified,
-            @RequestParam(value = "previous", required = false) Boolean previous,
+            @RequestParam(value = "fixed", required = false) boolean fixed,
+            @RequestParam(value = "hourly", required = false) boolean hourly,
+            @RequestParam(value = "verified", required = false) boolean verified,
+            @RequestParam(value = "previous", required = false) boolean previous,
             @PageableDefault Pageable pageable,
             Authentication authentication
     );

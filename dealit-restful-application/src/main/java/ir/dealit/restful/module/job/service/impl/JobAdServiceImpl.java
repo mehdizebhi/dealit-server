@@ -6,6 +6,7 @@ import ir.dealit.restful.dto.job.JobFilter;
 import ir.dealit.restful.dto.job.NewJobAd;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
 import ir.dealit.restful.module.job.repository.JobAdRepository;
+import ir.dealit.restful.module.job.repository.JobAdSearchRepository;
 import ir.dealit.restful.module.job.service.JobAdService;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.service.UserAuthService;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +29,10 @@ public class JobAdServiceImpl implements JobAdService {
 
     private final JobAdRepository jobAdRepository;
     private final UserAuthService userAuthService;
+    private final JobAdSearchRepository jobAdSearchRepository;
 
     @Override
-    public JobAd jobAd(ObjectId id) {
+    public JobAd jobAdDetails(ObjectId id) {
         var jobAdOp = jobAdRepository.findById(id);
         if (jobAdOp.isPresent()) {
             return toModel(jobAdOp.get());
@@ -38,14 +41,15 @@ public class JobAdServiceImpl implements JobAdService {
     }
 
     @Override
-    public Page<JobAd> jobAdsByOwner(Pageable pageable, UserEntity owner) {
+    public Page<JobAd> jobAdsDetailsByOwner(Pageable pageable, UserEntity owner) {
         return jobAdRepository.findByOwner(owner, pageable)
                 .map(entity -> toModel(entity));
     }
 
     @Override
-    public Page<JobAd> jobAdsByFilter(Pageable pageable, JobFilter filter, UserEntity user) {
-        return null;
+    public Page<JobAd> globalSearch(JobFilter filter, Pageable pageable, UserEntity requester) {
+        return jobAdSearchRepository.searchByFilter(filter, pageable)
+                .map(entity -> toModel(entity));
     }
 
 
@@ -56,11 +60,13 @@ public class JobAdServiceImpl implements JobAdService {
     }
 
     @Override
+    @Transactional
     public void updateJobAd(ChangeJobAd jobAd, UserEntity user) {
 
     }
 
     @Override
+    @Transactional
     public void removeJobAd(ObjectId id, UserEntity user) {
 
     }

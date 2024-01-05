@@ -61,7 +61,7 @@ public class JobAdDaoService {
     }
 
     public List<JobAdEntity> findByFilter(JobFilter filter, Pageable pageable){
-        return searchRepository.searchByFilter(filter, pageable);
+        return searchRepository.searchByFilter(filter, pageable).toList();
     }
 
     private JobAdEntity toEntity(JobAd jobAd) {

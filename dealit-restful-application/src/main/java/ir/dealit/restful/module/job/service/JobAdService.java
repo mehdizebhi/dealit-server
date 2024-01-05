@@ -15,12 +15,12 @@ import java.util.Optional;
 @Secured("ROLE_USER")
 public interface JobAdService {
 
-    JobAd jobAd(ObjectId id);
+    JobAd jobAdDetails(ObjectId id);
 
     @Secured("ROLE_CLIENT")
-    Page<JobAd> jobAdsByOwner(Pageable pageable, UserEntity owner);
+    Page<JobAd> jobAdsDetailsByOwner(Pageable pageable, UserEntity owner);
 
-    Page<JobAd> jobAdsByFilter(Pageable pageable, JobFilter filter,UserEntity user);
+    Page<JobAd> globalSearch(JobFilter filter, Pageable pageable, UserEntity requester);
 
     Optional<ObjectId> createJobAd(NewJobAd newJobAd, UserEntity user);
 

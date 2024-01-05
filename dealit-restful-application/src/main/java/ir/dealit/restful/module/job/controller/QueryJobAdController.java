@@ -13,14 +13,11 @@ import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
-import static ir.dealit.restful.util.helper.ControllerResponseHelper.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +28,7 @@ public class QueryJobAdController implements QueryJobAdApi {
     @Override
     public ResponseEntity<ResponseModel<JobAd>> getJobAd(ObjectId id, Authentication authentication) {
         var model = new ResponseModel.Builder<JobAd>()
-                .data(jobAdService.jobAd(id))
+                .data(jobAdService.jobAdDetails(id))
                 .success()
                 .build();
 
@@ -40,7 +37,7 @@ public class QueryJobAdController implements QueryJobAdApi {
 
     @Override
     public ResponseEntity<ResponseModel<List<JobAd>>> getMyJobAds(Pageable pageable, Authentication authentication) {
-        var models = jobAdService.jobAdsByOwner(pageable, (UserEntity) authentication.getPrincipal());
+        var models = jobAdService.jobAdsDetailsByOwner(pageable, (UserEntity) authentication.getPrincipal());
         return ResponseEntity.ok(new ResponseModel.Builder<List<JobAd>>()
                 .data(models.toList())
                 .pageMetadata(models)
@@ -49,17 +46,17 @@ public class QueryJobAdController implements QueryJobAdApi {
     }
 
     @Override
-    public ResponseEntity<PagedModel<JobAd>> getJobAds(String search,
+    public ResponseEntity<ResponseModel<List<JobAd>>> getJobAds(String search,
                                                        Double min,
                                                        Double max,
                                                        SubmitRange range,
                                                        List<ProjectLength> lengths,
                                                        List<WeeklyLoad> loads,
                                                        List<ExperienceLevel> levels,
-                                                       Boolean fixed,
-                                                       Boolean hourly,
-                                                       Boolean verified,
-                                                       Boolean previous,
+                                                       boolean fixed,
+                                                       boolean hourly,
+                                                       boolean verified,
+                                                       boolean previous,
                                                        Pageable pageable,
                                                        Authentication authentication) {
         var filter = JobFilter.builder()
@@ -75,10 +72,15 @@ public class QueryJobAdController implements QueryJobAdApi {
                 .paymentVerified(verified)
                 .fromPreviousClients(previous)
                 .build();
-        var models = toPagedModel(jobAdService
-                .jobAdsByFilter(pageable, filter, (UserEntity) authentication.getPrincipal()));
 
-        return ResponseEntity.ok(models);
+        var models = jobAdService
+                .globalSearch(filter, pageable, (UserEntity) authentication.getPrincipal());
+
+        return ResponseEntity.ok(new ResponseModel.Builder<List<JobAd>>()
+                .data(models.toList())
+                .pageMetadata(models)
+                .success()
+                .build());
     }
 
     /*@Override
