@@ -55,20 +55,20 @@ public class CommandUserController implements CommandUserApi {
     @Override
     public ResponseEntity<ResponseModel<Void>> updatePicture(MultipartFile file, Authentication authentication) throws Exception {
         userService.updateProfilePicture(file, (UserEntity) authentication.getPrincipal());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
+        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
     }
 
     @Override
     public ResponseEntity<ResponseModel<Void>> deletePicture(Authentication authentication) {
         userService.deleteProfilePicture((UserEntity) authentication.getPrincipal());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
+        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
     }
 
     @Override
     public ResponseEntity<ResponseModel<Void>> updatePassword(UpdatePasswordForm updatePasswordForm, Authentication authentication) {
         userService.updatePassword(updatePasswordForm.currentPassword(), updatePasswordForm.newPassword(), updatePasswordForm.confirmNewPassword(),
                 (UserEntity) authentication.getPrincipal());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
+        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class CommandUserController implements CommandUserApi {
         var user = (UserEntity) authentication.getPrincipal();
         if (!user.isPhoneConfirmed()) {
             authenticationService.sendOTP(user, OTPSenderMechanism.SMS);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
         }
         return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Phone Number is already verified").build());
     }
@@ -86,7 +86,7 @@ public class CommandUserController implements CommandUserApi {
         var user = (UserEntity) authentication.getPrincipal();
         if (!user.isEmailConfirmed()) {
             authenticationService.sendOTP(user, OTPSenderMechanism.EMAIL);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
         }
         return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Email is already verified").build());
     }
@@ -96,7 +96,7 @@ public class CommandUserController implements CommandUserApi {
         var user = (UserEntity) authentication.getPrincipal();
         if (!user.isPhoneConfirmed()) {
             authenticationService.verifyOTPCode(otpCode.code(), user, VerifyOTPType.PHONE_NUMBER);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
         }
         return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Phone Number is already verified").build());
     }
@@ -106,7 +106,7 @@ public class CommandUserController implements CommandUserApi {
         var user = (UserEntity) authentication.getPrincipal();
         if (!user.isEmailConfirmed()) {
             authenticationService.verifyOTPCode(otpCode.code(), user, VerifyOTPType.EMAIL);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseModel.Builder<Void>().success().build());
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
         }
         return ResponseEntity.badRequest().body(new ResponseModel.Builder<Void>().error("Email is already verified").build());
     }
