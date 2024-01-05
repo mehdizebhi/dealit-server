@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public interface AttachmentService {
 
-    Optional<Attachment> save(Attachment attachment, boolean isPublic) throws Exception;
+    Optional<Attachment> save(Attachment attachment, boolean isPublic);
 
     default Optional<List<Attachment>> saveAll(List<Attachment> attachments, boolean isPublic) {
         return Optional.of(attachments.stream()

@@ -20,6 +20,7 @@ public class Attachment extends RepresentationModel<Attachment> {
         private String fileType;
         private String fileExtension;
         private long fileSize;
+        private String href;
         private @JsonIgnore String uri;
         private @JsonIgnore byte[] data;
 }

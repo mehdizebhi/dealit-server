@@ -14,4 +14,6 @@ public class ExceptionMessages {
     public static final String USER_NOT_FOUND = "The user with this data is not exist";
     public static final String SMS_CREDIT_NOT_ENOUGH = "SMS credit is not enough";
     public static final String BAD_CREDENTIAL = "Credential is invalid";
+    public static final String NOT_AVAILABLE_UPLOAD_SERVICE = "The file upload service is not available";
+    public static final String FILE_NOT_FOUND = "The file was not found";
 }

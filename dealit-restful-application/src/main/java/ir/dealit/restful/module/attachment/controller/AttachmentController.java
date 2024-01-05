@@ -2,8 +2,11 @@ package ir.dealit.restful.module.attachment.controller;
 
 import ir.dealit.restful.api.AttachmentApi;
 import ir.dealit.restful.dto.attachment.Attachment;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.module.attachment.service.AttachmentService;
 import ir.dealit.restful.module.attachment.service.AttachmentDaoService;
+import ir.dealit.restful.util.exception.InvalidFileException;
+import ir.dealit.restful.util.exception.UploadServiceException;
 import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,45 +35,49 @@ public class AttachmentController implements AttachmentApi {
     private final AttachmentModelAssembler assembler;
 
     @Override
-    public ResponseEntity<Attachment> publicUpload(MultipartFile file) throws Exception {
-        return attachmentService.save(assembler.multipartFileToModel(file), true)
-                .map(ResponseEntity::ok)
-                .orElse(status(HttpStatus.UNAUTHORIZED).build());
+    public ResponseEntity<ResponseModel<Attachment>> publicUpload(MultipartFile file) throws Exception {
+        var attachment = attachmentService.save(assembler.multipartFileToModel(file), true);
+        if (attachment.isPresent()) {
+            return ResponseEntity.ok(new ResponseModel.Builder<Attachment>().success().data(attachment.get()).build());
+        }
+        throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @Override
-    public ResponseEntity<List<Attachment>> publicUploadAll(List<MultipartFile> files) {
+    public ResponseEntity<ResponseModel<List<Attachment>>> publicUploadAll(List<MultipartFile> files) {
         var attachments = files.stream()
                 .map(file -> {
                     try {
                         return attachmentService.save(assembler.multipartFileToModel(file), true).get();
                     } catch (Exception e) {
-                        throw new RuntimeException("Unable to upload files.", e);
+                        throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
                     }
                 })
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(attachments);
+        return ResponseEntity.ok(new ResponseModel.Builder<List<Attachment>>().success().data(attachments).build());
     }
 
     @Override
-    public ResponseEntity<Attachment> privateUpload(MultipartFile file) throws Exception {
-        return attachmentService.save(assembler.multipartFileToModel(file), false)
-                .map(ResponseEntity::ok)
-                .orElse(status(HttpStatus.UNAUTHORIZED).build());
+    public ResponseEntity<ResponseModel<Attachment>> privateUpload(MultipartFile file) throws Exception {
+        var attachment = attachmentService.save(assembler.multipartFileToModel(file), false);
+        if (attachment.isPresent()) {
+            return ResponseEntity.ok(new ResponseModel.Builder<Attachment>().success().data(attachment.get()).build());
+        }
+        throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @Override
-    public ResponseEntity<List<Attachment>> privateUploadAll(List<MultipartFile> files) {
+    public ResponseEntity<ResponseModel<List<Attachment>>> privateUploadAll(List<MultipartFile> files) {
         var attachments = files.stream()
                 .map(file -> {
                     try {
                         return attachmentService.save(assembler.multipartFileToModel(file), false).get();
                     } catch (Exception e) {
-                        throw new RuntimeException("Unable to upload files.", e);
+                        throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
                     }
                 })
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(attachments);
+        return ResponseEntity.ok(new ResponseModel.Builder<List<Attachment>>().success().data(attachments).build());
     }
 
     @Override
@@ -79,15 +86,19 @@ public class AttachmentController implements AttachmentApi {
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.CONTENT_TYPE, attachment.getFileType())
                 .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(attachment.getFileSize()))
-                .header(HttpHeaders.CONTENT_DISPOSITION,  "attachment; filename=\"" + attachment.getFileName() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getFileName() + "\"")
                 .body(new ByteArrayResource(attachment.getData()));
     }
 
     @Override
-    public ResponseEntity<Attachment> getAttachmentInfo(ObjectId id) {
-        return daoService.findById(id)
-                .map(assembler::toModel)
-                .map(ResponseEntity::ok)
-                .orElse(notFound().build());
+    public ResponseEntity<ResponseModel<Attachment>> getAttachmentInfo(ObjectId id) {
+        var attachment = daoService.findById(id);
+        if (attachment.isPresent()) {
+            return ResponseEntity.ok(new ResponseModel.Builder<Attachment>()
+                    .data(assembler.toModel(attachment.get()))
+                    .success()
+                    .build());
+        }
+        throw new InvalidFileException(HttpStatus.NOT_FOUND);
     }
 }

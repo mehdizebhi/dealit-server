@@ -1,12 +1,14 @@
 package ir.dealit.restful.module.attachment.service;
 
 import ir.dealit.restful.dto.attachment.Attachment;
+import ir.dealit.restful.util.exception.UploadServiceException;
 import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
 import ir.dealit.restful.util.helper.AttachmentHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import software.amazon.awssdk.core.ResponseBytes;
@@ -32,7 +34,7 @@ public class ArvanCloudStorageService implements AttachmentService {
     private final AttachmentModelAssembler assembler;
 
     @Override
-    public Optional<Attachment> save(Attachment attachment, boolean isPublic) throws Exception {
+    public Optional<Attachment> save(Attachment attachment, boolean isPublic) {
         try {
             var putObjectBuilder = PutObjectRequest.builder()
                     .bucket(defaultBucketName)
@@ -45,11 +47,12 @@ public class ArvanCloudStorageService implements AttachmentService {
             PutObjectRequest putOb = putObjectBuilder.build();
 
             s3.putObject(putOb, RequestBody.fromBytes(attachment.getData()));
+            log.info("File Uploaded!");
             return attachmentDaoService.register(attachment).map(assembler::toModel);
 
         } catch (S3Exception e) {
             log.error("S3 has problem with uploading = {}", e.getMessage());
-            return Optional.empty();
+            throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
@@ -68,7 +71,7 @@ public class ArvanCloudStorageService implements AttachmentService {
             return Optional.of(attachment);
         } catch (S3Exception e) {
             log.error("S3 Client has problem with downloading fileId = {}", id);
-            return Optional.empty();
+            throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
@@ -85,6 +88,7 @@ public class ArvanCloudStorageService implements AttachmentService {
             attachmentDaoService.delete(new ObjectId(attachment.getId()));
         } catch (S3Exception e) {
             log.error("S3 Client Can not delete object = {}", AttachmentHelper.getKey(attachment));
+            throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
@@ -112,6 +116,7 @@ public class ArvanCloudStorageService implements AttachmentService {
             attachmentDaoService.deleteAll(ids);
         } catch (S3Exception e) {
             log.error("S3 Client Can not delete objects = {}", keys);
+            throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 }

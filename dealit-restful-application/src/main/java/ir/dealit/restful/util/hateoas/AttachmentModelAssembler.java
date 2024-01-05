@@ -37,10 +37,11 @@ public class AttachmentModelAssembler extends RepresentationModelAssemblerSuppor
     @Override
     public Attachment toModel(AttachmentEntity entity) {
         if (Objects.nonNull(entity)) {
-            Attachment model = createModelWithId(entity.getId(), entity);
+            Attachment model = Attachment.builder().build();
             BeanUtils.copyProperties(entity, model);
             model.setId(entity.getId().toString());
-            model.add(getLinks(entity));
+            model.setHref(getDownloadHref(entity).getHref());
+//            model.add(getLinks(entity));
             return model;
         }
         return null;
@@ -63,6 +64,10 @@ public class AttachmentModelAssembler extends RepresentationModelAssemblerSuppor
         List<Link> links = new ArrayList<>();
         links.add(linkTo(methodOn(AttachmentApi.class).download(entity.getId())).withRel("download"));
         return links;
+    }
+
+    private Link getDownloadHref(AttachmentEntity entity) {
+        return linkTo(methodOn(AttachmentApi.class).download(entity.getId())).withRel("download");
     }
 
     private String getBasedUri() {

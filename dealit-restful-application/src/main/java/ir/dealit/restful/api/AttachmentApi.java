@@ -1,6 +1,7 @@
 package ir.dealit.restful.api;
 
 import ir.dealit.restful.dto.attachment.Attachment;
+import ir.dealit.restful.dto.common.ResponseModel;
 import org.bson.types.ObjectId;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +14,22 @@ import java.util.List;
 public interface AttachmentApi {
 
     @PostMapping("/pub-upload")
-    ResponseEntity<Attachment> publicUpload(
+    ResponseEntity<ResponseModel<Attachment>> publicUpload(
             @RequestPart MultipartFile file
     ) throws Exception;
 
     @PostMapping("/pub-upload-all")
-    ResponseEntity<List<Attachment>> publicUploadAll(
+    ResponseEntity<ResponseModel<List<Attachment>>> publicUploadAll(
             @RequestPart List<MultipartFile> files
     );
 
     @PostMapping("/upload")
-    ResponseEntity<Attachment> privateUpload(
+    ResponseEntity<ResponseModel<Attachment>> privateUpload(
             @RequestPart MultipartFile file
     ) throws Exception;
 
     @PostMapping("/upload-all")
-    ResponseEntity<List<Attachment>> privateUploadAll(
+    ResponseEntity<ResponseModel<List<Attachment>>> privateUploadAll(
             @RequestPart List<MultipartFile> files
     );
 
@@ -38,7 +39,7 @@ public interface AttachmentApi {
     );
 
     @GetMapping("/{id}")
-    ResponseEntity<Attachment> getAttachmentInfo(
+    ResponseEntity<ResponseModel<Attachment>> getAttachmentInfo(
             @PathVariable("id") ObjectId id
     );
 }
