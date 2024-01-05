@@ -1,6 +1,7 @@
 package ir.dealit.restful.dto.common;
 
 import lombok.Data;
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.HashMap;
@@ -42,6 +43,14 @@ public class ResponseModel<T> extends RepresentationModel<ResponseModel<T>> {
             responseModel.setMetadata(metadata);
             responseModel.setMessage(message);
             return responseModel;
+        }
+
+        public Builder<T> pageMetadata(Page<?> page) {
+            metadata("size", page.getSize());
+            metadata("page", page.getNumber());
+            metadata("totalPages", page.getTotalPages());
+            metadata("totalElements", page.getTotalElements());
+            return this;
         }
 
         // Additional methods for predefined messages based on HTTP codes
