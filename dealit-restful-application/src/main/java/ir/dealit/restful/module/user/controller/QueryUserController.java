@@ -37,11 +37,8 @@ public class QueryUserController implements QueryUserApi {
         var activities = userService.activities((UserEntity) authentication.getPrincipal(), pageable);
         return ResponseEntity.ok(
                 new ResponseModel.Builder<List<UserActivity>>()
-                        .data(userService.activities((UserEntity) authentication.getPrincipal(), pageable).toList())
-                        .metadata("size", activities.getSize())
-                        .metadata("page", activities.getNumber())
-                        .metadata("totalPages", activities.getTotalPages())
-                        .metadata("totalElements", activities.getTotalElements())
+                        .data(activities.toList())
+                        .pageMetadata(activities)
                         .success()
                         .build()
         );

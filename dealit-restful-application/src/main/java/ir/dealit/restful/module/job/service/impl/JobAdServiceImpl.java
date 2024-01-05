@@ -1,7 +1,5 @@
 package ir.dealit.restful.module.job.service.impl;
 
-import ir.dealit.restful.dto.enums.AccountType;
-import ir.dealit.restful.dto.enums.JobAdStatus;
 import ir.dealit.restful.dto.job.ChangeJobAd;
 import ir.dealit.restful.dto.job.JobAd;
 import ir.dealit.restful.dto.job.JobFilter;
@@ -11,10 +9,13 @@ import ir.dealit.restful.module.job.repository.JobAdRepository;
 import ir.dealit.restful.module.job.service.JobAdService;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.service.UserAuthService;
+import ir.dealit.restful.util.exception.JobNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +29,18 @@ public class JobAdServiceImpl implements JobAdService {
     private final UserAuthService userAuthService;
 
     @Override
-    public Page<JobAd> jobAds(Pageable pageable, UserEntity user) {
-        return null;
+    public JobAd jobAd(ObjectId id) {
+        var jobAdOp = jobAdRepository.findById(id);
+        if (jobAdOp.isPresent()) {
+            return toModel(jobAdOp.get());
+        }
+        throw new JobNotFoundException(HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public Page<JobAd> jobAdsByOwner(Pageable pageable, UserEntity owner) {
+        return jobAdRepository.findByOwner(owner, pageable)
+                .map(entity -> toModel(entity));
     }
 
     @Override
@@ -37,29 +48,7 @@ public class JobAdServiceImpl implements JobAdService {
         return null;
     }
 
-    @Override
-    public Page<JobAd> allJobAdsByStatus(Pageable pageable, JobAdStatus status, UserEntity user) {
-        return null;
-    }
 
-    @Override
-    public Integer countClientJobAds(JobAdStatus status, UserEntity owner) {
-        var accountId = userAuthService.getAccountId(owner, AccountType.CLIENT);
-        if (accountId.isPresent()) {
-            return jobAdRepository.countByStatusAndOwner(status, accountId.get());
-        }
-        return 0;
-    }
-
-    @Override
-    public JobAd jobAd(ObjectId id, UserEntity user) {
-        return null;
-    }
-
-    @Override
-    public List<JobAdEntity> allJobAd(JobAdStatus status, UserEntity owner) {
-        return jobAdRepository.findAllByStatusAndOwner(status, owner.getId());
-    }
 
     @Override
     public Optional<ObjectId> createJobAd(NewJobAd newJobAd, UserEntity user) {
@@ -74,5 +63,11 @@ public class JobAdServiceImpl implements JobAdService {
     @Override
     public void removeJobAd(ObjectId id, UserEntity user) {
 
+    }
+
+    private JobAd toModel(JobAdEntity entity) {
+        var model = JobAd.builder().build();
+        BeanUtils.copyProperties(entity, model);
+        return model;
     }
 }

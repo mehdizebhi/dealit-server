@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.job.controller;
 
 import ir.dealit.restful.api.query.QueryJobAdApi;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.enums.ExperienceLevel;
 import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
@@ -12,7 +13,6 @@ import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,25 +29,38 @@ public class QueryJobAdController implements QueryJobAdApi {
     private final JobAdService jobAdService;
 
     @Override
-    public ResponseEntity<EntityModel<JobAd>> getJobAd(ObjectId id, Authentication authentication) {
-        var model = EntityModel.of(jobAdService
-                .jobAd(id, (UserEntity) authentication.getPrincipal()));
+    public ResponseEntity<ResponseModel<JobAd>> getJobAd(ObjectId id, Authentication authentication) {
+        var model = new ResponseModel.Builder<JobAd>()
+                .data(jobAdService.jobAd(id))
+                .success()
+                .build();
 
         return ResponseEntity.ok(model);
     }
 
     @Override
-    public ResponseEntity<PagedModel<JobAd>> getAllJobAds(Pageable pageable, Authentication authentication) {
-        var models = toPagedModel(jobAdService
-                .jobAds(pageable, (UserEntity) authentication.getPrincipal()));
-
-        return ResponseEntity.ok(models);
+    public ResponseEntity<ResponseModel<List<JobAd>>> getMyJobAds(Pageable pageable, Authentication authentication) {
+        var models = jobAdService.jobAdsByOwner(pageable, (UserEntity) authentication.getPrincipal());
+        return ResponseEntity.ok(new ResponseModel.Builder<List<JobAd>>()
+                .data(models.toList())
+                .pageMetadata(models)
+                .success()
+                .build());
     }
 
     @Override
-    public ResponseEntity<PagedModel<JobAd>> getJobAds(Pageable pageable, String search, Double min, Double max, SubmitRange range,
-                                                       List<ProjectLength> lengths, List<WeeklyLoad> loads, List<ExperienceLevel> levels,
-                                                       Boolean fixed, Boolean hourly, Boolean verified, Boolean previous,
+    public ResponseEntity<PagedModel<JobAd>> getJobAds(String search,
+                                                       Double min,
+                                                       Double max,
+                                                       SubmitRange range,
+                                                       List<ProjectLength> lengths,
+                                                       List<WeeklyLoad> loads,
+                                                       List<ExperienceLevel> levels,
+                                                       Boolean fixed,
+                                                       Boolean hourly,
+                                                       Boolean verified,
+                                                       Boolean previous,
+                                                       Pageable pageable,
                                                        Authentication authentication) {
         var filter = JobFilter.builder()
                 .search(search)
