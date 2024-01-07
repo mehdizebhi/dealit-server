@@ -46,7 +46,9 @@ public class JobAdEntity {
     private @LastModifiedDate Date updatedAt;
     private @DocumentReference UserEntity owner;
     private List<String> questions;
-    private ObjectId jobPositionId;
+    private List<String> requirements;
+    private @DocumentReference JobPositionEntity position;
     private JobAdStatus status;
+    private @DocumentReference List<SkillEntity> skills;
     private @TextScore Float score;
 }

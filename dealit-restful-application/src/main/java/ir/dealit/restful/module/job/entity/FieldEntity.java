@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -15,6 +16,6 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Document(collection = "job_fields")
 public class FieldEntity {
     private @MongoId ObjectId id;
-    private String title;
+    private @Indexed(unique = true) String title;
     private String description;
 }

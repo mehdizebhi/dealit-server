@@ -10,8 +10,8 @@ import ir.dealit.restful.module.account.repository.FreelancerAccountRepository;
 import ir.dealit.restful.module.account.repository.FreelancerProfileRepository;
 import ir.dealit.restful.module.job.entity.JobSpaceEntity;
 import ir.dealit.restful.module.job.repository.JobSpaceRepository;
-import ir.dealit.restful.module.project.entity.ProjectSpaceEntity;
-import ir.dealit.restful.module.project.repository.ProjectSpaceRepository;
+import ir.dealit.restful.module.job.entity.ProjectSpaceEntity;
+import ir.dealit.restful.module.job.repository.ProjectSpaceRepository;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.util.factory.AccountFactory;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class AccountDaoService {
             freelancer.setProfile(profileRepository.save(new FreelancerProfileEntity(userEntity)));
             return freelancerAccountRepository.save(freelancer);
         } else if (account instanceof ClientAccountEntity client) {
-            client.setProjectSpaces(Collections.singletonList(projectSpaceRepository.save(new ProjectSpaceEntity(userEntity, "General"))));
+            client.setProjectSpaces(Collections.singletonList(projectSpaceRepository.save(new ProjectSpaceEntity("General", userEntity))));
             return clientAccountRepository.save(client);
         }
         return accountRepository.save(account);

@@ -1,4 +1,8 @@
 package ir.dealit.restful.dto.job;
 
-public class NewJobPosition {
+import jakarta.validation.constraints.NotBlank;
+
+public record NewJobPosition(
+        @NotBlank String title
+) {
 }

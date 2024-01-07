@@ -1,4 +1,4 @@
-package ir.dealit.restful.module.project.entity;
+package ir.dealit.restful.module.job.entity;
 
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.job.entity.JobPositionEntity;

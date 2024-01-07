@@ -2,7 +2,6 @@ package ir.dealit.restful.module.job.entity;
 
 import ir.dealit.restful.dto.enums.PositionStatus;
 import ir.dealit.restful.module.contract.entity.ContractEntity;
-import ir.dealit.restful.module.project.entity.ProjectSpaceEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +26,6 @@ import java.util.List;
 public class JobPositionEntity {
 
     private @MongoId ObjectId id;
-    private ObjectId positionId;
     private String title;
     private @DocumentReference UserEntity owner;
     private @DocumentReference ProjectSpaceEntity space;
@@ -35,4 +34,27 @@ public class JobPositionEntity {
     private @CreatedDate Date createdAt;
     private @LastModifiedDate Date updatedAt;
     private PositionStatus status;
+
+    public JobPositionEntity(String title, ProjectSpaceEntity space, UserEntity owner) {
+        this.title = title;
+        this.space = space;
+        this.owner = owner;
+        this.jobAds = new ArrayList<>();
+        this.contracts = new ArrayList<>();
+        this.status = PositionStatus.ACTIVE;
+    }
+
+    public void addJobAd(JobAdEntity jobAd) {
+        if (jobAds == null) {
+            jobAds = new ArrayList<>();
+        }
+        jobAds.add(jobAd);
+    }
+
+    public void addContract(ContractEntity contract) {
+        if (contracts == null) {
+            contracts = new ArrayList<>();
+        }
+        contracts.add(contract);
+    }
 }

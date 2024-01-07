@@ -1,6 +1,6 @@
 package ir.dealit.restful.module.account.entity;
 
-import ir.dealit.restful.module.project.entity.ProjectSpaceEntity;
+import ir.dealit.restful.module.job.entity.ProjectSpaceEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

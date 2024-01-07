@@ -1,8 +1,8 @@
 package ir.dealit.restful.module.job.controller;
 
 import ir.dealit.restful.api.command.CommandJobAdApi;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.job.ChangeJobAd;
-import ir.dealit.restful.dto.job.JobAd;
 import ir.dealit.restful.dto.job.NewJobAd;
 import ir.dealit.restful.module.job.service.JobAdService;
 import ir.dealit.restful.module.user.entity.UserEntity;
@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.badRequest;
 
@@ -22,39 +22,13 @@ public class CommandJobAdController implements CommandJobAdApi {
 
     private final JobAdService jobAdService;
 
-    /*@Override
-    public ResponseEntity<JobAd> getJobAd(ObjectId id) {
-        return jobAdDaoService.findById(id)
-                .map(assembler::toModel)
-                .map(ResponseEntity::ok)
-                .orElse(badRequest().build());
-    }
-
     @Override
-    public ResponseEntity<Collection<JobAd>> getAllJobAds(Pageable pageable) {
-        return ResponseEntity.ok(
-                jobAdDaoService.findAll(pageable)
-                        .stream()
-                        .map(assembler::toModel)
-                        .collect(Collectors.toList()));
-    }
-
-    @Override
-    public ResponseEntity<Collection<JobAd>> getJobAds(Pageable pageable, JobFilter filter) {
-        return ResponseEntity.ok(
-                jobAdDaoService.findByFilter(filter, pageable)
-                        .stream()
-                        .map(assembler::toModel)
-                        .collect(Collectors.toList()));
-    }*/
-
-    @Override
-    public ResponseEntity<Void> createJobAd(NewJobAd newJobAd, Authentication authentication) {
+    public ResponseEntity<ResponseModel<Map<String, String>>> createJobAd(NewJobAd newJobAd, Authentication authentication) {
         var id = jobAdService.createJobAd(newJobAd, (UserEntity) authentication.getPrincipal());
-        return id.isPresent() ? ResponseEntity
-                .status(201)
-                .header("Location", id.get().toString())
-                .build() : badRequest().build();
+        return ResponseEntity.ok(new ResponseModel.Builder<Map<String, String>>()
+                .data(Map.of("id", id.toString()))
+                .success()
+                .build());
     }
 
     @Override

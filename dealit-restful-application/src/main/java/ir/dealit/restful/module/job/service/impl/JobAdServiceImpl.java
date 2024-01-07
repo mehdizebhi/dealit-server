@@ -1,18 +1,23 @@
 package ir.dealit.restful.module.job.service.impl;
 
+import ir.dealit.restful.dto.enums.JobAdStatus;
 import ir.dealit.restful.dto.job.ChangeJobAd;
 import ir.dealit.restful.dto.job.JobAd;
 import ir.dealit.restful.dto.job.JobFilter;
 import ir.dealit.restful.dto.job.NewJobAd;
+import ir.dealit.restful.module.job.entity.FieldEntity;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
-import ir.dealit.restful.module.job.repository.JobAdRepository;
-import ir.dealit.restful.module.job.repository.JobAdSearchRepository;
+import ir.dealit.restful.module.job.entity.JobPositionEntity;
+import ir.dealit.restful.module.job.entity.SkillEntity;
+import ir.dealit.restful.module.job.repository.*;
 import ir.dealit.restful.module.job.service.JobAdService;
 import ir.dealit.restful.module.user.entity.UserEntity;
-import ir.dealit.restful.module.user.service.UserAuthService;
 import ir.dealit.restful.util.exception.JobNotFoundException;
+import ir.dealit.restful.util.exception.NotFoundResourceException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,16 +25,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class JobAdServiceImpl implements JobAdService {
 
     private final JobAdRepository jobAdRepository;
-    private final UserAuthService userAuthService;
     private final JobAdSearchRepository jobAdSearchRepository;
+    private final SkillRepository skillRepository;
+    private final FieldRepository fieldRepository;
+    private final JobPositionRepository jobPositionRepository;
 
     @Override
     public JobAd jobAdDetails(ObjectId id) {
@@ -52,11 +60,42 @@ public class JobAdServiceImpl implements JobAdService {
                 .map(entity -> toModel(entity));
     }
 
-
-
     @Override
-    public Optional<ObjectId> createJobAd(NewJobAd newJobAd, UserEntity user) {
-        return null;
+    @Transactional
+    public ObjectId createJobAd(NewJobAd newJobAd, UserEntity user) {
+        JobAdEntity entity = JobAdEntity.builder().build();
+        BeanUtils.copyProperties(newJobAd, entity);
+
+        var fieldOp = fieldRepository.findFirstByTitle(newJobAd.field());
+        if (!fieldOp.isPresent()) {
+            entity.setField(fieldRepository.save(FieldEntity.builder().title(newJobAd.field()).build()));
+        } else {
+            entity.setField(fieldOp.get());
+        }
+
+        var skillList = new ArrayList<SkillEntity>();
+        for (var skill : newJobAd.skills()) {
+            var skillOp = skillRepository.findFirstByTitle(skill);
+            if (!skillOp.isPresent()) {
+                skillList.add(skillRepository.save(SkillEntity.builder().title(skill).build()));
+            } else {
+                skillList.add(skillOp.get());
+            }
+        }
+
+        var positionOp = jobPositionRepository.findById(new ObjectId(newJobAd.jobPositionId()));
+        if (!positionOp.isPresent()) {
+            throw new NotFoundResourceException("The job position id not found");
+        }
+        entity.setPosition(positionOp.get());
+        entity.setSkills(skillList);
+        entity.setStatus(JobAdStatus.ACTIVE);
+        entity.setOwner(user);
+        entity = jobAdRepository.save(entity);
+        positionOp.get().addJobAd(entity);
+        jobPositionRepository.save(positionOp.get());
+
+        return entity.getId();
     }
 
     @Override
@@ -74,6 +113,13 @@ public class JobAdServiceImpl implements JobAdService {
     private JobAd toModel(JobAdEntity entity) {
         var model = JobAd.builder().build();
         BeanUtils.copyProperties(entity, model);
+        model.setId(entity.getId().toString());
+        model.setField(entity.getField().getTitle());
+        model.setOwnerId(entity.getOwner().getId().toString());
+        model.setJobPositionId(entity.getPosition().getId().toString());
+        model.setSkills(entity.getSkills().stream().map(skillEntity -> skillEntity.getTitle()).collect(Collectors.toList()));
+        model.setCreatedAt(new DateTime(entity.getCreatedAt()));
+        model.setUpdatedAt(new DateTime(entity.getUpdatedAt()));
         return model;
     }
 }

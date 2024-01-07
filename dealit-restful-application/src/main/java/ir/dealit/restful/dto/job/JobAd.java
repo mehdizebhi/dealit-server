@@ -1,16 +1,15 @@
 package ir.dealit.restful.dto.job;
 
 import ir.dealit.restful.dto.enums.ExperienceLevel;
-import ir.dealit.restful.module.job.entity.FieldEntity;
+import ir.dealit.restful.dto.enums.JobAdStatus;
 import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
-import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotNull;
+import ir.dealit.restful.module.job.entity.SkillEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.RepresentationModel;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -19,20 +18,25 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class JobAd {
-    private @NotNull String id;
-    private @NotNull String title;
-    private @NotNull String description;
-    private @NotNull boolean fixedPrice;
-    private @NotNull Double minBudget;
-    private @NotNull Double maxBudget;
-    private @NotNull String ownerId;
 
-    private @Nullable ProjectLength projectLength;
-    private @Nullable WeeklyLoad weeklyLoad;
-    private @Nullable SubmitRange submitRange;
-    private @Nullable ExperienceLevel experienceLevel;
-    private @Nullable FieldEntity field;
-    private @Nullable List<String> tags;
-    private @Nullable String createdAt;
-    private @Nullable String updatedAt;
+    private String id;
+    private String title;
+    private String description;
+    private boolean fixedPrice;
+    private Double minBudget;
+    private Double maxBudget;
+    private String ownerId;
+    private ProjectLength projectLength;
+    private WeeklyLoad weeklyLoad;
+    private SubmitRange submitRange;
+    private ExperienceLevel experienceLevel;
+    private String field;
+    private List<String> tags;
+    private List<String> questions;
+    private List<String> requirements;
+    private List<String> skills;
+    private JobAdStatus status;
+    private String jobPositionId;
+    private DateTime createdAt;
+    private DateTime updatedAt;
 }

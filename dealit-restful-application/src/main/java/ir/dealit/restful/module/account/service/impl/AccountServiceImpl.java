@@ -8,7 +8,7 @@ import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import ir.dealit.restful.module.account.service.AccountService;
 import ir.dealit.restful.module.contract.repository.ContractRepository;
 import ir.dealit.restful.module.job.repository.ProposalRepository;
-import ir.dealit.restful.module.project.repository.ProjectSpaceRepository;
+import ir.dealit.restful.module.job.repository.ProjectSpaceRepository;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.wallet.service.TransactionService;
 import lombok.RequiredArgsConstructor;

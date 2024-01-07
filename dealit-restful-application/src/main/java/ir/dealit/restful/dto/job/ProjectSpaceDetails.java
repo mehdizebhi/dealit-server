@@ -3,12 +3,13 @@ package ir.dealit.restful.dto.job;
 import lombok.Builder;
 import org.joda.time.DateTime;
 
+import java.util.List;
+
 @Builder
-public record JobPosition(
+public record ProjectSpaceDetails(
         String id,
         String title,
-        int jobAds,
-        int contracts,
+        List<JobPosition> positions,
         DateTime createdAt,
         DateTime updatedAt
 ) {

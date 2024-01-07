@@ -22,7 +22,7 @@ public interface JobAdService {
 
     Page<JobAd> globalSearch(JobFilter filter, Pageable pageable, UserEntity requester);
 
-    Optional<ObjectId> createJobAd(NewJobAd newJobAd, UserEntity user);
+    ObjectId createJobAd(NewJobAd newJobAd, UserEntity user);
 
     void updateJobAd(ChangeJobAd jobAd, UserEntity user);
 

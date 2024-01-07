@@ -1,7 +1,9 @@
-package ir.dealit.restful.module.project.service;
+package ir.dealit.restful.module.job.service;
 
 import ir.dealit.restful.dto.job.JobPosition;
+import ir.dealit.restful.dto.project.NewProjectSpace;
 import ir.dealit.restful.dto.project.ProjectSpace;
+import ir.dealit.restful.dto.project.UpdateProjectSpace;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import jakarta.validation.constraints.NotNull;
 import org.bson.types.ObjectId;
@@ -20,9 +22,9 @@ public interface ProjectSpaceService {
 
     ProjectSpace projectSpace(ObjectId spaceId, UserEntity owner);
 
-    ObjectId createProjectSpace(ProjectSpace newProjectSpace, @NotNull ObjectId userId);
+    ObjectId createProjectSpace(NewProjectSpace projectSpace, @NotNull UserEntity owner);
 
-    void updateProjectSpace(ProjectSpace projectSpace, @NotNull ObjectId userId);
+    void updateProjectSpace(ObjectId spaceId, UpdateProjectSpace projectSpace, @NotNull UserEntity owner);
 
-    void deleteProjectSpace(ObjectId projectSpaceId, @NotNull ObjectId userId);
+    void deleteProjectSpace(ObjectId spaceId, @NotNull UserEntity owner);
 }

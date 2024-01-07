@@ -5,27 +5,30 @@ import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
 import ir.dealit.restful.module.job.entity.FieldEntity;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
-@Data
 @Builder
-public class NewJobAd {
-    private @NotNull String id;
-    private @NotNull String title;
-    private @NotNull String description;
-    private @NotNull boolean fixedPrice;
-    private @NotNull Double minBudget;
-    private @NotNull Double maxBudget;
-    private @NotNull String ownerId;
-
-    private @Nullable ProjectLength projectLength;
-    private @Nullable WeeklyLoad weeklyLoad;
-    private @Nullable SubmitRange submitRange;
-    private @Nullable ExperienceLevel experienceLevel;
-    private @Nullable FieldEntity field;
-    private @Nullable List<String> tags;
+public record NewJobAd (
+        @NotBlank String title,
+        @NotBlank String description,
+        @NotNull boolean fixedPrice,
+        @Min(value = 0) Double minBudget,
+        @Min(value = 0) Double maxBudget,
+        @Nullable ProjectLength projectLength,
+        @Nullable WeeklyLoad weeklyLoad,
+        @Nullable ExperienceLevel experienceLevel,
+        @NotBlank String field,
+        @NotBlank String jobPositionId,
+        @Size(min = 0) List<String> questions,
+        @Size(min = 0) List<String> requirements,
+        @Size(min = 3) List<String> tags,
+        @Size(min = 1) List<String> skills
+){
 }
