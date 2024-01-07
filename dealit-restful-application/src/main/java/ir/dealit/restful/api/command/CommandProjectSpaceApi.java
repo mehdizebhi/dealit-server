@@ -36,14 +36,14 @@ public interface CommandProjectSpaceApi {
             Authentication authentication
     );
 
-    @PostMapping("/{spaceId}")
+    @PostMapping("/{spaceId}/positions")
     ResponseEntity<ResponseModel<Map<String, String>>> createJobPosition(
             @PathVariable("spaceId") ObjectId spaceId,
             @RequestBody NewJobPosition newJobPosition,
             Authentication authentication
     );
 
-    @PatchMapping("/{spaceId}/{positionId}")
+    @PatchMapping("/{spaceId}/positions/{positionId}")
     ResponseEntity<ResponseModel<Void>> updateJobPosition(
             @PathVariable("spaceId") ObjectId spaceId,
             @PathVariable("positionId") ObjectId positionId,
@@ -51,7 +51,7 @@ public interface CommandProjectSpaceApi {
             Authentication authentication
     );
 
-    @DeleteMapping("/{spaceId}/{positionId}")
+    @DeleteMapping("/{spaceId}/positions/{positionId}")
     ResponseEntity<ResponseModel<Void>> deleteJobPosition(
             @PathVariable("spaceId") ObjectId spaceId,
             @PathVariable("positionId") ObjectId positionId,

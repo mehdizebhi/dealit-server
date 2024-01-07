@@ -59,7 +59,7 @@ public class JobPositionServiceImpl implements JobPositionService {
     @Override
     @Transactional
     public ObjectId newPosition(NewJobPosition newJobPosition, ObjectId spaceId, UserEntity owner) {
-        var spaceOp = projectSpaceRepository.findById(spaceId);
+        var spaceOp = projectSpaceRepository.findByIdAndOwner(spaceId, owner);
         if (!spaceOp.isPresent()) {
             throw new NotFoundResourceException("The space id not found");
         }
