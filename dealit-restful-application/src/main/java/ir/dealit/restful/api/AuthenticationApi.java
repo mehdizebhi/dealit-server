@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface AuthenticationApi {
 
     @PostMapping("/token")
-    ResponseEntity<AuthToken> signIn(
+    ResponseEntity<ResponseModel<AuthToken>> signIn(
             @RequestBody AuthTokenRequest request
     );
 
     @PostMapping("/signup")
-    ResponseEntity<SignedInUser> signUp(
+    ResponseEntity<ResponseModel<SignedInUser>> signUp(
             @RequestBody NewUser newUser
     );
 
     @PostMapping("/refresh-token")
-    ResponseEntity<AuthToken> refreshAccessToken(
+    ResponseEntity<ResponseModel<AuthToken>> refreshAccessToken(
             @RequestBody TokenRefreshRequest request,
             Authentication authentication
     );

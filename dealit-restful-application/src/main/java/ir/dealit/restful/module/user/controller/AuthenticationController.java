@@ -6,7 +6,6 @@ import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.dto.user.ResetPassword;
 import ir.dealit.restful.module.user.service.TokenService;
-import ir.dealit.restful.util.exception.UserFoundException;
 import ir.dealit.restful.module.user.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
-
-import static org.springframework.http.ResponseEntity.badRequest;
-import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,30 +24,29 @@ public class AuthenticationController implements AuthenticationApi {
     private final TokenService tokenService;
 
     @Override
-    public ResponseEntity<AuthToken> signIn(
-            @Valid AuthTokenRequest request
-    ) {
-            return service.authenticate(request)
-                    .map(s -> s.getToken())
-                    .map(ResponseEntity::ok)
-                    .orElse(status(HttpStatus.UNAUTHORIZED).build());
+    public ResponseEntity<ResponseModel<AuthToken>> signIn(@Valid AuthTokenRequest request) {
+            return ResponseEntity.ok(new ResponseModel.Builder<AuthToken>()
+                    .data(service.authenticate(request).getToken())
+                    .success()
+                    .build());
     }
 
     @Override
-    public ResponseEntity<SignedInUser> signUp(NewUser newUser) {
-        try {
-            return service.register(newUser)
-                    .map(model -> status(HttpStatus.CREATED).body(model))
-                    .orElse(badRequest().build());
-        }
-        catch (UserFoundException exp) {
-            return status(HttpStatus.NOT_ACCEPTABLE).build();
-        }
+    public ResponseEntity<ResponseModel<SignedInUser>> signUp(NewUser newUser) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseModel.Builder<SignedInUser>()
+                .data(service.register(newUser))
+                .success()
+                .build()
+        );
     }
 
     @Override
-    public ResponseEntity<AuthToken> refreshAccessToken(TokenRefreshRequest request, Authentication authentication) {
-        return ResponseEntity.ok(tokenService.renewAccessToken(request.refreshToken()));
+    public ResponseEntity<ResponseModel<AuthToken>> refreshAccessToken(TokenRefreshRequest request, Authentication authentication) {
+        return ResponseEntity.ok(new ResponseModel.Builder<AuthToken>()
+                .data(tokenService.renewAccessToken(request.refreshToken()))
+                .success()
+                .build()
+        );
     }
 
     @Override

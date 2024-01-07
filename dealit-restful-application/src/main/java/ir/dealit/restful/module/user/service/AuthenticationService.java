@@ -44,22 +44,22 @@ public class AuthenticationService {
     @Value("${services.sms.number}")
     private String smsNumber;
 
-    public Optional<SignedInUser> register(NewUser newUser) {
+    public SignedInUser register(NewUser newUser) {
         if (!newUser.getPassword().equals(newUser.getConfirmPassword())) {
             throw new IncorrectPasswordException(HttpStatus.NOT_ACCEPTABLE);
         }
-        Optional<UserEntity> userEntity = service.registerUser(newUser);
-        return userEntity.map(u -> {
-            return Optional.of(SignedInUser.builder()
-                    .username(u.getUsername())
-                    .userId(u.getId().toString())
-                    .token(tokenService.createToken(userEntity.get()))
-                    .build()
-            );
-        }).orElse(Optional.empty());
+        Optional<UserEntity> userOp = service.registerUser(newUser);
+        if (!userOp.isPresent()) {
+            throw new UserNotFoundException(HttpStatus.UNAUTHORIZED);
+        }
+        return SignedInUser.builder()
+                .username(userOp.get().getUsername())
+                .userId(userOp.get().getId().toString())
+                .token(tokenService.createToken(userOp.get()))
+                .build();
     }
 
-    public Optional<SignedInUser> authenticate(AuthTokenRequest req) {
+    public SignedInUser authenticate(AuthTokenRequest req) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -71,13 +71,14 @@ public class AuthenticationService {
             throw new InvalidCredentialsException(HttpStatus.UNAUTHORIZED);
         }
         UserEntity user = service.findUserByUsername(req.getUsername());
-        return Objects.nonNull(user) ? Optional.of(
-                SignedInUser.builder()
-                        .userId(user.getId().toString())
-                        .username(user.getUsername())
-                        .token(tokenService.createToken(user))
-                        .build()
-        ) : Optional.empty();
+        if (Objects.nonNull(user)) {
+            return SignedInUser.builder()
+                    .userId(user.getId().toString())
+                    .username(user.getUsername())
+                    .token(tokenService.createToken(user))
+                    .build();
+        }
+        throw new UserNotFoundException(HttpStatus.UNAUTHORIZED);
     }
 
     public void logout(String token){
