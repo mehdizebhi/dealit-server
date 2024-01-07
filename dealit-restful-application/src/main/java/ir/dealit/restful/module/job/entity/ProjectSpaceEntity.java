@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +32,16 @@ public class ProjectSpaceEntity {
     private @CreatedDate Date createdAt;
     private @LastModifiedDate Date updatedAt;
 
-    public ProjectSpaceEntity(UserEntity owner, String title) {
+    public ProjectSpaceEntity(String title, UserEntity owner) {
         this.owner = owner;
         this.title = title;
         this.jobPositions = Collections.emptyList();
+    }
+
+    public void addJobPosition(JobPositionEntity jobPosition) {
+        if (jobPositions == null) {
+            jobPositions = new ArrayList<>();
+        }
+        jobPositions.add(jobPosition);
     }
 }

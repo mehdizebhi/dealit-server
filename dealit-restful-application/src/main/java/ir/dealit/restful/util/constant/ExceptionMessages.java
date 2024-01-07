@@ -17,4 +17,5 @@ public class ExceptionMessages {
     public static final String NOT_AVAILABLE_UPLOAD_SERVICE = "The file upload service is not available";
     public static final String FILE_NOT_FOUND = "The file was not found";
     public static final String JOB_AD_NOT_FOUND = "The Job Ad was not found";
+    public static final String JOB_FIELD_NOT_FOUND = "The Job Field was not found";
 }

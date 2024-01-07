@@ -24,9 +24,7 @@ public class QueryProjectSpaceController implements QueryProjectSpaceApi {
 
     @Override
     public ResponseEntity<PagedModel<ProjectSpace>> getAllProjectSpaces(Pageable pageable, Authentication authentication) {
-        UserEntity user = (UserEntity) authentication.getPrincipal();
-        return projectSpaceService
-                .allProjectSpaces(pageable, user.getId())
+        return projectSpaceService.allProjectSpacesByOwner(pageable, (UserEntity) authentication.getPrincipal())
                 .map(ResponseEntity::ok)
                 .orElse(notFound().build());
     }
