@@ -31,7 +31,7 @@ public class SecurityFilterChainConfig {
                 .csrf((csrf) -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
-                                .requestMatchers("/v1/auth/**", "/swagger-ui/**").permitAll()
+                                .requestMatchers("/v1/auth/**", "/swagger-ui/**", "", "/").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session
