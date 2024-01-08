@@ -10,6 +10,7 @@ import ir.dealit.restful.module.user.repository.ConfirmationCodeRepository;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.service.MailService;
 import ir.dealit.restful.service.SMSService;
+import ir.dealit.restful.util.constant.HTMLEmailTemplate;
 import ir.dealit.restful.util.exception.*;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,9 @@ public class AuthenticationService {
 
     @Value("${services.sms.number}")
     private String smsNumber;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     public SignedInUser register(NewUser newUser) {
         if (!newUser.getPassword().equals(newUser.getConfirmPassword())) {
@@ -115,7 +119,9 @@ public class AuthenticationService {
     public void sendForgetPasswordToken(@Email String email) {
         var userOp = userRepository.findByEmail(email);
         if (userOp.isPresent()) {
-            mailService.send(email, "Forget Password", confirmationCodeService.newResetPasswordToken(userOp.get()));
+            String token = confirmationCodeService.newResetPasswordToken(userOp.get());
+            mailService.send(email, "Reset Password",
+                    HTMLEmailTemplate.getResetPasswordTemplate(frontendUrl + "/reset-password?token=" + token));
             return;
         }
         throw new UserNotFoundException(HttpStatus.NOT_FOUND);
