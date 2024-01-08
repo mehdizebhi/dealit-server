@@ -21,6 +21,6 @@ public class GlobalDefaultExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<ResponseModel<Void>> methodArgumentTypeMismatchHandler(Exception ex) {
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body((ResponseModel<Void>) ResponseModel.builder().error("The input is not acceptable").build());
+        return ResponseEntity.status(HttpStatus.METHOD_FAILURE).body((ResponseModel<Void>) ResponseModel.builder().error("The input is not acceptable").build());
     }
 }
