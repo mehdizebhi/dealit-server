@@ -121,6 +121,12 @@ public class AuthenticationService {
         throw new UserNotFoundException(HttpStatus.NOT_FOUND);
     }
 
+    public boolean checkResetPasswordTokenIsExist(String token) {
+        var confirmationCode = confirmationCodeRepository
+                .findByCodeAndUsedAndExpireAtIsAfter(token, false, DateTime.now().toDate());
+        return confirmationCode.isPresent();
+    }
+
     @Transactional
     public void verifyResetTokenAndUpdatePassword(String token, ResetPassword resetPassword) {
         var confirmationCode = confirmationCodeRepository

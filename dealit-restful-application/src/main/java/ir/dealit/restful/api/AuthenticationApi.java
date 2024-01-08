@@ -7,10 +7,7 @@ import ir.dealit.restful.dto.user.ResetPassword;
 import jakarta.validation.constraints.Email;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/v1/auth")
 public interface AuthenticationApi {
@@ -39,6 +36,11 @@ public interface AuthenticationApi {
     @PostMapping("/forget-password")
     ResponseEntity<ResponseModel<Void>> forgetPassword(
             @RequestParam("email") @Email String email
+    );
+
+    @GetMapping("/check-reset-password-token")
+    ResponseEntity<ResponseModel<Void>> checkResetPasswordToken(
+            @RequestParam(value = "token") String token
     );
 
     @PostMapping("/reset-password")

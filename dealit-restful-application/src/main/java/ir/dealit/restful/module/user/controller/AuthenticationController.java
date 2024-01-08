@@ -62,6 +62,14 @@ public class AuthenticationController implements AuthenticationApi {
     }
 
     @Override
+    public ResponseEntity<ResponseModel<Void>> checkResetPasswordToken(String token) {
+        if (service.checkResetPasswordTokenIsExist(token)) {
+            return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel.Builder<Void>().error("The reset password token in not found").build());
+    }
+
+    @Override
     public ResponseEntity<ResponseModel<Void>> resetPassword(String token, ResetPassword resetPassword) {
         service.verifyResetTokenAndUpdatePassword(token, resetPassword);
         return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
