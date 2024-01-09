@@ -5,6 +5,7 @@ import ir.dealit.restful.dto.user.UserActivity;
 import ir.dealit.restful.dto.user.UserInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -28,7 +29,7 @@ public interface QueryUserApi {
     @GetMapping("/activities")
     @Secured("ROLE_USER")
     ResponseEntity<ResponseModel<List<UserActivity>>> getUserActivities(
-            @PageableDefault Pageable pageable,
+            @PageableDefault(sort = {"createdAt"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable,
             Authentication authentication
     );
 }

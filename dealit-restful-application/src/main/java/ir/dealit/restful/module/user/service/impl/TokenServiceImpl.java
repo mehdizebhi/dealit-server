@@ -77,7 +77,11 @@ public class TokenServiceImpl implements TokenService {
         if (tokenOptional.isPresent()){
             var tokenEntity = tokenOptional.get();
             var expiredAt = DateTime.now().plusSeconds((int) (EXPIRATION_PERIOD / 1_000));
-            tokenEntity.setToken(jwtUtils.generateToken(tokenEntity.getUser()));
+            var user = tokenEntity.getUser();
+            tokenEntity.setToken(jwtUtils.generateToken(Map.of("isFreelancer", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_FREELANCER")).count() == 1,
+                    "isClient", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_CLIENT")).count() == 1,
+                    "isAdmin", user.getRoles().stream().filter(role -> role.getName().equals("ROLE_ADMIN")).count() == 1),
+                    user));
             tokenEntity.setExpiredAt(expiredAt.toDate());
             tokenRepository.save(tokenEntity);
 

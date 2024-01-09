@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
             }
             throw new InvalidPasswordException(HttpStatus.NOT_ACCEPTABLE);
         }
-        throw new IncorrectPasswordException(HttpStatus.NOT_ACCEPTABLE);
+        throw new IncorrectPasswordException(HttpStatus.NOT_FOUND);
     }
 
     @Override
