@@ -35,7 +35,6 @@ public class AuthenticationService {
     private final SMSService smsService;
     private final ConfirmationCodeRepository confirmationCodeRepository;
     private final UserRepository userRepository;
-    private final UserService userService;
     private final TokenService tokenService;
     private final ConfirmationCodeService confirmationCodeService;
     private final MailService mailService;
@@ -90,9 +89,22 @@ public class AuthenticationService {
     }
 
     public void sendOTP(UserEntity user, OTPSenderMechanism senderMechanism) {
+
         switch (senderMechanism) {
-            case EMAIL -> mailService.send(user.getEmail(), "Verify Email", confirmationCodeService.newOTPCode(VerifyOTPType.EMAIL.name(), user));
-            case SMS -> smsService.send(smsNumber, user.getPhoneNumber(), confirmationCodeService.newOTPCode(VerifyOTPType.PHONE_NUMBER.name(), user));
+            case EMAIL -> {
+                var codeList = confirmationCodeRepository.findAnyValidCode(user.getId(), VerifyOTPType.EMAIL.name(), DateTime.now().toDate());
+                if (!codeList.isEmpty()) {
+                    throw new TooManyRequestException("OTP already send to email");
+                }
+                mailService.send(user.getEmail(), "Verify Email", confirmationCodeService.newOTPCode(VerifyOTPType.EMAIL.name(), user));
+            }
+            case SMS -> {
+                var codeList = confirmationCodeRepository.findAnyValidCode(user.getId(), VerifyOTPType.PHONE_NUMBER.name(), DateTime.now().toDate());
+                if (!codeList.isEmpty()) {
+                    throw new TooManyRequestException("OTP already send to phone");
+                }
+                smsService.send(smsNumber, user.getPhoneNumber(), confirmationCodeService.newOTPCode(VerifyOTPType.PHONE_NUMBER.name(), user));
+            }
             default -> throw new DealitException("Invalid Sender Mechanism", HttpStatus.NOT_ACCEPTABLE);
         }
     }

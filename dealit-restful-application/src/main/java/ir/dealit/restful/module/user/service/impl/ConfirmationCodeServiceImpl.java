@@ -25,7 +25,7 @@ public class ConfirmationCodeServiceImpl implements ConfirmationCodeService {
         String code = String.format("%06d", number);
         var confirmationCode = ConfirmationCodeEntity.builder()
                 .code(code)
-                .expireAt(DateTime.now().plusMinutes(5).toDate())
+                .expireAt(DateTime.now().plusMinutes(10).toDate())
                 .reason(reason)
                 .user(user)
                 .used(false)
@@ -40,7 +40,7 @@ public class ConfirmationCodeServiceImpl implements ConfirmationCodeService {
         String uuid = UUID.randomUUID().toString();
         var token = ConfirmationCodeEntity.builder()
                 .code(uuid)
-                .expireAt(DateTime.now().plusMinutes(5).toDate())
+                .expireAt(DateTime.now().plusMinutes(30).toDate())
                 .reason("RESET_PASSWORD")
                 .user(user)
                 .used(false)
