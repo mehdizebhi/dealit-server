@@ -34,7 +34,7 @@ public class WalletEntity {
     private @DocumentReference List<TransactionEntity> transactions;
     private Currency defaultCurrency;
     private CreditCardEntity creditCard;
-    private @Transient List<Money> monies;
+    private List<BlockAssetEntity> blockAssets;
 
     public WalletEntity(UserEntity owner) {
         this.owner = owner;
@@ -43,6 +43,7 @@ public class WalletEntity {
         this.transactions = Collections.emptyList();
         this.defaultCurrency = Currency.IRR;
         this.creditCard = CreditCardEntity.builder().build();
+        this.blockAssets = Collections.emptyList();
     }
 
     public void addMoney(Money money) {
@@ -60,9 +61,7 @@ public class WalletEntity {
     }
 
     public List<Money> getMonies() {
-        if (monies == null) {
-            monies = new ArrayList<>();
-        }
+        List<Money> monies = new ArrayList<>();
         for (AssetEntity asset : assets) {
             monies.add(asset.toMoney());
         }

@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.wallet.controller;
 
 import ir.dealit.restful.api.query.QueryWalletApi;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.wallet.CreditCardInfo;
 import ir.dealit.restful.dto.wallet.NewCreditCard;
 import ir.dealit.restful.dto.wallet.WalletInfo;
@@ -19,14 +20,22 @@ public class QueryWalletController implements QueryWalletApi {
     private final WalletService walletService;
 
     @Override
-    public ResponseEntity<EntityModel<WalletInfo>> getWalletInfo(Authentication authentication) {
-        return null;
+    public ResponseEntity<ResponseModel<WalletInfo>> getWalletInfo(Authentication authentication) {
+        return ResponseEntity.ok(
+                new ResponseModel.Builder<WalletInfo>()
+                        .data(walletService.walletInfo((UserEntity) authentication.getPrincipal()))
+                        .success()
+                        .build()
+        );
     }
 
     @Override
-    public ResponseEntity<EntityModel<CreditCardInfo>> getCreditCardInfo(Authentication authentication) {
-        return ResponseEntity.ok(EntityModel.of(
-                walletService.creditCard((UserEntity) authentication.getPrincipal())
-        ));
+    public ResponseEntity<ResponseModel<CreditCardInfo>> getCreditCardInfo(Authentication authentication) {
+        return ResponseEntity.ok(
+                new ResponseModel.Builder<CreditCardInfo>()
+                        .data(walletService.creditCard((UserEntity) authentication.getPrincipal()))
+                        .success()
+                        .build()
+        );
     }
 }

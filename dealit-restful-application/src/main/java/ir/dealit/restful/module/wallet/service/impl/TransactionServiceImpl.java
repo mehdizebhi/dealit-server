@@ -75,16 +75,14 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private BigDecimal total (List<TransactionEntity> transactions, CurrencyUnit target) {
-        Money income = Money.of(target, 0d);
+        double total = 0d;
         for (var transaction : transactions) {
-            if (transaction.getMoney().isSameCurrency(income)){
-                income.plus(transaction.getMoney());
-            } else {
-                income.plus(exchangeRateCurrencyService.convert(transaction.getMoney().getCurrencyUnit().getCode(),
-                        target.getCode(),
-                        transaction.getMoney().getAmount().doubleValue()));
-            }
+            double value = exchangeRateCurrencyService.convert(
+                    transaction.getMoney().getCurrencyUnit().getCode(),
+                    target.getCode(),
+                    transaction.getMoney().getAmount().doubleValue());
+            total += value;
         }
-        return income.getAmount();
+        return new BigDecimal(total);
     }
 }

@@ -24,6 +24,10 @@ public class ExchangeRateCurrencyServiceImpl implements ExchangeRateCurrencyServ
 
     @Override
     public double convert(String baseCurrency, String targetCurrency, double amount) {
-        return client.getConversionResult(apiKey, baseCurrency, targetCurrency, amount).get("conversion_result").asDouble();
+        if (baseCurrency.equals(targetCurrency)) {
+            return amount;
+        }
+        var conversionRate = client.getConversionRate(apiKey, baseCurrency, targetCurrency).get("conversion_rate").asDouble();
+        return amount * conversionRate;
     }
 }
