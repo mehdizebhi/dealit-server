@@ -22,4 +22,7 @@ public interface JobAdRepository extends MongoRepository<JobAdEntity, ObjectId> 
     List<JobAdEntity> findAllByStatusAndOwner(JobAdStatus status, ObjectId accountId);
 
     Page<JobAdEntity> findByOwner(UserEntity owner, Pageable pageable);
+
+    @Query(value = "{'jobPosition': ?0}", count = true)
+    Integer countByJobPosition(ObjectId positionId);
 }

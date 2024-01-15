@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.wallet.controller;
 
 import ir.dealit.restful.api.query.QueryTransactionApi;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.transaction.Transaction;
 import ir.dealit.restful.dto.transaction.TransactionSummary;
 import ir.dealit.restful.module.user.entity.UserEntity;
@@ -17,6 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -25,19 +28,24 @@ public class QueryTransactionController implements QueryTransactionApi {
 
     private final TransactionService transactionService;
 
+
     @Override
-    public ResponseEntity<PagedModel<Transaction>> getAllTransactions(Pageable pageable, Authentication authentication) {
+    public ResponseEntity<ResponseModel<List<Transaction>>> getAllTransactions(Pageable pageable, Authentication authentication) {
         return null;
     }
 
     @Override
-    public ResponseEntity<EntityModel<Transaction>> getTransaction(ObjectId id, Authentication authentication) {
+    public ResponseEntity<ResponseModel<Transaction>> getTransaction(ObjectId id, Authentication authentication) {
         return null;
     }
 
     @Override
-    public ResponseEntity<EntityModel<TransactionSummary>> getTransactionSummary(Date startTime, Date endTime, Authentication authentication) {
-        log.info("start = {}, end = {}", DateTimeUtils.withTimeAtStartOfDay(startTime), DateTimeUtils.withTimeAtEndOfDay(endTime));
+    public ResponseEntity<ResponseModel<TransactionSummary>> getTransactionSummary(String type, Date startTime, Date endTime, Authentication authentication) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ResponseModel<Map<String, Object>>> getAnnualReport(String type, Authentication authentication) {
         return null;
     }
 }

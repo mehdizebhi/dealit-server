@@ -4,7 +4,6 @@ import ir.dealit.restful.dto.enums.ExperienceLevel;
 import ir.dealit.restful.dto.enums.JobAdStatus;
 import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
-import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
@@ -47,8 +46,9 @@ public class JobAdEntity {
     private @DocumentReference UserEntity owner;
     private List<String> questions;
     private List<String> requirements;
-    private @DocumentReference JobPositionEntity position;
+    private @DocumentReference JobPositionEntity jobPosition;
     private JobAdStatus status;
     private @DocumentReference List<SkillEntity> skills;
     private @TextScore Float score;
+    private int requiredConnection;
 }

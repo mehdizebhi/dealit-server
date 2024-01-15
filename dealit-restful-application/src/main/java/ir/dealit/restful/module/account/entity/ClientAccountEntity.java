@@ -13,11 +13,8 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Document(collection = "accounts")
 @TypeAlias("ClientAccount")
 public class ClientAccountEntity extends AccountEntity{
-    private @DocumentReference List<ProjectSpaceEntity> projectSpaces;
-    private @DocumentReference ClientProfileEntity profile;
 }

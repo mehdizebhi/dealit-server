@@ -29,8 +29,6 @@ public class JobPositionEntity {
     private String title;
     private @DocumentReference UserEntity owner;
     private @DocumentReference ProjectSpaceEntity space;
-    private @DocumentReference(lazy = true) List<JobAdEntity> jobAds;
-    private @DocumentReference(lazy = true) List<ContractEntity> contracts;
     private @CreatedDate Date createdAt;
     private @LastModifiedDate Date updatedAt;
     private PositionStatus status;
@@ -39,22 +37,6 @@ public class JobPositionEntity {
         this.title = title;
         this.space = space;
         this.owner = owner;
-        this.jobAds = new ArrayList<>();
-        this.contracts = new ArrayList<>();
         this.status = PositionStatus.ACTIVE;
-    }
-
-    public void addJobAd(JobAdEntity jobAd) {
-        if (jobAds == null) {
-            jobAds = new ArrayList<>();
-        }
-        jobAds.add(jobAd);
-    }
-
-    public void addContract(ContractEntity contract) {
-        if (contracts == null) {
-            contracts = new ArrayList<>();
-        }
-        contracts.add(contract);
     }
 }

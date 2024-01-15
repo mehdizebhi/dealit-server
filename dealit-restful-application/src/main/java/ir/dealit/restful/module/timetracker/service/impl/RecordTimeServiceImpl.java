@@ -41,7 +41,7 @@ public class RecordTimeServiceImpl implements RecordTimeService {
     public ObjectId register(RecordTime recordTime, UserEntity owner) {
         var entity = WorkTimeEntity.builder().build();
         BeanUtils.copyProperties(recordTime, entity);
-        entity.setContract(contractRepository.findById(recordTime.contractId()).orElseThrow(() -> new NotFoundResourceException("Contract id is not found")));
+        entity.setContract(contractRepository.findByIdAndHired(recordTime.contractId(), owner).orElseThrow(() -> new NotFoundResourceException("Contract id is not found")));
         entity.setOwner(owner);
         entity = timeRepository.save(entity);
         return entity.getId();

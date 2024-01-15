@@ -3,7 +3,9 @@ package ir.dealit.restful.module.job.service.impl;
 import ir.dealit.restful.dto.job.JobPosition;
 import ir.dealit.restful.dto.job.NewJobPosition;
 import ir.dealit.restful.dto.job.UpdateJobPosition;
+import ir.dealit.restful.module.contract.repository.ContractRepository;
 import ir.dealit.restful.module.job.entity.JobPositionEntity;
+import ir.dealit.restful.module.job.repository.JobAdRepository;
 import ir.dealit.restful.module.job.repository.JobPositionRepository;
 import ir.dealit.restful.module.job.service.JobPositionService;
 import ir.dealit.restful.module.job.repository.ProjectSpaceRepository;
@@ -26,6 +28,8 @@ public class JobPositionServiceImpl implements JobPositionService {
 
     private final JobPositionRepository jobPositionRepository;
     private final ProjectSpaceRepository projectSpaceRepository;
+    private final ContractRepository contractRepository;
+    private final JobAdRepository jobAdRepository;
 
     @Override
     public JobPosition position(ObjectId positionId, ObjectId spaceId, UserEntity owner) {
@@ -36,8 +40,8 @@ public class JobPositionServiceImpl implements JobPositionService {
         return JobPosition.builder()
                 .id(positionOp.get().getId().toString())
                 .title(positionOp.get().getTitle())
-                .jobAds(positionOp.get().getJobAds().size())
-                .contracts(positionOp.get().getContracts().size())
+                .jobAds(jobAdRepository.countByJobPosition(positionId))
+                .contracts(contractRepository.countByJobPosition(positionId))
                 .createdAt(new DateTime(positionOp.get().getCreatedAt()))
                 .updatedAt(new DateTime(positionOp.get().getUpdatedAt()))
                 .build();
@@ -49,8 +53,8 @@ public class JobPositionServiceImpl implements JobPositionService {
         return positions.map(position -> JobPosition.builder()
                 .id(position.getId().toString())
                 .title(position.getTitle())
-                .jobAds(position.getJobAds().size())
-                .contracts(position.getContracts().size())
+                .jobAds(jobAdRepository.countByJobPosition(position.getId()))
+                .contracts(contractRepository.countByJobPosition(position.getId()))
                 .createdAt(new DateTime(position.getCreatedAt()))
                 .updatedAt(new DateTime(position.getUpdatedAt()))
                 .build());
@@ -87,7 +91,7 @@ public class JobPositionServiceImpl implements JobPositionService {
         if (!positionOp.isPresent()) {
             throw new NotFoundResourceException("The position id not found");
         }
-        if (positionOp.get().getJobAds().isEmpty() && positionOp.get().getContracts().isEmpty()) {
+        if (jobAdRepository.countByJobPosition(positionId) == 0 && contractRepository.countByJobPosition(positionId) == 0) {
             jobPositionRepository.deleteById(positionId);
             return;
         }

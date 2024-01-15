@@ -25,8 +25,6 @@ public interface UserAuthService {
 
     Optional<ObjectId> getChatId(ObjectId userId);
 
-    List<ObjectId> getProjectSpaceIds(ObjectId userId);
-
     Optional<ObjectId> getJobSpaceId(ObjectId userId);
 
     Optional<ObjectId> getProfileId(ObjectId userId);

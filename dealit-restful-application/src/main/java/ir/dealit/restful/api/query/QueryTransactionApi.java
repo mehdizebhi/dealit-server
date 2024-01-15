@@ -1,5 +1,6 @@
 package ir.dealit.restful.api.query;
 
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.transaction.Transaction;
 import ir.dealit.restful.dto.transaction.TransactionSummary;
 import org.bson.types.ObjectId;
@@ -17,26 +18,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/v1/transactions")
 public interface QueryTransactionApi {
 
     @GetMapping("/")
-    ResponseEntity<PagedModel<Transaction>> getAllTransactions(
+    ResponseEntity<ResponseModel<List<Transaction>>> getAllTransactions(
             @PageableDefault Pageable pageable,
             Authentication authentication
     );
 
     @GetMapping("/{id}")
-    ResponseEntity<EntityModel<Transaction>> getTransaction(
+    ResponseEntity<ResponseModel<Transaction>> getTransaction(
             @PathVariable("id") ObjectId id,
             Authentication authentication
     );
 
-    @GetMapping("/summary")
-    ResponseEntity<EntityModel<TransactionSummary>> getTransactionSummary(
+    @GetMapping("/report/summary")
+    ResponseEntity<ResponseModel<TransactionSummary>> getTransactionSummary(
+            @RequestParam("type") String type,
             @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startTime,
             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endTime,
+            Authentication authentication
+    );
+
+    @GetMapping("/report/annual")
+    ResponseEntity<ResponseModel<Map<String, Object>>> getAnnualReport(
+            @RequestParam("type") String type,
             Authentication authentication
     );
 }

@@ -43,4 +43,24 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return Page.empty();
     }
+
+    @Override
+    public void sendTo(UserEntity to, Notification notification) {
+
+    }
+
+    @Override
+    public void sendTo(UserEntity from, UserEntity to, Notification notification) {
+
+    }
+
+    @Override
+    public void update(Notification notification) {
+
+    }
+
+    @Override
+    public void delete(Notification notification) {
+
+    }
 }

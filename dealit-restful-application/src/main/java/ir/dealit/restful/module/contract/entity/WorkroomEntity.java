@@ -1,5 +1,6 @@
 package ir.dealit.restful.module.contract.entity;
 
+import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
 import ir.dealit.restful.module.attachment.entity.FolderEntity;
 import ir.dealit.restful.module.timetracker.entity.WorkTimeEntity;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,5 @@ import java.util.List;
 public class WorkroomEntity {
     private @MongoId ObjectId id;
     private @DocumentReference ContractEntity contract;
-    private FolderEntity folderEntity;
-    private List<WorkTimeEntity> workTimes;
-
+    private @DocumentReference List<AttachmentEntity> attachments;
 }

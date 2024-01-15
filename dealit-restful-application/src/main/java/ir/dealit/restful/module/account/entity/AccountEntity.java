@@ -20,6 +20,7 @@ public abstract class AccountEntity {
 
     protected @MongoId ObjectId id;
     protected @DocumentReference(lazy = true) UserEntity user;
+    protected @DocumentReference(lazy = true) ProfileEntity profile;
     public AccountEntity(UserEntity user) {
         this.user = user;
     }

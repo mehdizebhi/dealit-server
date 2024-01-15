@@ -7,7 +7,6 @@ import ir.dealit.restful.dto.job.JobFilter;
 import ir.dealit.restful.dto.job.NewJobAd;
 import ir.dealit.restful.module.job.entity.FieldEntity;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
-import ir.dealit.restful.module.job.entity.JobPositionEntity;
 import ir.dealit.restful.module.job.entity.SkillEntity;
 import ir.dealit.restful.module.job.repository.*;
 import ir.dealit.restful.module.job.service.JobAdService;
@@ -87,14 +86,11 @@ public class JobAdServiceImpl implements JobAdService {
         if (!positionOp.isPresent()) {
             throw new NotFoundResourceException("The job position id not found");
         }
-        entity.setPosition(positionOp.get());
+        entity.setJobPosition(positionOp.get());
         entity.setSkills(skillList);
         entity.setStatus(JobAdStatus.ACTIVE);
         entity.setOwner(user);
         entity = jobAdRepository.save(entity);
-        positionOp.get().addJobAd(entity);
-        jobPositionRepository.save(positionOp.get());
-
         return entity.getId();
     }
 
@@ -116,7 +112,7 @@ public class JobAdServiceImpl implements JobAdService {
         model.setId(entity.getId().toString());
         model.setField(entity.getField().getTitle());
         model.setOwnerId(entity.getOwner().getId().toString());
-        model.setJobPositionId(entity.getPosition().getId().toString());
+        model.setJobPositionId(entity.getJobPosition().getId().toString());
         model.setSkills(entity.getSkills().stream().map(skillEntity -> skillEntity.getTitle()).collect(Collectors.toList()));
         model.setCreatedAt(new DateTime(entity.getCreatedAt()));
         model.setUpdatedAt(new DateTime(entity.getUpdatedAt()));

@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.contract.controller;
 
 import ir.dealit.restful.api.query.QueryContractApi;
+import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.contract.ClientContractInfo;
 import ir.dealit.restful.dto.contract.Contract;
 import ir.dealit.restful.dto.contract.FreelancerContractInfo;
@@ -17,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 import static ir.dealit.restful.util.helper.ControllerResponseHelper.*;
 
 @RestController
@@ -25,33 +28,19 @@ public class QueryContractController implements QueryContractApi {
 
     private final ContractService contractService;
 
+
     @Override
-    public ResponseEntity<EntityModel<FreelancerContractInfo>> getFreelancerContractInfo(Authentication authentication) {
+    public ResponseEntity<ResponseModel<List<Contract>>> getAllContracts(Pageable pageable, ContractStatus status, Authentication authentication) {
         return null;
     }
 
     @Override
-    public ResponseEntity<EntityModel<ClientContractInfo>> getClientContractInfo(Authentication authentication) {
+    public ResponseEntity<ResponseModel<Contract>> getContract(ObjectId id, Authentication authentication) {
         return null;
     }
 
     @Override
-    public ResponseEntity<PagedModel<Contract>> getAllContracts(Pageable pageable, ContractStatus status, Authentication authentication) {
-        var models = toPagedModel(contractService
-                .contracts(pageable, status, (UserEntity) authentication.getPrincipal()));
-
-        return ResponseEntity.ok(models);
-    }
-
-    @Override
-    public ResponseEntity<EntityModel<Contract>> getContract(ObjectId id, Authentication authentication) {
-        var model = EntityModel.of(contractService.contract(id, (UserEntity) authentication.getPrincipal()));
-
-        return ResponseEntity.ok(model);
-    }
-
-    @Override
-    public ResponseEntity<EntityModel<Workroom>> getWorkroom(ObjectId id, Authentication authentication) {
+    public ResponseEntity<ResponseModel<Workroom>> getWorkroom(ObjectId id, Authentication authentication) {
         return null;
     }
 }

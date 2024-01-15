@@ -24,7 +24,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 @Document(collection = "profiles")
-public class FreelancerProfileEntity {
+public class ProfileEntity {
     private @MongoId ObjectId id;
     private String bio;
     private List<PersonalProject> personalProjects;
@@ -34,7 +34,7 @@ public class FreelancerProfileEntity {
     private @LastModifiedDate Date updatedAt;
     private @DocumentReference UserEntity owner;
 
-    public FreelancerProfileEntity(UserEntity owner) {
+    public ProfileEntity(UserEntity owner) {
         this.owner = owner;
         this.bio = "";
         this.personalProjects = Collections.emptyList();

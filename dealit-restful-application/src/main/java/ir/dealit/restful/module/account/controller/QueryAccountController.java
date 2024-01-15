@@ -36,9 +36,9 @@ public class QueryAccountController implements QueryAccountApi {
         var model = new ResponseModel.Builder<FreelancerAccountInfo>()
                 .data(accountService.freelancerInfo((UserEntity) authentication.getPrincipal())).success().build();
 
-        model.add(linkTo(methodOn(QueryContractController.class).getFreelancerContractInfo(authentication)).withRel("contracts"));
+/*        model.add(linkTo(methodOn(QueryContractController.class).getFreelancerContractInfo(authentication)).withRel("contracts"));
         model.add(linkTo(methodOn(QueryProposalController.class).getFreelancerProposalInfo(authentication)).withRel("proposals"));
-        model.add(linkTo(methodOn(QueryProfileController.class).getFreelancerProfileInfo(authentication)).withRel("profile"));
+        model.add(linkTo(methodOn(QueryProfileController.class).getFreelancerProfileInfo(authentication)).withRel("profile"));*/
 
         return ResponseEntity.ok(model);
     }
@@ -48,9 +48,9 @@ public class QueryAccountController implements QueryAccountApi {
         var model = new ResponseModel.Builder<ClientAccountInfo>()
                 .data(accountService.clientInfo((UserEntity) authentication.getPrincipal())).success().build();
 
-        model.add(linkTo(methodOn(QueryContractController.class).getClientContractInfo(authentication)).withRel("contracts"));
+        /*model.add(linkTo(methodOn(QueryContractController.class).getClientContractInfo(authentication)).withRel("contracts"));
         model.add(linkTo(methodOn(QueryProposalController.class).getClientProposalInfo(authentication)).withRel("proposals"));
-        model.add(linkTo(methodOn(QueryProfileController.class).getClientProfileInfo(authentication)).withRel("profile"));
+        model.add(linkTo(methodOn(QueryProfileController.class).getClientProfileInfo(authentication)).withRel("profile"));*/
 
         return ResponseEntity.ok(model);
     }

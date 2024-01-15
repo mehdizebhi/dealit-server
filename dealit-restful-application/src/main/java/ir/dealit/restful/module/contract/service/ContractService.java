@@ -10,6 +10,10 @@ import org.springframework.data.domain.Pageable;
 public interface ContractService {
 
     Page<Contract> contracts(Pageable pageable, ContractStatus status, UserEntity user);
+
     Contract contract(ObjectId id, UserEntity user);
-    Integer countFreelancerContracts(ContractStatus status, UserEntity user);
+
+    ObjectId create(Contract contract, UserEntity user);
+
+    void update(ObjectId contractId, Contract contract, UserEntity user);
 }

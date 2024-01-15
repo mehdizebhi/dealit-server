@@ -17,9 +17,6 @@ public interface ProjectSpaceRepository extends MongoRepository<ProjectSpaceEnti
     @Query(value = "{'owner': ?0}", count = true)
     Integer countByOwner(ObjectId userId);
 
-    @Query(value = "{'owner': ?0}", fields = "{'_id': 0, 'jobPositions': 1}", count = true)
-    Integer countJobPositionsByOwner(ObjectId userId);
-
     Integer countByTitleAndOwner(String title, UserEntity owner);
 
     Page<ProjectSpaceEntity> findByOwner(UserEntity owner, Pageable pageable);

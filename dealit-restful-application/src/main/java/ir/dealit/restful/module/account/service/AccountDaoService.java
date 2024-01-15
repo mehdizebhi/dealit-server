@@ -3,7 +3,7 @@ package ir.dealit.restful.module.account.service;
 import ir.dealit.restful.module.account.entity.AccountEntity;
 import ir.dealit.restful.module.account.entity.ClientAccountEntity;
 import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
-import ir.dealit.restful.module.account.entity.FreelancerProfileEntity;
+import ir.dealit.restful.module.account.entity.ProfileEntity;
 import ir.dealit.restful.module.account.repository.AccountRepository;
 import ir.dealit.restful.module.account.repository.ClientAccountRepository;
 import ir.dealit.restful.module.account.repository.FreelancerAccountRepository;
@@ -39,10 +39,10 @@ public class AccountDaoService {
         account = accountRepository.save(account);
         if (account instanceof FreelancerAccountEntity freelancer) {
             freelancer.setJobSpace(jobSpaceRepository.save(new JobSpaceEntity(userEntity)));
-            freelancer.setProfile(profileRepository.save(new FreelancerProfileEntity(userEntity)));
+            freelancer.setProfile(profileRepository.save(new ProfileEntity(userEntity)));
             return freelancerAccountRepository.save(freelancer);
         } else if (account instanceof ClientAccountEntity client) {
-            client.setProjectSpaces(Collections.singletonList(projectSpaceRepository.save(new ProjectSpaceEntity("General", userEntity))));
+            projectSpaceRepository.save(new ProjectSpaceEntity("General", userEntity));
             return clientAccountRepository.save(client);
         }
         return accountRepository.save(account);

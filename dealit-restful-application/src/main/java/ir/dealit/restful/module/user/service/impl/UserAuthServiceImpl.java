@@ -97,12 +97,6 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    public List<ObjectId> getProjectSpaceIds(ObjectId userId) {
-        var account = (ClientAccountEntity) accountRepository.findByUserIdAndType(userId, getAccountType(AccountType.CLIENT)).get();
-        return account.getProjectSpaces().stream().map(project -> project.getId()).collect(Collectors.toList());
-    }
-
-    @Override
     public Optional<ObjectId> getJobSpaceId(ObjectId userId) {
         var account = (FreelancerAccountEntity) accountRepository.findByUserIdAndType(userId, getAccountType(AccountType.FREELANCER)).get();
         return Optional.of(account.getJobSpace().getId());

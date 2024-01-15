@@ -9,6 +9,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Data
 @Builder
 public class Contract {
+
     private String id;
     private String title;
     private String workroomId;

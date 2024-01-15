@@ -10,7 +10,18 @@ import org.springframework.security.access.annotation.Secured;
 
 @Secured("ROLE_USER")
 public interface NotificationService {
+
     Page<Notification> allNotifications(Pageable pageable, UserEntity user);
+
     Notification notification(ObjectId id, UserEntity user);
+
     Page<Notification> activeNotificationsByType(Pageable pageable, NotificationType type, UserEntity user);
+
+    void sendTo(UserEntity to, Notification notification);
+
+    void sendTo(UserEntity from, UserEntity to, Notification notification);
+
+    void update(Notification notification);
+
+    void delete(Notification notification);
 }

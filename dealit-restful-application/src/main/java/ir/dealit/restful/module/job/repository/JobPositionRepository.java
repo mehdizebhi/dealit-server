@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.job.repository;
 
 import ir.dealit.restful.module.job.entity.JobPositionEntity;
+import ir.dealit.restful.module.job.entity.JobSpaceEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
@@ -21,4 +22,10 @@ public interface JobPositionRepository extends MongoRepository<JobPositionEntity
 
     @Query(value = "{'space': ?0, 'owner': ?1}")
     Page<JobPositionEntity> findByOwnerAndSpace(ObjectId spaceId, ObjectId ownerId, Pageable pageable);
+
+    @Query(value = "{'owner': ?0, 'space': ?1}", count = true)
+    Integer countByOwnerAndSpace(ObjectId ownerId, ObjectId spaceId);
+
+    @Query(value = "{'owner': ?0}", count = true)
+    Integer countByOwner(ObjectId ownerId);
 }

@@ -7,6 +7,7 @@ import ir.dealit.restful.module.account.entity.ClientAccountEntity;
 import ir.dealit.restful.module.account.entity.FreelancerAccountEntity;
 import ir.dealit.restful.module.account.service.AccountService;
 import ir.dealit.restful.module.contract.repository.ContractRepository;
+import ir.dealit.restful.module.job.repository.JobPositionRepository;
 import ir.dealit.restful.module.job.repository.ProposalRepository;
 import ir.dealit.restful.module.job.repository.ProjectSpaceRepository;
 import ir.dealit.restful.module.user.entity.UserEntity;
@@ -27,6 +28,7 @@ public class AccountServiceImpl implements AccountService {
     private final ProposalRepository proposalRepository;
     private final TransactionService transactionService;
     private final ProjectSpaceRepository projectSpaceRepository;
+    private final JobPositionRepository jobPositionRepository;
 
     @Override
     public FreelancerAccountInfo freelancerInfo(UserEntity user) {
@@ -47,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
     public ClientAccountInfo clientInfo(UserEntity user) {
         var info = ClientAccountInfo.builder()
                 .projectSpaces(projectSpaceRepository.countByOwner(user.getId()))
-                .activePositions(projectSpaceRepository.countJobPositionsByOwner(user.getId()))
+                .activePositions(jobPositionRepository.countByOwner(user.getId()))
                 .contracts(contractRepository.countByHiredBy(user.getId()))
                 .activeContracts(contractRepository.countByStatusAndHiredBy(ContractStatus.ACTIVE, user.getId()))
                 .newProposal(0)

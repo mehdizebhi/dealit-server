@@ -88,4 +88,23 @@ public class UserEntity implements UserDetails {
         }
         return types;
     }
+
+    public AccountEntity getAccountByType(AccountType type) {
+        for (var accountEntity : accounts) {
+            switch (type){
+                case FREELANCER -> {
+                    if (accountEntity instanceof FreelancerAccountEntity) {
+                        return accountEntity;
+                    }
+                }
+                case CLIENT -> {
+                    if (accountEntity instanceof ClientAccountEntity) {
+                        return accountEntity;
+                    }
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + type);
+            }
+        }
+        return null;
+    }
 }

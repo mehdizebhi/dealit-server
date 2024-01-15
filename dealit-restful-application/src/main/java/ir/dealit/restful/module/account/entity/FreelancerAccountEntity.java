@@ -9,8 +9,6 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,5 +17,4 @@ import java.util.List;
 @TypeAlias("FreelancerAccount")
 public class FreelancerAccountEntity extends AccountEntity {
     private @DocumentReference(lazy = true) JobSpaceEntity jobSpace;
-    private @DocumentReference(lazy = true) FreelancerProfileEntity profile;
 }

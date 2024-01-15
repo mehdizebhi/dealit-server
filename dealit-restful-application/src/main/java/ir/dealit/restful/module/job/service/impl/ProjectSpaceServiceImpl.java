@@ -4,6 +4,7 @@ import ir.dealit.restful.dto.project.NewProjectSpace;
 import ir.dealit.restful.dto.project.ProjectSpace;
 import ir.dealit.restful.dto.project.UpdateProjectSpace;
 import ir.dealit.restful.module.job.entity.ProjectSpaceEntity;
+import ir.dealit.restful.module.job.repository.JobPositionRepository;
 import ir.dealit.restful.module.job.repository.ProjectSpaceRepository;
 import ir.dealit.restful.module.job.service.ProjectSpaceService;
 import ir.dealit.restful.module.user.entity.UserEntity;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProjectSpaceServiceImpl implements ProjectSpaceService {
 
     private final ProjectSpaceRepository projectSpaceRepository;
+    private final JobPositionRepository jobPositionRepository;
 
     @Override
     public Page<ProjectSpace> allProjectSpacesByOwner(Pageable pageable, UserEntity owner) {
@@ -31,7 +33,7 @@ public class ProjectSpaceServiceImpl implements ProjectSpaceService {
         return spaces.map(space -> ProjectSpace.builder()
                 .id(space.getId().toString())
                 .title(space.getTitle())
-                .positions(space.getJobPositions().size())
+                .positions(jobPositionRepository.countByOwner(owner.getId()))
                 .createdAt(new DateTime(space.getCreatedAt()))
                 .updatedAt(new DateTime(space.getUpdatedAt()))
                 .build());
@@ -46,7 +48,7 @@ public class ProjectSpaceServiceImpl implements ProjectSpaceService {
         return spaceOp.map(space -> ProjectSpace.builder()
                 .id(space.getId().toString())
                 .title(space.getTitle())
-                .positions(space.getJobPositions().size())
+                .positions(jobPositionRepository.countByOwner(owner.getId()))
                 .createdAt(new DateTime(space.getCreatedAt()))
                 .updatedAt(new DateTime(space.getUpdatedAt()))
                 .build()).get();
@@ -79,7 +81,7 @@ public class ProjectSpaceServiceImpl implements ProjectSpaceService {
         if (!spaceOp.isPresent()) {
             throw new NotFoundResourceException("The space id not found");
         }
-        if (spaceOp.get().getJobPositions().isEmpty()) {
+        if (jobPositionRepository.countByOwnerAndSpace(owner.getId(), spaceId) == 0) {
             projectSpaceRepository.deleteById(spaceId);
             return;
         }
