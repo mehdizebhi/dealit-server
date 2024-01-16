@@ -7,12 +7,15 @@ import ir.dealit.restful.dto.transaction.TransactionSummary;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.wallet.service.TransactionService;
 import ir.dealit.restful.util.DateTimeUtils;
+import ir.dealit.restful.util.exception.DealitException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +44,10 @@ public class QueryTransactionController implements QueryTransactionApi {
 
     @Override
     public ResponseEntity<ResponseModel<TransactionSummary>> getTransactionSummary(String type, Date startTime, Date endTime, Authentication authentication) {
-        return null;
+        return ResponseEntity.ok(new ResponseModel.Builder<TransactionSummary>()
+                .data(transactionService.summary(type, new DateTime(startTime), new DateTime(endTime), (UserEntity) authentication.getPrincipal()))
+                .success()
+                .build());
     }
 
     @Override

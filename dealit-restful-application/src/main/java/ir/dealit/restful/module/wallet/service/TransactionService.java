@@ -12,9 +12,14 @@ import java.math.BigDecimal;
 public interface TransactionService {
 
     BigDecimal income(UserEntity user, CurrencyUnit target);
+
     BigDecimal income(DateTime start, DateTime end, UserEntity user, CurrencyUnit target);
+
     BigDecimal outcome(UserEntity user, CurrencyUnit target);
+
     BigDecimal outcome(DateTime start, DateTime end, UserEntity user, CurrencyUnit target);
+
     Integer countNewTransaction(UserEntity user);
-    TransactionSummary summary(DateTime startTime, DateTime endTime, UserEntity user);
+
+    TransactionSummary summary(String type, DateTime startTime, DateTime endTime, UserEntity user);
 }

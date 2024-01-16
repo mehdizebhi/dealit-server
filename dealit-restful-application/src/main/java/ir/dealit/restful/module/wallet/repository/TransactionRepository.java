@@ -27,4 +27,7 @@ public interface TransactionRepository extends MongoRepository<TransactionEntity
 
     @Query(value = "{'createdAt': {$gte: ?0}, 'createdAt': {$lte: ?1}, to: ?2}")
     List<TransactionEntity> findAllIncomeTransactionByTime(Date startTime, Date endTime, ObjectId walletId);
+
+    @Query(value = "{'createdAt': {$gte: ?0}, 'createdAt': {$lte: ?1}, from: ?2}")
+    List<TransactionEntity> findAllOutcomeTransactionByTime(Date startTime, Date endTime, ObjectId walletId);
 }
