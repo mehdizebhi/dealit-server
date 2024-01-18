@@ -2,7 +2,9 @@ package ir.dealit.restful.module.attachment.service;
 
 
 import ir.dealit.restful.dto.attachment.Attachment;
+import ir.dealit.restful.util.exception.UploadServiceException;
 import org.bson.types.ObjectId;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +20,7 @@ public interface AttachmentService {
                     try {
                         return save(attachment, isPublic);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
                     }
                 })
                 .filter(Optional::isPresent)
