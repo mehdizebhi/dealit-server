@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RequestMapping("/v1/users")
 public interface CommandUserApi {
@@ -23,7 +24,7 @@ public interface CommandUserApi {
     );
 
     @PostMapping("/picture")
-    ResponseEntity<ResponseModel<Void>> updatePicture(
+    ResponseEntity<ResponseModel<Map<String, Object>>> updatePicture(
             @RequestPart MultipartFile file,
             Authentication authentication
     ) throws Exception;

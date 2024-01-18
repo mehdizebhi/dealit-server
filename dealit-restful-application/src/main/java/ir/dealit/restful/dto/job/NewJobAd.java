@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
+import org.bson.types.ObjectId;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,9 +28,11 @@ public record NewJobAd (
         @Nullable ExperienceLevel experienceLevel,
         @NotBlank String field,
         @NotBlank String jobPositionId,
-        @Size(min = 0) List<String> questions,
-        @Size(min = 0) List<String> requirements,
-        @Size(min = 3) List<String> tags,
-        @Size(min = 1) List<String> skills
+        @Size(min = 2, max = 50) int connections,
+        @Size(min = 0, max = 5) List<String> questions,
+        @Size(min = 0, max = 5) List<String> requirements,
+        @Size(min = 0, max = 5) List<String> tags,
+        @Size(min = 1, max = 3) List<String> skills,
+        @Size(min = 0, max = 5) List<ObjectId> files
 ){
 }

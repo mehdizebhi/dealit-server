@@ -1,10 +1,12 @@
 package ir.dealit.restful.module.job.service.impl;
 
+import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.dto.enums.JobAdStatus;
 import ir.dealit.restful.dto.job.ChangeJobAd;
 import ir.dealit.restful.dto.job.JobAd;
 import ir.dealit.restful.dto.job.JobFilter;
 import ir.dealit.restful.dto.job.NewJobAd;
+import ir.dealit.restful.module.attachment.service.AttachmentService;
 import ir.dealit.restful.module.job.entity.FieldEntity;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
 import ir.dealit.restful.module.job.entity.SkillEntity;
@@ -13,6 +15,7 @@ import ir.dealit.restful.module.job.service.JobAdService;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.util.exception.JobNotFoundException;
 import ir.dealit.restful.util.exception.NotFoundResourceException;
+import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +41,8 @@ public class JobAdServiceImpl implements JobAdService {
     private final SkillRepository skillRepository;
     private final FieldRepository fieldRepository;
     private final JobPositionRepository jobPositionRepository;
+    private final AttachmentService attachmentService;
+    private final AttachmentModelAssembler assembler;
 
     @Override
     public JobAd jobAdDetails(ObjectId id) {
@@ -81,6 +87,9 @@ public class JobAdServiceImpl implements JobAdService {
                 skillList.add(skillOp.get());
             }
         }
+
+        /*List<Attachment> attachments = newJobAd.files().stream().map(file -> assembler.multipartFileToModel(file)).collect(Collectors.toList());
+        attachmentService.saveAll(attachments, true);*/
 
         var positionOp = jobPositionRepository.findById(new ObjectId(newJobAd.jobPositionId()));
         if (!positionOp.isPresent()) {

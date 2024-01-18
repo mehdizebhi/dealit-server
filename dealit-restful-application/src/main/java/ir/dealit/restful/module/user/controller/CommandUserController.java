@@ -20,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -53,9 +55,11 @@ public class CommandUserController implements CommandUserApi {
     }
 
     @Override
-    public ResponseEntity<ResponseModel<Void>> updatePicture(MultipartFile file, Authentication authentication) throws Exception {
-        userService.updateProfilePicture(file, (UserEntity) authentication.getPrincipal());
-        return ResponseEntity.ok(new ResponseModel.Builder<Void>().success().build());
+    public ResponseEntity<ResponseModel<Map<String, Object>>> updatePicture(MultipartFile file, Authentication authentication) throws Exception {
+        String href = userService.updateProfilePicture(file, (UserEntity) authentication.getPrincipal());
+        return ResponseEntity.ok(new ResponseModel.Builder<Map<String, Object>>()
+                .data(Map.of("pictureHref", href))
+                .success().build());
     }
 
     @Override

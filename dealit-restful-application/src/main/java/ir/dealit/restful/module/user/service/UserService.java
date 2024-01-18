@@ -13,7 +13,7 @@ import java.util.List;
 @Secured("ROLE_USER")
 public interface UserService {
 
-    void updateProfilePicture(MultipartFile img, UserEntity user) throws Exception;
+    String updateProfilePicture(MultipartFile img, UserEntity user) throws Exception;
 
     void deleteProfilePicture(UserEntity user);
 

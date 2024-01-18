@@ -4,11 +4,13 @@ import ir.dealit.restful.module.attachment.controller.AttachmentController;
 import ir.dealit.restful.api.AttachmentApi;
 import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
+import ir.dealit.restful.util.exception.DealitException;
 import ir.dealit.restful.util.helper.AttachmentHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,17 +49,21 @@ public class AttachmentModelAssembler extends RepresentationModelAssemblerSuppor
         return null;
     }
 
-    public Attachment multipartFileToModel (MultipartFile file) throws IOException {
+    public Attachment multipartFileToModel (MultipartFile file) {
         String fileId = UUID.randomUUID().toString();
-        return Attachment.builder()
-                .fileId(fileId)
-                .fileName(file.getOriginalFilename())
-                .fileType(file.getContentType())
-                .fileExtension(file.getContentType().split("/")[1])
-                .fileSize(file.getSize())
-                .data(file.getBytes())
-                .uri(getBasedUri() + "/" + fileId + "." + AttachmentHelper.getFileExtension(file.getOriginalFilename()))
-                .build();
+        try {
+            return Attachment.builder()
+                    .fileId(fileId)
+                    .fileName(file.getOriginalFilename())
+                    .fileType(file.getContentType())
+                    .fileExtension(file.getContentType().split("/")[1])
+                    .fileSize(file.getSize())
+                    .data(file.getBytes())
+                    .uri(getBasedUri() + "/" + fileId + "." + AttachmentHelper.getFileExtension(file.getOriginalFilename()))
+                    .build();
+        } catch (IOException e) {
+            throw new DealitException("can not get file's bytes", HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     private List<Link> getLinks(AttachmentEntity entity) {

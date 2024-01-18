@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateProfilePicture(MultipartFile img, UserEntity user) throws Exception {
+    public String updateProfilePicture(MultipartFile img, UserEntity user) throws Exception {
         this.deleteProfilePicture(user);
         if (img.getContentType().split("/")[0].equals("image")) {
             var attachment = attachmentService.save(assembler.multipartFileToModel(img), true);
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
                 user.setPictureHref(href);
                 userRepository.save(user);
             }
-            return;
+            return user.getPictureHref();
         }
         throw new IllegalFileFormatException(HttpStatus.NOT_ACCEPTABLE);
     }
