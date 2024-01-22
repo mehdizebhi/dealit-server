@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.joda.time.DateTime;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
@@ -21,6 +22,8 @@ public class Attachment extends RepresentationModel<Attachment> {
         private String fileExtension;
         private long fileSize;
         private String href;
-        private @JsonIgnore String uri;
+        private DateTime createdAt;
+        private DateTime updatedAt;
+        private String uri;
         private @JsonIgnore byte[] data;
 }

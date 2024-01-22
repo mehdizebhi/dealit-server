@@ -6,6 +6,7 @@ import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
 import ir.dealit.restful.util.exception.DealitException;
 import ir.dealit.restful.util.helper.AttachmentHelper;
+import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.Link;
@@ -43,6 +44,8 @@ public class AttachmentModelAssembler extends RepresentationModelAssemblerSuppor
             BeanUtils.copyProperties(entity, model);
             model.setId(entity.getId().toString());
             model.setHref(getDownloadHref(entity).getHref());
+            model.setCreatedAt(new DateTime(entity.getCreatedAt()));
+            model.setUpdatedAt(new DateTime(entity.getUpdatedAt()));
 //            model.add(getLinks(entity));
             return model;
         }

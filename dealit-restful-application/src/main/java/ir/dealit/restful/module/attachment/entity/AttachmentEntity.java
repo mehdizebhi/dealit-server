@@ -1,5 +1,6 @@
 package ir.dealit.restful.module.attachment.entity;
 
+import ir.dealit.restful.module.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Date;
@@ -28,4 +30,5 @@ public class AttachmentEntity {
     private @Indexed(unique = true) String uri;
     private @CreatedDate Date createdAt;
     private @LastModifiedDate Date updatedAt;
+    private @DocumentReference UserEntity owner;
 }

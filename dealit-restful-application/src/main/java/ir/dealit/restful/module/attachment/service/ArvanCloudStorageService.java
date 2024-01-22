@@ -1,6 +1,8 @@
 package ir.dealit.restful.module.attachment.service;
 
 import ir.dealit.restful.dto.attachment.Attachment;
+import ir.dealit.restful.module.user.entity.UserEntity;
+import ir.dealit.restful.util.exception.NotFoundResourceException;
 import ir.dealit.restful.util.exception.UploadServiceException;
 import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
 import ir.dealit.restful.util.helper.AttachmentHelper;
@@ -35,6 +37,11 @@ public class ArvanCloudStorageService implements AttachmentService {
 
     @Override
     public Optional<Attachment> save(Attachment attachment, boolean isPublic) {
+        return this.save(attachment, isPublic, null);
+    }
+
+    @Override
+    public Optional<Attachment> save(Attachment attachment, boolean isPublic, UserEntity owner) {
         try {
             var putObjectBuilder = PutObjectRequest.builder()
                     .bucket(defaultBucketName)
@@ -48,7 +55,11 @@ public class ArvanCloudStorageService implements AttachmentService {
 
             s3.putObject(putOb, RequestBody.fromBytes(attachment.getData()));
             log.info("File Uploaded!");
-            return attachmentDaoService.register(attachment).map(assembler::toModel);
+            if (owner == null) {
+                return attachmentDaoService.register(attachment).map(assembler::toModel);
+
+            }
+            return attachmentDaoService.register(attachment, owner).map(assembler::toModel);
 
         } catch (S3Exception e) {
             log.error("S3 has problem with uploading = {}", e.getMessage());
@@ -76,8 +87,13 @@ public class ArvanCloudStorageService implements AttachmentService {
     }
 
     @Override
-    @Transactional
     public void delete(Attachment attachment) {
+        this.delete(attachment, null);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Attachment attachment, UserEntity owner) {
         try {
             DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
                     .bucket(defaultBucketName)
@@ -85,7 +101,10 @@ public class ArvanCloudStorageService implements AttachmentService {
                     .build();
 
             s3.deleteObject(deleteObjectRequest);
-            attachmentDaoService.delete(new ObjectId(attachment.getId()));
+            if (owner == null) {
+                attachmentDaoService.delete(new ObjectId(attachment.getId()));
+            }
+            attachmentDaoService.delete(new ObjectId(attachment.getId()), owner);
         } catch (S3Exception e) {
             log.error("S3 Client Can not delete object = {}", AttachmentHelper.getKey(attachment));
             throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
@@ -93,8 +112,18 @@ public class ArvanCloudStorageService implements AttachmentService {
     }
 
     @Override
+    public void deleteById(ObjectId attachmentId, UserEntity owner) {
+        var attachmentOp = attachmentDaoService.attachment(attachmentId, owner);
+        if (attachmentOp.isPresent()) {
+            this.delete(attachmentOp.map(assembler::toModel).get(), owner);
+            return;
+        }
+        throw new NotFoundResourceException("attachment id is not found");
+    }
+
+    @Override
     @Transactional
-    public void deleteAll(List<Attachment> attachments) {
+    public void deleteAll(List<Attachment> attachments, UserEntity owner) {
         List<ObjectIdentifier> keys = attachments.stream()
                 .map(attachment -> ObjectIdentifier.builder().key(AttachmentHelper.getKey(attachment)).build())
                 .collect(Collectors.toList());
@@ -113,7 +142,7 @@ public class ArvanCloudStorageService implements AttachmentService {
                     .build();
 
             s3.deleteObjects(multiObjectDeleteRequest);
-            attachmentDaoService.deleteAll(ids);
+            attachmentDaoService.deleteAll(ids, owner);
         } catch (S3Exception e) {
             log.error("S3 Client Can not delete objects = {}", keys);
             throw new UploadServiceException(HttpStatus.SERVICE_UNAVAILABLE);
