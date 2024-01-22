@@ -18,7 +18,6 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,11 +35,13 @@ public class ArvanCloudStorageService implements AttachmentService {
     private final AttachmentModelAssembler assembler;
 
     @Override
+    @Transactional
     public Optional<Attachment> save(Attachment attachment, boolean isPublic) {
         return this.save(attachment, isPublic, null);
     }
 
     @Override
+    @Transactional
     public Optional<Attachment> save(Attachment attachment, boolean isPublic, UserEntity owner) {
         try {
             var putObjectBuilder = PutObjectRequest.builder()
@@ -87,6 +88,7 @@ public class ArvanCloudStorageService implements AttachmentService {
     }
 
     @Override
+    @Transactional
     public void delete(Attachment attachment) {
         this.delete(attachment, null);
     }
@@ -112,6 +114,7 @@ public class ArvanCloudStorageService implements AttachmentService {
     }
 
     @Override
+    @Transactional
     public void deleteById(ObjectId attachmentId, UserEntity owner) {
         var attachmentOp = attachmentDaoService.attachment(attachmentId, owner);
         if (attachmentOp.isPresent()) {
