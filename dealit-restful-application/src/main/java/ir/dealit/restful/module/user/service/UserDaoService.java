@@ -42,7 +42,6 @@ public class UserDaoService {
         return repository.findById(id);
     }
 
-
     @Transactional
     public Optional<UserEntity> registerUser(NewUser newUser) {
         Integer count = repository.countByUsernameOrEmail(
@@ -70,6 +69,25 @@ public class UserDaoService {
     }
     public List<UserEntity> findAllUsers() {
         return repository.findAll();
+    }
+
+    @Transactional
+    public Optional<UserEntity> registerAdmin(NewUser newUser) {
+        Integer count = repository.countByUsernameOrEmail(
+                newUser.getUsername(),
+                newUser.getEmail());
+        if (count > 0) {
+            throw new UserFoundException(HttpStatus.NOT_ACCEPTABLE);
+        }
+        UserEntity userEntity = toEntity(newUser);
+        userEntity.addRoles(roleDaoService.loadRoleByName("ROLE_USER"));
+        userEntity = repository.save(userEntity);
+        userEntity.setWallet(walletRepository.save(AccountFactory.wallet(userEntity)));
+        userEntity.setInbox(inboxRepository.save(AccountFactory.inbox(userEntity)));
+        userEntity.setChat(chatRepository.save(AccountFactory.chat(userEntity)));
+        userEntity.addRoles(roleDaoService.loadRoleByName("ROLE_ADMIN"));
+        userEntity = repository.save(userEntity);
+        return Optional.of(userEntity);
     }
 
     private UserEntity toEntity(NewUser newUser) {

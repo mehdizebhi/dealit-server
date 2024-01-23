@@ -1,5 +1,6 @@
 package ir.dealit.restful.config.db;
 
+import ir.dealit.restful.dto.user.NewUser;
 import ir.dealit.restful.module.chat.entity.ChatEntity;
 import ir.dealit.restful.module.chat.entity.ConversationEntity;
 import ir.dealit.restful.module.contract.entity.ContractEntity;
@@ -10,9 +11,11 @@ import ir.dealit.restful.module.timetracker.entity.WorkTimeEntity;
 import ir.dealit.restful.module.user.entity.RoleEntity;
 import ir.dealit.restful.module.user.entity.TokenEntity;
 import ir.dealit.restful.module.user.service.RoleDaoService;
+import ir.dealit.restful.module.user.service.UserDaoService;
 import ir.dealit.restful.module.wallet.entity.TransactionEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
@@ -26,11 +29,26 @@ public class MongoMigration {
 
     private final RoleDaoService roleDaoService;
     private final MongoTemplate mongoTemplate;
+    private final UserDaoService userDaoService;
+
+    @Value("${app.admin.username}")
+    private String adminUsername;
+
+    @Value("${app.admin.password}")
+    private String adminPassword;
+
+    @Value("${app.admin.phoneNumber}")
+    private String adminPhoneNumber;
+
+    @Value("${app.admin.email}")
+    private String adminEmail;
+
 
     public void init() {
         log.info("Starting to execute migration mongodb to populate some collections.");
         createPrimitiveCollections();
         createPrimitiveRoles();
+        createAdmin();
         log.info("Ending execute migration mongodb to populate some collections.");
     }
 
@@ -84,5 +102,21 @@ public class MongoMigration {
                 ROLE_CLIENT,
                 ROLE_FREELANCER,
                 ROLE_SUBSCRIBER);
+    }
+
+    private void createAdmin() {
+        try {
+            userDaoService.registerAdmin(NewUser.builder()
+                    .username(adminUsername)
+                    .password(adminPassword)
+                    .confirmPassword(adminPassword)
+                    .phoneNumber(adminPhoneNumber)
+                    .email(adminEmail)
+                    .displayName(adminUsername)
+                    .account("admin")
+                    .build());
+        } catch (Exception e) {
+            log.warn("Admin already exist.");
+        }
     }
 }
