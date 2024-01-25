@@ -5,11 +5,12 @@ import ir.dealit.restful.dto.enums.ExperienceLevel;
 import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
 import ir.dealit.restful.dto.job.JobAd;
+import ir.dealit.restful.dto.job.JobField;
 import ir.dealit.restful.dto.job.SubmitRange;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,13 @@ public interface QueryJobAdApi {
     );
 
     @GetMapping("/all")
-    ResponseEntity<ResponseModel<List<JobAd>>> getMyJobAds(
-            @PageableDefault Pageable pageable,
+    ResponseEntity<ResponseModel<List<JobAd>>> exploreJobAd(
+            @PageableDefault(sort = {"updatedAt"}, direction = Sort.Direction.DESC) Pageable pageable,
             Authentication authentication
     );
 
     @GetMapping("")
-    ResponseEntity<ResponseModel<List<JobAd>>> getJobAds(
+    ResponseEntity<ResponseModel<List<JobAd>>> searchJobAd(
             @RequestParam("search") String search,
             @RequestParam(value = "min", required = false) Double min,
             @RequestParam(value = "max", required = false) Double max,
@@ -47,6 +48,9 @@ public interface QueryJobAdApi {
             @PageableDefault Pageable pageable,
             Authentication authentication
     );
+
+    @GetMapping("/fields")
+    ResponseEntity<ResponseModel<List<JobField>>> getJobFields();
 
     /*    @GetMapping("/")
         ResponseEntity<PagedModel<JobAd>> getJobAds(

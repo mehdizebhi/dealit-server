@@ -4,7 +4,6 @@ import ir.dealit.restful.dto.enums.ExperienceLevel;
 import ir.dealit.restful.dto.enums.JobAdStatus;
 import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
-import ir.dealit.restful.module.job.entity.SkillEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,4 +38,5 @@ public class JobAd {
     private String jobPositionId;
     private DateTime createdAt;
     private DateTime updatedAt;
+    private int requiredConnection;
 }

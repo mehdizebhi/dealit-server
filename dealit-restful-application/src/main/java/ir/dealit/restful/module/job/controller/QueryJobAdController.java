@@ -6,6 +6,7 @@ import ir.dealit.restful.dto.enums.ExperienceLevel;
 import ir.dealit.restful.dto.enums.ProjectLength;
 import ir.dealit.restful.dto.enums.WeeklyLoad;
 import ir.dealit.restful.dto.job.JobAd;
+import ir.dealit.restful.dto.job.JobField;
 import ir.dealit.restful.dto.job.JobFilter;
 import ir.dealit.restful.dto.job.SubmitRange;
 import ir.dealit.restful.module.job.service.JobAdService;
@@ -36,8 +37,8 @@ public class QueryJobAdController implements QueryJobAdApi {
     }
 
     @Override
-    public ResponseEntity<ResponseModel<List<JobAd>>> getMyJobAds(Pageable pageable, Authentication authentication) {
-        var models = jobAdService.jobAdsDetailsByOwner(pageable, (UserEntity) authentication.getPrincipal());
+    public ResponseEntity<ResponseModel<List<JobAd>>> exploreJobAd(Pageable pageable, Authentication authentication) {
+        var models = jobAdService.allJobAdsForUser(pageable, (UserEntity) authentication.getPrincipal());
         return ResponseEntity.ok(new ResponseModel.Builder<List<JobAd>>()
                 .data(models.toList())
                 .pageMetadata(models)
@@ -46,19 +47,19 @@ public class QueryJobAdController implements QueryJobAdApi {
     }
 
     @Override
-    public ResponseEntity<ResponseModel<List<JobAd>>> getJobAds(String search,
-                                                       Double min,
-                                                       Double max,
-                                                       SubmitRange range,
-                                                       List<ProjectLength> lengths,
-                                                       List<WeeklyLoad> loads,
-                                                       List<ExperienceLevel> levels,
-                                                       boolean fixed,
-                                                       boolean hourly,
-                                                       boolean verified,
-                                                       boolean previous,
-                                                       Pageable pageable,
-                                                       Authentication authentication) {
+    public ResponseEntity<ResponseModel<List<JobAd>>> searchJobAd(String search,
+                                                                  Double min,
+                                                                  Double max,
+                                                                  SubmitRange range,
+                                                                  List<ProjectLength> lengths,
+                                                                  List<WeeklyLoad> loads,
+                                                                  List<ExperienceLevel> levels,
+                                                                  boolean fixed,
+                                                                  boolean hourly,
+                                                                  boolean verified,
+                                                                  boolean previous,
+                                                                  Pageable pageable,
+                                                                  Authentication authentication) {
         var filter = JobFilter.builder()
                 .search(search)
                 .minPrice(min)
@@ -79,6 +80,14 @@ public class QueryJobAdController implements QueryJobAdApi {
         return ResponseEntity.ok(new ResponseModel.Builder<List<JobAd>>()
                 .data(models.toList())
                 .pageMetadata(models)
+                .success()
+                .build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseModel<List<JobField>>> getJobFields() {
+        return ResponseEntity.ok(new ResponseModel.Builder<List<JobField>>()
+                .data(jobAdService.allJobField())
                 .success()
                 .build());
     }

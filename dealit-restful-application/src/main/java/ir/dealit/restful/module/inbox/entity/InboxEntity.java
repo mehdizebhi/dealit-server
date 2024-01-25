@@ -25,14 +25,13 @@ public class InboxEntity {
 
     private @MongoId ObjectId id;
     private @DocumentReference @Indexed(unique = true) UserEntity owner;
-    private @DocumentReference List<NotificationEntity> notifications;
     private @DocumentReference List<Bookmarkable> bookmarks;
     private List<InvitationEntity> invitations;
 
     public InboxEntity(UserEntity owner) {
         this.owner = owner;
         this.invitations = Collections.emptyList();
-        this.notifications = Collections.emptyList();
         this.bookmarks = Collections.emptyList();
     }
+
 }

@@ -2,10 +2,9 @@ package ir.dealit.restful.module.job.service.impl;
 
 import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.dto.enums.JobAdStatus;
-import ir.dealit.restful.dto.job.ChangeJobAd;
-import ir.dealit.restful.dto.job.JobAd;
-import ir.dealit.restful.dto.job.JobFilter;
-import ir.dealit.restful.dto.job.NewJobAd;
+import ir.dealit.restful.dto.job.*;
+import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
+import ir.dealit.restful.module.attachment.repository.AttachmentRepository;
 import ir.dealit.restful.module.attachment.service.AttachmentService;
 import ir.dealit.restful.module.job.entity.FieldEntity;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
@@ -13,6 +12,7 @@ import ir.dealit.restful.module.job.entity.SkillEntity;
 import ir.dealit.restful.module.job.repository.*;
 import ir.dealit.restful.module.job.service.JobAdService;
 import ir.dealit.restful.module.user.entity.UserEntity;
+import ir.dealit.restful.util.exception.DealitException;
 import ir.dealit.restful.util.exception.JobNotFoundException;
 import ir.dealit.restful.util.exception.NotFoundResourceException;
 import ir.dealit.restful.util.hateoas.AttachmentModelAssembler;
@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +42,7 @@ public class JobAdServiceImpl implements JobAdService {
     private final SkillRepository skillRepository;
     private final FieldRepository fieldRepository;
     private final JobPositionRepository jobPositionRepository;
-    private final AttachmentService attachmentService;
+    private final AttachmentRepository attachmentRepository;
     private final AttachmentModelAssembler assembler;
 
     @Override
@@ -51,6 +52,12 @@ public class JobAdServiceImpl implements JobAdService {
             return toModel(jobAdOp.get());
         }
         throw new JobNotFoundException(HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public Page<JobAd> allJobAdsForUser(Pageable pageable, UserEntity user) {
+        return jobAdRepository.findAll(pageable)
+                .map(entity -> toModel(entity));
     }
 
     @Override
@@ -71,7 +78,7 @@ public class JobAdServiceImpl implements JobAdService {
         JobAdEntity entity = JobAdEntity.builder().build();
         BeanUtils.copyProperties(newJobAd, entity);
 
-        var fieldOp = fieldRepository.findFirstByTitle(newJobAd.field());
+        var fieldOp = fieldRepository.findById(new ObjectId(newJobAd.field()));
         if (!fieldOp.isPresent()) {
             entity.setField(fieldRepository.save(FieldEntity.builder().title(newJobAd.field()).build()));
         } else {
@@ -88,8 +95,11 @@ public class JobAdServiceImpl implements JobAdService {
             }
         }
 
-        /*List<Attachment> attachments = newJobAd.files().stream().map(file -> assembler.multipartFileToModel(file)).collect(Collectors.toList());
-        attachmentService.saveAll(attachments, true);*/
+        List<AttachmentEntity> attachmentEntities = newJobAd.files().stream().map(file -> attachmentRepository.findById(new ObjectId(file)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+        entity.setAttachment(attachmentEntities);
 
         var positionOp = jobPositionRepository.findById(new ObjectId(newJobAd.jobPositionId()));
         if (!positionOp.isPresent()) {
@@ -114,6 +124,34 @@ public class JobAdServiceImpl implements JobAdService {
     public void removeJobAd(ObjectId id, UserEntity user) {
 
     }
+
+    @Override
+    public List<JobField> allJobField() {
+        return fieldRepository.findAll().stream().map(fieldEntity -> new JobField(fieldEntity.getId().toString(), fieldEntity.getTitle()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public ObjectId createJobField(JobField jobField) {
+        var fieldOp = fieldRepository.findFirstByTitle(jobField.title());
+        if (fieldOp.isPresent()) {
+            throw new DealitException("The job field with title is already exist", HttpStatus.NOT_ACCEPTABLE);
+        }
+        return fieldRepository.save(FieldEntity.builder().title(jobField.title()).build()).getId();
+    }
+
+    @Override
+    @Transactional
+    public List<ObjectId> createJobFields(List<JobField> jobFields) {
+        // TODO: Check is already exist?
+        List<ObjectId> ids = fieldRepository
+                .saveAll(jobFields.stream().map(jobField -> FieldEntity.builder().title(jobField.title()).build())
+                        .collect(Collectors.toList()))
+                .stream().map(FieldEntity::getId).collect(Collectors.toList());
+        return ids;
+    }
+
 
     private JobAd toModel(JobAdEntity entity) {
         var model = JobAd.builder().build();

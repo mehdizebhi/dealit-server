@@ -6,6 +6,7 @@ import ir.dealit.restful.dto.job.ProjectSpaceDetails;
 import ir.dealit.restful.dto.project.ProjectSpace;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -24,7 +25,7 @@ public interface QueryProjectSpaceApi {
 
     @GetMapping("")
     ResponseEntity<ResponseModel<List<ProjectSpace>>> getProjectSpaces(
-            @PageableDefault Pageable pageable,
+            @PageableDefault(sort = {"updatedAt"}, direction = Sort.Direction.DESC) Pageable pageable,
             Authentication authentication
     );
 
@@ -37,7 +38,7 @@ public interface QueryProjectSpaceApi {
     @GetMapping("/{spaceId}/positions")
     ResponseEntity<ResponseModel<List<JobPosition>>>  getAllJobPositions(
             @PathVariable("spaceId") ObjectId spaceId,
-            @PageableDefault Pageable pageable,
+            @PageableDefault(sort = {"updatedAt"}, direction = Sort.Direction.DESC) Pageable pageable,
             Authentication authentication
     );
 

@@ -14,6 +14,9 @@ public interface UserRepository extends MongoRepository<UserEntity, ObjectId> {
 
     UserEntity findByUsername(String username);
 
+    @Query("{'username': {$in: ?0}}")
+    List<UserEntity> findAllByUsername(List<String> usernames);
+
     Optional<UserEntity> findByEmail(String email);
 
     @Query("{'name':  ?0}")

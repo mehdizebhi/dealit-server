@@ -8,6 +8,10 @@ public record ProjectSpace(
         String id,
         String title,
         int positions,
+        int activeContracts,
+        long totalWorkTimeInSeconds,
+        int members,
+        double totalPayment,
         DateTime createdAt,
         DateTime updatedAt
 ) {

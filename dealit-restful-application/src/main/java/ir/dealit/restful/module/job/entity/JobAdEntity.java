@@ -32,7 +32,7 @@ public class JobAdEntity {
     private @MongoId ObjectId id;
     private @TextIndexed(weight = 3) String title;
     private @TextIndexed(weight = 2) String description;
-    private FieldEntity field;
+    private @DocumentReference FieldEntity field;
     private List<String> tags;
     private ExperienceLevel experienceLevel;
     private boolean fixedPrice;

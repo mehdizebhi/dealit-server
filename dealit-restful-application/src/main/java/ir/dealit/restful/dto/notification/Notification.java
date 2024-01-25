@@ -3,13 +3,15 @@ package ir.dealit.restful.dto.notification;
 import ir.dealit.restful.dto.enums.NotificationType;
 import lombok.Builder;
 import lombok.Data;
+import org.joda.time.DateTime;
 
-@Data
 @Builder
-public class Notification {
-
-    private String id;
-    private String title;
-    private String description;
-    private NotificationType type;
+public record Notification(
+        String id,
+        String title,
+        String description,
+        NotificationType type,
+        boolean read,
+        DateTime createdAt
+) {
 }

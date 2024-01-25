@@ -7,6 +7,8 @@ import org.joda.time.DateTime;
 public record JobPosition(
         String id,
         String title,
+        String projectSpaceTitle,
+        String projectSpaceId,
         int jobAds,
         int contracts,
         DateTime createdAt,

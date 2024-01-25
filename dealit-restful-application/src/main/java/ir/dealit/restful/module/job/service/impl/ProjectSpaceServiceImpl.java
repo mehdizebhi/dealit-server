@@ -33,7 +33,7 @@ public class ProjectSpaceServiceImpl implements ProjectSpaceService {
         return spaces.map(space -> ProjectSpace.builder()
                 .id(space.getId().toString())
                 .title(space.getTitle())
-                .positions(jobPositionRepository.countByOwner(owner.getId()))
+                .positions(jobPositionRepository.countByOwnerAndSpace(owner.getId(), space.getId()))
                 .createdAt(new DateTime(space.getCreatedAt()))
                 .updatedAt(new DateTime(space.getUpdatedAt()))
                 .build());
@@ -48,7 +48,7 @@ public class ProjectSpaceServiceImpl implements ProjectSpaceService {
         return spaceOp.map(space -> ProjectSpace.builder()
                 .id(space.getId().toString())
                 .title(space.getTitle())
-                .positions(jobPositionRepository.countByOwner(owner.getId()))
+                .positions(jobPositionRepository.countByOwnerAndSpace(owner.getId(), spaceId))
                 .createdAt(new DateTime(space.getCreatedAt()))
                 .updatedAt(new DateTime(space.getUpdatedAt()))
                 .build()).get();

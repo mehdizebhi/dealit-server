@@ -3,6 +3,7 @@ package ir.dealit.restful.module.job.controller;
 import ir.dealit.restful.api.command.CommandJobAdApi;
 import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.job.ChangeJobAd;
+import ir.dealit.restful.dto.job.JobField;
 import ir.dealit.restful.dto.job.NewJobAd;
 import ir.dealit.restful.module.job.service.JobAdService;
 import ir.dealit.restful.module.user.entity.UserEntity;
@@ -45,5 +46,14 @@ public class CommandJobAdController implements CommandJobAdApi {
         return ResponseEntity
                 .status(204)
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<ResponseModel<Map<String, String>>> createJobField(JobField jobField, Authentication authentication) {
+        var id = jobAdService.createJobField(jobField);
+        return ResponseEntity.ok(new ResponseModel.Builder<Map<String, String>>()
+                .data(Map.of("id", id.toString()))
+                .success()
+                .build());
     }
 }

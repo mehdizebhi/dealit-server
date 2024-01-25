@@ -28,11 +28,11 @@ public record NewJobAd (
         @Nullable ExperienceLevel experienceLevel,
         @NotBlank String field,
         @NotBlank String jobPositionId,
-        @Size(min = 2, max = 50) int connections,
+        @Size(min = 0, max = 50) int connections,
         @Size(min = 0, max = 5) List<String> questions,
         @Size(min = 0, max = 5) List<String> requirements,
         @Size(min = 0, max = 5) List<String> tags,
         @Size(min = 1, max = 3) List<String> skills,
-        @Size(min = 0, max = 5) List<ObjectId> files
+        @Size(min = 0, max = 5) List<String> files
 ){
 }
