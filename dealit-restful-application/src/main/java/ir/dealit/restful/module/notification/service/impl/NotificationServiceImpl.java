@@ -9,11 +9,13 @@ import ir.dealit.restful.module.notification.service.NotificationService;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import ir.dealit.restful.module.user.repository.UserRepository;
 import ir.dealit.restful.module.user.service.UserAuthService;
+import ir.dealit.restful.util.exception.NotFoundResourceException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,6 +58,15 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendTo(UserEntity from, UserEntity to, Notification notification) {
 
+    }
+
+    @Override
+    @Async
+    public void sendToAsync(ObjectId userId, Notification notification) {
+        var inbox = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundResourceException("user id is not found"))
+                .getInbox();
+        notificationRepository.save(toEntity(notification, inbox));
     }
 
     @Override

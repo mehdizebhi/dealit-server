@@ -23,6 +23,8 @@ public interface NotificationService {
 
     void sendTo(UserEntity from, UserEntity to, Notification notification);
 
+    void sendToAsync(ObjectId userId, Notification notification);
+
     List<ObjectId> sendToAll(List<String> usernames, Notification notification);
 
     void read(List<ObjectId> notificationIds, UserEntity owner);
