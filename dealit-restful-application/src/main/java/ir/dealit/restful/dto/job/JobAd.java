@@ -39,4 +39,5 @@ public class JobAd {
     private DateTime createdAt;
     private DateTime updatedAt;
     private int requiredConnection;
+    private boolean applied;
 }

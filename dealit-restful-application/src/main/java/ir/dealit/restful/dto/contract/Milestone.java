@@ -1,17 +1,14 @@
 package ir.dealit.restful.dto.contract;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.joda.time.DateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class MileStone {
-    private int step;
-    private int days;
-    private Double price;
-    private String description;
+public record Milestone(
+        int step,
+        Double ratePrice,
+        String description,
+        DateTime startedAt,
+        DateTime endedAt
+) {
 }

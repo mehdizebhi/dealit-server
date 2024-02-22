@@ -28,7 +28,7 @@ public record NewJobAd (
         @Nullable ExperienceLevel experienceLevel,
         @NotBlank String field,
         @NotBlank String jobPositionId,
-        @Size(min = 0, max = 50) int connections,
+        @Size(min = 0, max = 50) int requiredConnection,
         @Size(min = 0, max = 5) List<String> questions,
         @Size(min = 0, max = 5) List<String> requirements,
         @Size(min = 0, max = 5) List<String> tags,

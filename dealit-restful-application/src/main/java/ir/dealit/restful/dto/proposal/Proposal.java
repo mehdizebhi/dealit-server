@@ -1,11 +1,28 @@
 package ir.dealit.restful.dto.proposal;
 
+import ir.dealit.restful.dto.contract.Milestone;
+import ir.dealit.restful.dto.enums.ProjectLength;
+import ir.dealit.restful.dto.enums.ProposalStatus;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.hateoas.RepresentationModel;
+import org.joda.time.DateTime;
 
-@Data
+import java.util.List;
+import java.util.Map;
+
 @Builder
-public class Proposal {
-    // Todo: Complete later
+public record Proposal(
+        String id,
+        double hourlyPriceRate,
+        double fixedPriceRate,
+        List<Milestone> milestones,
+        ProjectLength suggestProjectLength,
+        String coverLetter,
+        Map<String, String> answers,
+        ProposalStatus status,
+        String jobAdId,
+        DateTime createdAt,
+        DateTime updatedAt,
+        boolean seenByClient
+) {
 }
