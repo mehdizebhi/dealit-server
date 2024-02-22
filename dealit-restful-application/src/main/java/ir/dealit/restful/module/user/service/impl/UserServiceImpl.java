@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public String updateProfilePicture(MultipartFile img, UserEntity user) throws Exception {
-        this.deleteProfilePicture(user);
+//        this.deleteProfilePicture(user);
         if (img.getContentType().split("/")[0].equals("image")) {
             var attachment = attachmentService.save(assembler.multipartFileToModel(img), true);
             if (attachment.isPresent()) {
@@ -59,8 +59,12 @@ public class UserServiceImpl implements UserService {
     public void deleteProfilePicture(UserEntity user) {
         var attachment = attachmentRepository.findByUri(user.getPictureHref());
         if (attachment.isPresent()) {
-            attachmentRepository.deleteById(attachment.get().getId());
-            attachmentService.delete(assembler.toModel(attachment.get()));
+//            attachmentRepository.deleteById(attachment.get().getId());
+            try {
+                attachmentService.delete(assembler.toModel(attachment.get()));
+            } catch (Exception e) {
+                log.warn("can not delete picture file");
+            }
         }
         user.setPictureHref("https://dealit.s3.ir-thr-at1.arvanstorage.ir/user.png");
         userRepository.save(user);
