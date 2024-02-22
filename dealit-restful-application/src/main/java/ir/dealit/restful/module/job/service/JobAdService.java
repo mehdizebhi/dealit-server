@@ -1,5 +1,6 @@
 package ir.dealit.restful.module.job.service;
 
+import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.dto.job.*;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import org.bson.types.ObjectId;
@@ -12,7 +13,9 @@ import java.util.List;
 @Secured("ROLE_USER")
 public interface JobAdService {
 
-    JobAd jobAdDetails(ObjectId id);
+    JobAd jobAdDetails(ObjectId id, UserEntity user);
+
+    List<Attachment> attachmentsOfJobAd(ObjectId id, UserEntity user);
 
     Page<JobAd> allJobAdsForUser(Pageable pageable, UserEntity user);
 

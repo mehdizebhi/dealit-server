@@ -44,12 +44,22 @@ public class JobAdServiceImpl implements JobAdService {
     private final JobPositionRepository jobPositionRepository;
     private final AttachmentRepository attachmentRepository;
     private final AttachmentModelAssembler assembler;
+    private final ProposalRepository proposalRepository;
 
     @Override
-    public JobAd jobAdDetails(ObjectId id) {
+    public JobAd jobAdDetails(ObjectId id, UserEntity user) {
         var jobAdOp = jobAdRepository.findById(id);
         if (jobAdOp.isPresent()) {
-            return toModel(jobAdOp.get());
+            return toModel(jobAdOp.get(), user);
+        }
+        throw new JobNotFoundException(HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public List<Attachment> attachmentsOfJobAd(ObjectId id, UserEntity user) {
+        var jobAdOp = jobAdRepository.findById(id);
+        if (jobAdOp.isPresent()) {
+            return jobAdOp.get().getAttachment().stream().map(assembler::toModel).collect(Collectors.toList());
         }
         throw new JobNotFoundException(HttpStatus.NOT_FOUND);
     }
@@ -57,7 +67,7 @@ public class JobAdServiceImpl implements JobAdService {
     @Override
     public Page<JobAd> allJobAdsForUser(Pageable pageable, UserEntity user) {
         return jobAdRepository.findAll(pageable)
-                .map(entity -> toModel(entity));
+                .map(entity -> toModel(entity, user));
     }
 
     @Override
@@ -69,7 +79,7 @@ public class JobAdServiceImpl implements JobAdService {
     @Override
     public Page<JobAd> globalSearch(JobFilter filter, Pageable pageable, UserEntity requester) {
         return jobAdSearchRepository.searchByFilter(filter, pageable)
-                .map(entity -> toModel(entity));
+                .map(entity -> toModel(entity, requester));
     }
 
     @Override
@@ -163,6 +173,12 @@ public class JobAdServiceImpl implements JobAdService {
         model.setSkills(entity.getSkills().stream().map(skillEntity -> skillEntity.getTitle()).collect(Collectors.toList()));
         model.setCreatedAt(new DateTime(entity.getCreatedAt()));
         model.setUpdatedAt(new DateTime(entity.getUpdatedAt()));
+        return model;
+    }
+
+    private JobAd toModel(JobAdEntity entity, UserEntity user) {
+        var model = toModel(entity);
+        model.setApplied(proposalRepository.countByOwnerIdAndJobAdId(user.getId(), entity.getId()) > 0);
         return model;
     }
 }
