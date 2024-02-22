@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.job.repository;
 
 import ir.dealit.restful.dto.enums.JobAdStatus;
+import ir.dealit.restful.module.attachment.entity.AttachmentEntity;
 import ir.dealit.restful.module.job.entity.JobAdEntity;
 import ir.dealit.restful.module.user.entity.UserEntity;
 import org.bson.types.ObjectId;
