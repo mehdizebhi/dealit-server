@@ -17,16 +17,16 @@ services:
       - "mongo1_config:/data/configdb"
     networks:
       - dealit-network
-#  spring-app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    depends_on:
-#      - mongo
-#    ports:
-#      - "8085:8085"
-#    networks:
-#      - dealit-network
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    ports:
+      - "8085:8085"
+    networks:
+      - dealit-network
 networks:
   dealit-network:
     driver: bridge
