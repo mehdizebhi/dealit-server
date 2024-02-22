@@ -1,5 +1,6 @@
 package ir.dealit.restful.api.query;
 
+import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.enums.ExperienceLevel;
 import ir.dealit.restful.dto.enums.ProjectLength;
@@ -26,6 +27,13 @@ public interface QueryJobAdApi {
             Authentication authentication
     );
 
+    @GetMapping("/{id}/attachments")
+    ResponseEntity<ResponseModel<List<Attachment>>> getAttachmentsOfJobAd(
+            @PathVariable ObjectId id,
+            Authentication authentication
+    );
+
+
     @GetMapping("/all")
     ResponseEntity<ResponseModel<List<JobAd>>> exploreJobAd(
             @PageableDefault(sort = {"updatedAt"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -51,6 +59,12 @@ public interface QueryJobAdApi {
 
     @GetMapping("/fields")
     ResponseEntity<ResponseModel<List<JobField>>> getJobFields();
+
+    @GetMapping("/me")
+    ResponseEntity<ResponseModel<List<JobAd>>> getMyJobAds(
+            @PageableDefault(sort = {"updatedAt"}, direction = Sort.Direction.DESC) Pageable pageable,
+            Authentication authentication
+    );
 
     /*    @GetMapping("/")
         ResponseEntity<PagedModel<JobAd>> getJobAds(
