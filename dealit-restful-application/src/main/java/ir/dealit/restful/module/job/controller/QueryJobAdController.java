@@ -1,6 +1,7 @@
 package ir.dealit.restful.module.job.controller;
 
 import ir.dealit.restful.api.query.QueryJobAdApi;
+import ir.dealit.restful.dto.attachment.Attachment;
 import ir.dealit.restful.dto.common.ResponseModel;
 import ir.dealit.restful.dto.enums.ExperienceLevel;
 import ir.dealit.restful.dto.enums.ProjectLength;
@@ -29,11 +30,19 @@ public class QueryJobAdController implements QueryJobAdApi {
     @Override
     public ResponseEntity<ResponseModel<JobAd>> getJobAd(ObjectId id, Authentication authentication) {
         var model = new ResponseModel.Builder<JobAd>()
-                .data(jobAdService.jobAdDetails(id))
+                .data(jobAdService.jobAdDetails(id, (UserEntity) authentication.getPrincipal()))
                 .success()
                 .build();
 
         return ResponseEntity.ok(model);
+    }
+
+    @Override
+    public ResponseEntity<ResponseModel<List<Attachment>>> getAttachmentsOfJobAd(ObjectId id, Authentication authentication) {
+        return ResponseEntity.ok(new ResponseModel.Builder<List<Attachment>>()
+                .data(jobAdService.attachmentsOfJobAd(id, (UserEntity) authentication.getPrincipal()))
+                .success()
+                .build());
     }
 
     @Override
@@ -88,6 +97,18 @@ public class QueryJobAdController implements QueryJobAdApi {
     public ResponseEntity<ResponseModel<List<JobField>>> getJobFields() {
         return ResponseEntity.ok(new ResponseModel.Builder<List<JobField>>()
                 .data(jobAdService.allJobField())
+                .success()
+                .build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseModel<List<JobAd>>> getMyJobAds(Pageable pageable, Authentication authentication) {
+        var models = jobAdService
+                .jobAdsDetailsByOwner(pageable, (UserEntity) authentication.getPrincipal());
+
+        return ResponseEntity.ok(new ResponseModel.Builder<List<JobAd>>()
+                .data(models.toList())
+                .pageMetadata(models)
                 .success()
                 .build());
     }
